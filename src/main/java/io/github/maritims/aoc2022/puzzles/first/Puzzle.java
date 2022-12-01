@@ -13,27 +13,26 @@ public class Puzzle extends DailyPuzzle {
         this.fileName = fileName;
     }
 
-    protected List<Elf> getElves() {
+    protected List<Integer> getCalories() {
         List<String> allCalories = getFileContent(fileName);
         return splitListToLists(allCalories).stream()
                 .map(caloriesPerElf -> caloriesPerElf.stream().mapToInt(Integer::parseInt).sum())
-                .map(Elf::new)
                 .collect(Collectors.toList());
     }
 
     public Integer solvePartOne() {
-        return getElves().stream()
-                .max(Comparator.comparing(Elf::getCalories))
-                .map(Elf::getCalories)
+        return getCalories().stream()
+                .max(Comparator.comparingInt(calories -> calories))
                 .orElse(0);
     }
 
     public Integer solvePartTwo() {
-        List<Elf> sortedElves = getElves().stream()
-                .sorted((elf1, elf2) -> Integer.compare(elf2.getCalories(), elf1.getCalories()))
+        List<Integer> sortedCalories = getCalories().stream()
+                .sorted((c1, c2) -> Integer.compare(c2, c1))
                 .collect(Collectors.toList());
-        return sortedElves.stream()
+        return sortedCalories.stream()
                 .limit(3)
-                .mapToInt(Elf::getCalories).sum();
+                .mapToInt(calories -> calories)
+                .sum();
     }
 }

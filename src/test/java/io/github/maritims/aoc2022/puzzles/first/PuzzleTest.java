@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 class PuzzleTest {
-    public static Stream<Arguments> getElves() {
+    public static Stream<Arguments> getCalories() {
         return of(arguments("first/example.txt", 5));
     }
 
@@ -31,8 +31,8 @@ class PuzzleTest {
 
     @ParameterizedTest()
     @MethodSource
-    public void getElves(String filePath, int expectedResult) {
-        assertEquals(expectedResult, new Puzzle(filePath).getElves().size());
+    public void getCalories(String filePath, int expectedResult) {
+        assertEquals(expectedResult, new Puzzle(filePath).getCalories().size());
     }
 
     @ParameterizedTest
