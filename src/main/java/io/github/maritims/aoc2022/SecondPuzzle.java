@@ -27,8 +27,8 @@ public class SecondPuzzle extends Puzzle {
         for(String round : getFileContent(fileName)) {
             String[] moves = round.split(" ");
             int enemy = moves[0].charAt(0);
-            int outcome = moves[1].charAt(0);
             int you = enemy;
+            int outcome = moves[1].charAt(0);
             if(outcome == 88) {
                 you = enemy == 65 ? enemy + 2 : enemy - 1;
             } else if(outcome == 89) {
