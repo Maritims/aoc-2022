@@ -1,16 +1,31 @@
-package io.github.maritims.aoc2022.puzzles.first;
+package io.github.maritims.aoc2022;
 
-import io.github.maritims.aoc2022.puzzles.DailyPuzzle;
-
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Puzzle extends DailyPuzzle {
+public class FirstPuzzle extends Puzzle {
     private final String fileName;
 
-    public Puzzle(String fileName) {
+    public FirstPuzzle(String fileName) {
         this.fileName = fileName;
+    }
+
+    protected final List<List<String>> splitListToLists(List<String> input) {
+        List<List<String>> listOfLists = new ArrayList<>();
+        int previous = 0;
+
+        for(int current = 0; current < input.size(); current++) {
+            if("".equals(input.get(current))) {
+                listOfLists.add(input.subList(previous, current));
+                previous = current + 1;
+            }
+        }
+
+        // Get the last part of the original list.
+        listOfLists.add(input.subList(previous, input.size()));
+        return listOfLists;
     }
 
     protected List<Integer> getCalories() {

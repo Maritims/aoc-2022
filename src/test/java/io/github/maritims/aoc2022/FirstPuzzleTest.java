@@ -1,4 +1,4 @@
-package io.github.maritims.aoc2022.puzzles.first;
+package io.github.maritims.aoc2022;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -10,7 +10,7 @@ import static java.util.stream.Stream.of;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-class PuzzleTest {
+class FirstPuzzleTest {
     public static Stream<Arguments> getCalories() {
         return of(arguments("first/example.txt", 5));
     }
@@ -32,18 +32,18 @@ class PuzzleTest {
     @ParameterizedTest()
     @MethodSource
     public void getCalories(String filePath, int expectedResult) {
-        assertEquals(expectedResult, new Puzzle(filePath).getCalories().size());
+        assertEquals(expectedResult, new FirstPuzzle(filePath).getCalories().size());
     }
 
     @ParameterizedTest
     @MethodSource
     public void solvePartOne(String filePath, int expectedResult) {
-        assertEquals(expectedResult, new Puzzle(filePath).solvePartOne());
+        assertEquals(expectedResult, new FirstPuzzle(filePath).solvePartOne());
     }
 
     @ParameterizedTest
     @MethodSource
     public void solvePartTwo(String filePath, int expectedResult) {
-        assertEquals(expectedResult, new Puzzle(filePath).solvePartTwo());
+        assertEquals(expectedResult, new FirstPuzzle(filePath).solvePartTwo());
     }
 }
