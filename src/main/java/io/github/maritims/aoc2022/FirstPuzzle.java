@@ -6,10 +6,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class FirstPuzzle extends Puzzle {
-    private final String fileName;
-
     public FirstPuzzle(String fileName) {
-        this.fileName = fileName;
+        super(fileName);
     }
 
     protected final List<List<String>> splitListToLists(List<String> input) {

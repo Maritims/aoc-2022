@@ -9,6 +9,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class Puzzle {
+    protected final String fileName;
+
+    protected Puzzle(String fileName) {
+        this.fileName = fileName;
+    }
+
     protected final List<String> getFileContent(String fileName) {
         InputStream is = getClass().getClassLoader().getResourceAsStream(fileName);
         return is == null ? Collections.emptyList() : new BufferedReader(new InputStreamReader(is))
