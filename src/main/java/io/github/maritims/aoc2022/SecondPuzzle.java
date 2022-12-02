@@ -1,18 +1,13 @@
 package io.github.maritims.aoc2022;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
 public class SecondPuzzle extends Puzzle {
     protected SecondPuzzle(String fileName) {
         super(fileName);
     }
 
     public Integer solvePartOne() {
-        List<String> rounds = getFileContent(fileName);
         int points = 0;
-        for(String round : rounds) {
+        for(String round : getFileContent(fileName)) {
             String[] moves = round.split(" ");
             int enemy = moves[0].charAt(0);
             int you = moves[1].charAt(0);
@@ -23,6 +18,26 @@ public class SecondPuzzle extends Puzzle {
                 points += 6;
             }
             points += you - 87;
+        }
+        return points;
+    }
+
+    public Integer solvePartTwo() {
+        int points = 0;
+        for(String round : getFileContent(fileName)) {
+            String[] moves = round.split(" ");
+            int enemy = moves[0].charAt(0);
+            int outcome = moves[1].charAt(0);
+            int you = enemy;
+            if(outcome == 88) {
+                you = enemy == 65 ? enemy + 2 : enemy - 1;
+            } else if(outcome == 89) {
+                points += 3;
+            } else if(outcome == 90) {
+                you = enemy == 67 ? enemy - 2 : enemy + 1;
+                points += 6;
+            }
+            points += you - 64;
         }
         return points;
     }
