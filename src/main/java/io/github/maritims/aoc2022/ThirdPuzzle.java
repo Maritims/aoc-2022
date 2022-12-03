@@ -32,25 +32,25 @@ public class ThirdPuzzle extends Puzzle {
         return sum;
     }
 
-    protected List<Character> getItemsInRucksack(String rucksack) {
+    protected HashSet<Character> getItemsInRucksack(String rucksack) {
         return rucksack.chars()
                 .mapToObj(c -> (char) c)
-                .collect(Collectors.toList());
+                .collect(Collectors.toCollection(HashSet::new));
     }
 
-    protected List<List<Character>> getItemsInGroup(List<String> group) {
+    protected List<HashSet<Character>> getItemsInGroup(List<String> group) {
         return group.stream()
                 .map(this::getItemsInRucksack)
                 .collect(Collectors.toList());
     }
 
-    protected Character getCommonItemInGroup(List<List<Character>> itemsInGroup) {
-        Iterator<List<Character>> iterator = itemsInGroup.iterator();
-        List<Character> commons = iterator.next();
+    protected Character getCommonItemInGroup(List<HashSet<Character>> itemsInGroup) {
+        Iterator<HashSet<Character>> iterator = itemsInGroup.iterator();
+        HashSet<Character> commons = iterator.next();
         while (iterator.hasNext()) {
             commons.retainAll(iterator.next());
         }
-        return commons.stream().distinct().collect(Collectors.toList()).get(0);
+        return commons.iterator().next();
     }
 
     @Override
