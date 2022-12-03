@@ -8,28 +8,34 @@ public class ThirdPuzzle extends Puzzle {
         super(fileName);
     }
 
-    protected int getPriority(Character c) {
-        return c - (Character.isUpperCase(c) ? 'A' - 27 : 'a' - 1);
+    protected List<String> getCompartments(String rucksack) {
+        return Arrays.asList(rucksack.substring(0, rucksack.length() / 2), rucksack.substring(rucksack.length() / 2));
+    }
+
+    protected int getPriority(Character item) {
+        return item - (Character.isUpperCase(item) ? 'A' - 27 : 'a' - 1);
+    }
+
+    protected HashSet<Integer> getPriorities(String compartment) {
+        return compartment
+                .chars()
+                .mapToObj(c -> (char) c)
+                .map(this::getPriority)
+                .collect(Collectors.toCollection(HashSet::new));
+    }
+
+    protected Integer getPriority(List<String> compartments) {
+        HashSet<Integer> priorities = getPriorities(compartments.get(0));
+        priorities.retainAll(getPriorities(compartments.get(1)));
+        return priorities.stream().mapToInt(i -> i).sum();
     }
 
     @Override
     public Integer solvePartOne() {
-        int sum = 0;
-        for (String rucksack : getFileContent()) {
-            List<String> compartments = Arrays.asList(rucksack.substring(0, rucksack.length() / 2), rucksack.substring(rucksack.length() / 2));
-            HashSet<Integer> priorities = compartments.get(0)
-                    .chars()
-                    .mapToObj(c -> (char) c)
-                    .map(this::getPriority)
-                    .collect(Collectors.toCollection(HashSet::new));
-            priorities.retainAll(compartments.get(1)
-                    .chars()
-                    .mapToObj(c -> (char) c)
-                    .map(this::getPriority)
-                    .collect(Collectors.toCollection(HashSet::new)));
-            sum += priorities.stream().mapToInt(i -> i).sum();
-        }
-        return sum;
+        return getFileContent().stream()
+                .map(this::getCompartments)
+                .mapToInt(this::getPriority)
+                .sum();
     }
 
     protected HashSet<Character> getItemsInRucksack(String rucksack) {
