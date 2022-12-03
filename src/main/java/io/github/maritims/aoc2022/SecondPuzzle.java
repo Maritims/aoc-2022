@@ -1,13 +1,13 @@
 package io.github.maritims.aoc2022;
 
 public class SecondPuzzle extends Puzzle {
-    protected SecondPuzzle(String fileName) {
+    public SecondPuzzle(String fileName) {
         super(fileName);
     }
 
     public Integer solvePartOne() {
         int points = 0;
-        for(String round : getFileContent(fileName)) {
+        for(String round : getFileContent()) {
             String[] moves = round.split(" ");
             int enemy = moves[0].charAt(0);
             int you = moves[1].charAt(0);
@@ -24,7 +24,7 @@ public class SecondPuzzle extends Puzzle {
 
     public Integer solvePartTwo() {
         int points = 0;
-        for(String round : getFileContent(fileName)) {
+        for(String round : getFileContent()) {
             String[] moves = round.split(" ");
             int enemy = moves[0].charAt(0);
             int you = enemy;

@@ -15,35 +15,9 @@ class FirstPuzzleTest {
         return of(arguments("first/example.txt", 5));
     }
 
-    public static Stream<Arguments> solvePartOne() {
-        return Stream.of(
-                Arguments.arguments("first/example.txt", 24000),
-                Arguments.arguments("first/input.txt", 67016)
-        );
-    }
-
-    public static Stream<Arguments> solvePartTwo() {
-        return Stream.of(
-                Arguments.arguments("first/example.txt", 45000),
-                Arguments.arguments("first/input.txt", 200116)
-        );
-    }
-
-    @ParameterizedTest()
+    @ParameterizedTest
     @MethodSource
     public void getCalories(String filePath, int expectedResult) {
         assertEquals(expectedResult, new FirstPuzzle(filePath).getCalories().size());
-    }
-
-    @ParameterizedTest
-    @MethodSource
-    public void solvePartOne(String filePath, int expectedResult) {
-        assertEquals(expectedResult, new FirstPuzzle(filePath).solvePartOne());
-    }
-
-    @ParameterizedTest
-    @MethodSource
-    public void solvePartTwo(String filePath, int expectedResult) {
-        assertEquals(expectedResult, new FirstPuzzle(filePath).solvePartTwo());
     }
 }

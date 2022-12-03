@@ -27,7 +27,7 @@ public class FirstPuzzle extends Puzzle {
     }
 
     protected List<Integer> getCalories() {
-        List<String> allCalories = getFileContent(fileName);
+        List<String> allCalories = getFileContent();
         return splitListToLists(allCalories).stream()
                 .map(caloriesPerElf -> caloriesPerElf.stream().mapToInt(Integer::parseInt).sum())
                 .collect(Collectors.toList());
