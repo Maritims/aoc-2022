@@ -27,8 +27,7 @@ public class FirstPuzzle extends Puzzle {
     }
 
     protected List<Integer> getCalories() {
-        List<String> allCalories = getFileContent();
-        return splitListToLists(allCalories).stream()
+        return splitListToLists(getFileContent()).stream()
                 .map(caloriesPerElf -> caloriesPerElf.stream().mapToInt(Integer::parseInt).sum())
                 .collect(Collectors.toList());
     }
@@ -40,10 +39,8 @@ public class FirstPuzzle extends Puzzle {
     }
 
     public Integer solvePartTwo() {
-        List<Integer> sortedCalories = getCalories().stream()
+        return getCalories().stream()
                 .sorted((c1, c2) -> Integer.compare(c2, c1))
-                .collect(Collectors.toList());
-        return sortedCalories.stream()
                 .limit(3)
                 .mapToInt(calories -> calories)
                 .sum();
