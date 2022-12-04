@@ -6,11 +6,17 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
+import static java.util.stream.Stream.*;
 import static java.util.stream.Stream.of;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.params.provider.Arguments.*;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-class FirstPuzzleTest {
+class FirstPuzzleTest extends PuzzleTest<FirstPuzzle> {
+    public FirstPuzzleTest() {
+        super(FirstPuzzle.class);
+    }
+
     public static Stream<Arguments> getCalories() {
         return of(arguments("first/example.txt", 5));
     }
@@ -18,6 +24,16 @@ class FirstPuzzleTest {
     @ParameterizedTest
     @MethodSource
     public void getCalories(String filePath, int expectedResult) {
-        assertEquals(expectedResult, new FirstPuzzle(filePath).getCalories().size());
+        assertEquals(expectedResult, new FirstPuzzle().getCalories(filePath).size());
+    }
+
+    @Override
+    public Stream<Arguments> solvePartOne() {
+        return of(arguments("first/example.txt", 24000), arguments("first/input.txt", 67016));
+    }
+
+    @Override
+    public Stream<Arguments> solvePartTwo() {
+        return of(arguments("first/example.txt", 45000), arguments("first/input.txt", 200116));
     }
 }

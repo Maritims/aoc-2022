@@ -5,10 +5,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class FourthPuzzle extends Puzzle {
-    public FourthPuzzle(String fileName) {
-        super(fileName);
-    }
-
     public int[] getRange(String[] assignments) {
         return new int[] { Integer.parseInt(assignments[0]), Integer.parseInt(assignments[1]) };
     }
@@ -37,16 +33,16 @@ public class FourthPuzzle extends Puzzle {
     }
 
     @Override
-    public Integer solvePartOne() {
-        return (int) getFileContent().stream()
+    public Integer solvePartOne(String filePath) {
+        return (int) getFileContent(filePath).stream()
                 .map(this::getRanges)
                 .filter(this::isOverlapping)
                 .count();
     }
 
     @Override
-    public Integer solvePartTwo() {
-        return (int) getFileContent().stream()
+    public Integer solvePartTwo(String filePath) {
+        return (int) getFileContent(filePath).stream()
                 .map(this::getRanges)
                 .filter(this::isIntersecting)
                 .count();

@@ -9,20 +9,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class Puzzle {
-    protected final String fileName;
-
-    public Puzzle(String fileName) {
-        this.fileName = fileName;
-    }
-
-    protected final List<String> getFileContent() {
+    protected final List<String> getFileContent(String fileName) {
         InputStream is = getClass().getClassLoader().getResourceAsStream(fileName);
         return is == null ? Collections.emptyList() : new BufferedReader(new InputStreamReader(is))
                 .lines()
                 .collect(Collectors.toList());
     }
 
-    public abstract Integer solvePartOne();
+    public abstract Integer solvePartOne(String filePath);
 
-    public abstract Integer solvePartTwo();
+    public abstract Integer solvePartTwo(String filePath);
 }

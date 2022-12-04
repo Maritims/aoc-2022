@@ -6,10 +6,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class FirstPuzzle extends Puzzle {
-    public FirstPuzzle(String fileName) {
-        super(fileName);
-    }
-
     protected final List<List<String>> splitListToLists(List<String> input) {
         List<List<String>> listOfLists = new ArrayList<>();
         int previous = 0;
@@ -26,20 +22,20 @@ public class FirstPuzzle extends Puzzle {
         return listOfLists;
     }
 
-    protected List<Integer> getCalories() {
-        return splitListToLists(getFileContent()).stream()
+    protected List<Integer> getCalories(String filePath) {
+        return splitListToLists(getFileContent(filePath)).stream()
                 .map(caloriesPerElf -> caloriesPerElf.stream().mapToInt(Integer::parseInt).sum())
                 .collect(Collectors.toList());
     }
 
-    public Integer solvePartOne() {
-        return getCalories().stream()
+    public Integer solvePartOne(String filePath) {
+        return getCalories(filePath).stream()
                 .max(Comparator.comparingInt(calories -> calories))
                 .orElse(0);
     }
 
-    public Integer solvePartTwo() {
-        return getCalories().stream()
+    public Integer solvePartTwo(String filePath) {
+        return getCalories(filePath).stream()
                 .sorted((c1, c2) -> Integer.compare(c2, c1))
                 .limit(3)
                 .mapToInt(calories -> calories)

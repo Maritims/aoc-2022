@@ -4,10 +4,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class ThirdPuzzle extends Puzzle {
-    public ThirdPuzzle(String fileName) {
-        super(fileName);
-    }
-
     protected List<String> getCompartments(String rucksack) {
         return Arrays.asList(rucksack.substring(0, rucksack.length() / 2), rucksack.substring(rucksack.length() / 2));
     }
@@ -31,8 +27,8 @@ public class ThirdPuzzle extends Puzzle {
     }
 
     @Override
-    public Integer solvePartOne() {
-        return getFileContent().stream()
+    public Integer solvePartOne(String filePath) {
+        return getFileContent(filePath).stream()
                 .map(this::getCompartments)
                 .mapToInt(this::getPriority)
                 .sum();
@@ -60,8 +56,8 @@ public class ThirdPuzzle extends Puzzle {
     }
 
     @Override
-    public Integer solvePartTwo() {
-        List<String> fileContent = getFileContent();
+    public Integer solvePartTwo(String filePath) {
+        List<String> fileContent = getFileContent(filePath);
         List<List<String>> groups = new ArrayList<>();
         for (int i = 0; i < fileContent.size(); i += 3) {
             groups.add(fileContent.subList(i, i + 3));

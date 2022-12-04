@@ -1,10 +1,6 @@
 package io.github.maritims.aoc2022;
 
 public class SecondPuzzle extends Puzzle {
-    public SecondPuzzle(String fileName) {
-        super(fileName);
-    }
-
     /**
      * <p>This method takes an {@code int} representing the original move, and returns the simplified version.</p>
      * <br>
@@ -16,9 +12,9 @@ public class SecondPuzzle extends Puzzle {
         return originalMove & 3;
     }
 
-    public Integer solvePartOne() {
+    public Integer solvePartOne(String filePath) {
         int points = 0;
-        for(String round : getFileContent()) {
+        for(String round : getFileContent(filePath)) {
             String[] moves = round.split(" ");
             int originalPlayerMove = moves[1].charAt(0);
             int simplifiedEnemyMove = getSimplifiedMove(moves[0].charAt(0));
@@ -77,9 +73,9 @@ public class SecondPuzzle extends Puzzle {
         return pointsForMove + pointsForOutcome;
     }
 
-    public Integer solvePartTwo() {
+    public Integer solvePartTwo(String filePath) {
         int points = 0;
-        for(String round : getFileContent()) {
+        for(String round : getFileContent(filePath)) {
             String[] moves = round.split(" ");
             int simplifiedEnemyMove = getSimplifiedMove(moves[0].charAt(0));
             int simplifiedOutcome = getSimplifiedOutcome(moves[1].charAt(0));
