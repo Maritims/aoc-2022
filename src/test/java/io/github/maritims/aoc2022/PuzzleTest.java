@@ -30,7 +30,9 @@ public class PuzzleTest {
                 Arguments.arguments(2, SecondPuzzle.class, "second/example.txt", 12),
                 Arguments.arguments(2, SecondPuzzle.class, "second/input.txt", 12424),
                 Arguments.arguments(3, ThirdPuzzle.class, "third/example.txt", 70),
-                Arguments.arguments(3, ThirdPuzzle.class, "third/input.txt", 2604)
+                Arguments.arguments(3, ThirdPuzzle.class, "third/input.txt", 2604),
+                Arguments.arguments(4, FourthPuzzle.class, "fourth/example.txt", 4),
+                Arguments.arguments(4, FourthPuzzle.class, "fourth/input.txt", 895)
         );
     }
 

@@ -1,6 +1,5 @@
 package io.github.maritims.aoc2022;
 
-import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,35 +9,46 @@ public class FourthPuzzle extends Puzzle {
         super(fileName);
     }
 
-    public Point getPoint(String[] assignments) {
-        return new Point(Integer.parseInt(assignments[0]), Integer.parseInt(assignments[1]));
+    public int[] getRange(String[] assignments) {
+        return new int[] { Integer.parseInt(assignments[0]), Integer.parseInt(assignments[1]) };
     }
 
-    public List<Point> getPoints(String pairs) {
+    public List<int[]> getRanges(String pairs) {
         return Arrays.stream(pairs.split(","))
-                .map(assignmentPair -> assignmentPair.split("-"))
-                .map(this::getPoint)
+                .map(pair -> pair.split("-"))
+                .map(this::getRange)
                 .collect(Collectors.toList());
     }
 
-    public boolean isOverlapping(Point start, Point end) {
-        return start.x <= end.x && start.y >= end.y;
+    public boolean isOverlapping(int[] x, int[] y) {
+        return x[0] <= y[0] && x[1] >= y[1];
     }
 
-    public boolean isOverlapping(List<Point> points) {
-        return isOverlapping(points.get(0), points.get(1)) || isOverlapping(points.get(1), points.get(0));
+    public boolean isOverlapping(List<int[]> ranges) {
+        return isOverlapping(ranges.get(0), ranges.get(1)) || isOverlapping(ranges.get(1), ranges.get(0));
+    }
+
+    public boolean isIntersecting(int[] x, int[] y) {
+        return (x[0] >= y[0] && x[0] <= y[1]) || (x[1] >= y[0] && x[1] <= y[1]);
+    }
+
+    public boolean isIntersecting(List<int[]> ranges) {
+        return isIntersecting(ranges.get(0), ranges.get(1)) || isIntersecting(ranges.get(1), ranges.get(0));
     }
 
     @Override
     public Integer solvePartOne() {
         return (int) getFileContent().stream()
-                .map(this::getPoints)
+                .map(this::getRanges)
                 .filter(this::isOverlapping)
                 .count();
     }
 
     @Override
     public Integer solvePartTwo() {
-        return null;
+        return (int) getFileContent().stream()
+                .map(this::getRanges)
+                .filter(this::isIntersecting)
+                .count();
     }
 }
