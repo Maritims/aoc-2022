@@ -15,7 +15,7 @@ public class SecondPuzzle extends Puzzle<Integer> {
         /**
          * Plays a game of Rochambeau and returns the points from the player's perspective.
          * @param enemyMove ∈ {1 (Rock), 2 (Paper), 3 (Scissors)}
-         * @param playerMove ∈ {1 (Paper), 2 (Scissors) or 0 (Rock)}
+         * @param playerMove ∈ {1 (Paper), 2 (Scissors), 0 (Rock)}
          * @return The result of the game in points. 6 (victory), 3 (draw), 0 (loss) plus 1 (rock), 2 (paper) or 3 (scissors).
          */
         public static Integer play(int enemyMove, int playerMove) {
