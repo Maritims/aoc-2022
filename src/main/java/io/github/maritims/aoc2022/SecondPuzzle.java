@@ -1,6 +1,6 @@
 package io.github.maritims.aoc2022;
 
-public class SecondPuzzle extends Puzzle {
+public class SecondPuzzle extends Puzzle<Integer> {
     /**
      * <p>This method takes an {@code int} representing the original move, and returns the simplified version.</p>
      * <br>
@@ -12,6 +12,7 @@ public class SecondPuzzle extends Puzzle {
         return originalMove & 3;
     }
 
+    @Override
     public Integer solvePartOne(String filePath) {
         int points = 0;
         for(String round : getFileContent(filePath)) {
@@ -73,6 +74,7 @@ public class SecondPuzzle extends Puzzle {
         return pointsForMove + pointsForOutcome;
     }
 
+    @Override
     public Integer solvePartTwo(String filePath) {
         int points = 0;
         for(String round : getFileContent(filePath)) {

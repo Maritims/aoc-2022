@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class Puzzle {
+public abstract class Puzzle<T> {
     protected final List<String> getFileContent(String fileName) {
         InputStream is = getClass().getClassLoader().getResourceAsStream(fileName);
         return is == null ? Collections.emptyList() : new BufferedReader(new InputStreamReader(is))
@@ -16,7 +16,7 @@ public abstract class Puzzle {
                 .collect(Collectors.toList());
     }
 
-    public abstract Integer solvePartOne(String filePath);
+    public abstract T solvePartOne(String filePath);
 
-    public abstract Integer solvePartTwo(String filePath);
+    public abstract T solvePartTwo(String filePath);
 }

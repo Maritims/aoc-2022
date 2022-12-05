@@ -1,18 +1,22 @@
 # Changelog
 
-## [Day four] - 2022-12-04
+## [Day 5] - 2022-12-05
+Solved the fifth puzzle of AOC 2022.
+
+## [Day 4] - 2022-12-04
 Solved the fourth puzzle of AOC 2022.
 
-## [Day three] - 2022-12-03
+## [Day 3] - 2022-12-03
 Solved the third puzzle of AOC 2022.
 
-## [Day two] - 2022-12-02
+## [Day 2] - 2022-12-02
 Solved the second puzzle of AOC 2022.
 
-## [Day one] - 2022-12-01
+## [Day 1] - 2022-12-01
 Solved the first puzzle of AOC 2022.
 
-[Day four]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/FourthPuzzle.java
-[Day three]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/ThirdPuzzle.java
-[Day two]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/SecondPuzzle.java
-[Day one]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/FirstPuzzle.java
+[Day 5]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/FourthPuzzle.java
+[Day 4]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/FourthPuzzle.java
+[Day 3]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/ThirdPuzzle.java
+[Day 2]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/SecondPuzzle.java
+[Day 1]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/FirstPuzzle.java

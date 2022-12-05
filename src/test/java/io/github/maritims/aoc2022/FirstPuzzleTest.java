@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.params.provider.Arguments.*;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-class FirstPuzzleTest extends PuzzleTest<FirstPuzzle> {
+class FirstPuzzleTest extends PuzzleTest<Integer, FirstPuzzle> {
     public FirstPuzzleTest() {
         super(FirstPuzzle.class);
     }

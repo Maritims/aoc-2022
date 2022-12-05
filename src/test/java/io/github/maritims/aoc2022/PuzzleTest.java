@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public abstract class PuzzleTest<T extends Puzzle> {
+public abstract class PuzzleTest<S, T extends Puzzle<S>> {
     private final Class<T> clazz;
     private T puzzle;
 
@@ -26,7 +26,7 @@ public abstract class PuzzleTest<T extends Puzzle> {
 
     @ParameterizedTest
     @MethodSource
-    public void solvePartOne(String filePath, int expectedResult) {
+    public void solvePartOne(String filePath, S expectedResult) {
         assertEquals(expectedResult, puzzle.solvePartOne(filePath));
     }
 
@@ -34,7 +34,7 @@ public abstract class PuzzleTest<T extends Puzzle> {
 
     @ParameterizedTest
     @MethodSource
-    public void solvePartTwo(String filePath, int expectedResult) {
+    public void solvePartTwo(String filePath, S expectedResult) {
         assertEquals(expectedResult, puzzle.solvePartTwo(filePath));
     }
 
