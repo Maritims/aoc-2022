@@ -17,6 +17,6 @@ class FifthPuzzleTest extends PuzzleTest<String, FifthPuzzle> {
 
     @Override
     public Stream<Arguments> solvePartTwo() {
-        return null;
+        return Stream.of(Arguments.arguments("fifth/example.txt", "MCD"), Arguments.arguments("fifth/input.txt", "FGLQJCMBD"));
     }
 }

@@ -6,17 +6,16 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class FifthPuzzle extends Puzzle<String> {
-    @Override
-    public String solvePartOne(String filePath) {
-        List<String> lines = getFileContent(filePath);
-        Map<Integer, List<Character>> crateStacks = new HashMap<>();
-        Pattern pattern = Pattern.compile("\\s+(\\d+)\\s");
 
-        Iterator<String> iterator = lines.iterator();
+    public static final Pattern CRATE_NUMBER_PATTERN = Pattern.compile("\\s+(\\d+)\\s");
+
+    public Map<Integer, List<Character>> getCrateStacks(Iterator<String> iterator) {
+        Map<Integer, List<Character>> crateStacks = new HashMap<>();
+
         while(iterator.hasNext()) {
             String line = iterator.next();
 
-            Matcher matcher = pattern.matcher(line);
+            Matcher matcher = CRATE_NUMBER_PATTERN.matcher(line);
             if(matcher.find()) {
                 iterator.remove();
                 iterator.next();
@@ -34,6 +33,14 @@ public class FifthPuzzle extends Puzzle<String> {
             }
             iterator.remove();
         }
+
+        return crateStacks;
+    }
+
+    @Override
+    public String solvePartOne(String filePath) {
+        Iterator<String> iterator = getFileContent(filePath).iterator();
+        Map<Integer, List<Character>> crateStacks = getCrateStacks(iterator);
 
         while(iterator.hasNext()) {
             String line = iterator.next();
@@ -67,6 +74,26 @@ public class FifthPuzzle extends Puzzle<String> {
 
     @Override
     public String solvePartTwo(String filePath) {
-        return null;
+        Iterator<String> iterator = getFileContent(filePath).iterator();
+        Map<Integer, List<Character>> crateStacks = getCrateStacks(iterator);
+
+        while(iterator.hasNext()) {
+            String line = iterator.next();
+            String[] instructions = line.split(" ");
+            int quantity = Integer.parseInt(instructions[1]);
+            int source = Integer.parseInt(instructions[3]) - 1;
+            int destination = Integer.parseInt(instructions[5]) - 1;
+
+            List<Character> crates = crateStacks.get(source).subList(0, quantity);
+            crateStacks.get(destination).addAll(0, crates);
+            crateStacks.get(source).subList(0, quantity).clear();
+
+            iterator.remove();
+        }
+        return crateStacks.values()
+                .stream()
+                .map(stack -> stack.size() == 0 ? "" : stack.get(0))
+                .map(Object::toString)
+                .collect(Collectors.joining(""));
     }
 }
