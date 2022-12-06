@@ -4,24 +4,27 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class SixthPuzzle extends Puzzle<Integer> {
-    @Override
-    public Integer solvePartOne(String filePath) {
-        String dataStreamBuffer = getFileContent(filePath).get(0);
-        List<Character> lastFour = new LinkedList<>();
+    private static Integer getMarker(String dataStreamBuffer, int markerSize) {
+        List<Character> potentialMarker = new LinkedList<>();
         for(int i = 0; i < dataStreamBuffer.length(); i++) {
-            lastFour.add(dataStreamBuffer.charAt(i));
-            if(lastFour.stream().distinct().count() == 4) {
+            potentialMarker.add(dataStreamBuffer.charAt(i));
+            if(potentialMarker.stream().distinct().count() == markerSize) {
                 return i + 1;
             }
-            if(lastFour.size() == 4) {
-                lastFour.remove(0);
+            if(potentialMarker.size() == markerSize) {
+                potentialMarker.remove(0);
             }
         }
         return null;
     }
 
     @Override
+    public Integer solvePartOne(String filePath) {
+        return getMarker(getFileContent(filePath).get(0), 4);
+    }
+
+    @Override
     public Integer solvePartTwo(String filePath) {
-        return null;
+        return getMarker(getFileContent(filePath).get(0), 14);
     }
 }

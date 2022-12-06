@@ -23,6 +23,13 @@ public class SixthPuzzleTest extends PuzzleTest<Integer, SixthPuzzle> {
 
     @Override
     public Stream<Arguments> solvePartTwo() {
-        return null;
+        return Stream.of(
+                Arguments.arguments("sixth/example1.txt", 19),
+                Arguments.arguments("sixth/example2.txt", 23),
+                Arguments.arguments("sixth/example3.txt", 23),
+                Arguments.arguments("sixth/example4.txt", 29),
+                Arguments.arguments("sixth/example5.txt", 26),
+                Arguments.arguments("sixth/input.txt", 1855)
+        );
     }
 }
