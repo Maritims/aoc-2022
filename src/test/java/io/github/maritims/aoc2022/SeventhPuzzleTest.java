@@ -27,7 +27,10 @@ public class SeventhPuzzleTest extends PuzzleTest<Integer, SeventhPuzzle> {
 
     @Override
     public Stream<Arguments> solvePartTwo() {
-        return null;
+        return Stream.of(
+                Arguments.arguments("seventh/example.txt", 24933642),
+                Arguments.arguments("seventh/input.txt", 10475598)
+        );
     }
 
     @Test

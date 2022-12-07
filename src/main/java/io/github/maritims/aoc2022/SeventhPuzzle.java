@@ -2,6 +2,7 @@ package io.github.maritims.aoc2022;
 
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class SeventhPuzzle extends Puzzle<Integer> {
@@ -106,6 +107,19 @@ public class SeventhPuzzle extends Puzzle<Integer> {
 
     @Override
     public Integer solvePartTwo(String filePath) {
-        return null;
+        FileStructure root = FileStructure.build(getFileContent(filePath));
+        LinkedHashSet<FileStructure> hashSet = new LinkedHashSet<>();
+        hashSet.add(root);
+        LinkedHashSet<FileStructure> dirs = FileStructure.getDirsThroughoutStructure(hashSet).collect(Collectors.toCollection(LinkedHashSet::new));
+        int unusedSpace = 70000000 - root.getSize();
+        int requiredSpace = 30000000;
+        int smallestSizeToDelete = 0;
+        for(FileStructure dir : dirs) {
+            int size = dir.getSize();
+            if(unusedSpace + size >= requiredSpace && (smallestSizeToDelete == 0 || smallestSizeToDelete > size)) {
+                smallestSizeToDelete = size;
+            }
+        }
+        return smallestSizeToDelete;
     }
 }
