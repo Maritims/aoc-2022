@@ -84,8 +84,97 @@ public class EightPuzzle extends Puzzle<Integer> {
         return visible;
     }
 
+    public int[][] getGrid(List<String> lines) {
+        int[][] grid = new int[lines.size()][lines.get(0).length()];
+        for(int row = 0; row < lines.size(); row++) {
+            for(int col = 0; col < lines.get(row).length(); col++) {
+                grid[row][col] = Character.getNumericValue(lines.get(row).charAt(col));
+            }
+        }
+        return grid;
+    }
+
+    public int getUpwardsFacingScenicScore(int[][] grid, int row, int col) {
+        if(row == 0) {
+            return 0;
+        }
+
+        int scenicScore = 0;
+        for(int i = row - 1; i >= 0; i--) {
+            scenicScore += 1;
+            if(grid[i][col] >= grid[row][col]) {
+                break;
+            }
+        }
+        return scenicScore;
+    }
+
+    public int getDownwardsFacingScenicScore(int[][] grid, int row, int col) {
+        if(row == grid.length - 1) {
+            return 0;
+        }
+
+        int scenicScore = 0;
+        for(int i = row + 1; i < grid.length; i++) {
+            scenicScore += 1;
+            if(grid[i][col] >= grid[row][col]) {
+                break;
+            }
+        }
+        return scenicScore;
+    }
+
+    public int getLeftFacingScenicScore(int[][] grid, int row, int col) {
+        if(col == 0) {
+            return 0;
+        }
+
+        int scenicScore = 0;
+        for(int i = col - 1; i >= 0; i--) {
+            scenicScore += 1;
+            if(grid[row][i] >= grid[row][col]) {
+                break;
+            }
+        }
+        return scenicScore;
+    }
+
+    public int getRightFacingScenicScore(int[][] grid, int row, int col) {
+        if(col == grid[0].length - 1) {
+            return 0;
+        }
+
+        int scenicScore = 0;
+        for(int i = col + 1; i < grid[0].length; i++) {
+            scenicScore += 1;
+            if(grid[row][i] >= grid[row][col]) {
+                break;
+            }
+        }
+        return scenicScore;
+    }
+
     @Override
     public Integer solvePartTwo(String filePath) {
-        return null;
+        List<String> lines = getFileContent(filePath);
+        int topScenicScore = 0;
+        int[][] grid = getGrid(lines);
+        for(int i = 0; i < lines.size(); i++) {
+            for(int j = 0; j < lines.get(i).length(); j++) {
+                int scenicScore = getScenicScore(grid, i, j);
+                if(scenicScore > topScenicScore) {
+                    topScenicScore = scenicScore;
+                }
+            }
+        }
+        return topScenicScore;
+    }
+
+    public int getScenicScore(int[][] grid, int i, int j) {
+        int up = getUpwardsFacingScenicScore(grid, i, j);
+        int down = getDownwardsFacingScenicScore(grid, i, j);
+        int left = getLeftFacingScenicScore(grid, i, j);
+        int right = getRightFacingScenicScore(grid, i, j);
+        return up * down * left * right;
     }
 }

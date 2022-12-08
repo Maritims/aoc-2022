@@ -27,7 +27,10 @@ class EightPuzzleTest extends PuzzleTest<Integer, EightPuzzle> {
 
     @Override
     public Stream<Arguments> solvePartTwo() {
-        return null;
+        return Stream.of(
+                Arguments.arguments("eight/example.txt", 8),
+                Arguments.arguments("eight/input.txt", 301392)
+        );
     }
 
     public Stream<Arguments> getVisible() {
@@ -72,5 +75,60 @@ class EightPuzzleTest extends PuzzleTest<Integer, EightPuzzle> {
                 new boolean[] { true, true, false }
         };
         assertArrayEquals(new boolean[] { true, false, true }, sut.getRotatedColumn(grid, 0));
+    }
+
+    public Stream<Arguments> getUpwardsFacingScenicScore() {
+        return Stream.of(
+                Arguments.arguments(0, 0, 0),
+                Arguments.arguments(1, 1, 1),
+                Arguments.arguments(2, 2, 1),
+                Arguments.arguments(3, 3, 3),
+                Arguments.arguments(2, 3, 2)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    public void getUpwardsFacingScenicScore(int row, int col, int expectedResult) {
+        EightPuzzle sut = new EightPuzzle();
+        List<String> lines = sut.getFileContent("eight/example.txt");
+        int[][] grid = sut.getGrid(lines);
+        int scenicScore = sut.getUpwardsFacingScenicScore(grid, row, col);
+        assertEquals(expectedResult, scenicScore);
+    }
+
+    public Stream<Arguments> getDownwardsFacingScenicScore() {
+        return Stream.of(
+                Arguments.arguments(0, 0, 2),
+                Arguments.arguments(0, 1, 1),
+                Arguments.arguments(0, 2, 1),
+                Arguments.arguments(0, 3, 4)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    public void getDownwardsFacingScenicScore(int row, int col, int expectedResult) {
+        EightPuzzle sut = new EightPuzzle();
+        List<String> lines = sut.getFileContent("eight/example.txt");
+        int[][] grid = sut.getGrid(lines);
+        int scenicScore = sut.getDownwardsFacingScenicScore(grid, row, col);
+        assertEquals(expectedResult, scenicScore);
+    }
+
+    public Stream<Arguments> getScenicScore() {
+        return Stream.of(
+                Arguments.arguments(1, 2, 4),
+                Arguments.arguments(3, 2, 8)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    public void getScenicScore(int row, int col, int expectedResult) {
+        EightPuzzle sut = new EightPuzzle();
+        List<String> lines = sut.getFileContent("eight/example.txt");
+        int[][] grid = sut.getGrid(lines);
+        assertEquals(expectedResult, sut.getScenicScore(grid, row, col));
     }
 }
