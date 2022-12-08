@@ -1,12 +1,23 @@
 package io.github.maritims.aoc2022;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class EightPuzzle extends Puzzle<Integer> {
+    public static <T> List<List<T>> getTransposed(List<List<T>> table) {
+        List<List<T>> transposedTable = new LinkedList<>();
+        int tableWidth = table.get(0).size();
+        for(int i = 0; i < tableWidth; i++) {
+            List<T> col = new LinkedList<>();
+            for(List<T> row : table) {
+                col.add(row.get(i));
+            }
+            transposedTable.add(col);
+        }
+        return transposedTable;
+    }
+
     public String getRotatedColumn(List<String> lines, int column) {
         return lines.stream()
                 .map(line -> line.charAt(column))
@@ -23,21 +34,13 @@ public class EightPuzzle extends Puzzle<Integer> {
         return normalizedColumn;
     }
 
-    public boolean[] getVisibleFromTheStart(boolean[] gridLine, String treeLine) {
+    public boolean[] getVisible(boolean[] gridLine, String treeLine, boolean reverse) {
         int maxHeight = -1;
-        for(int i = 0; i < treeLine.length(); i++) {
-            int height = Character.getNumericValue(treeLine.charAt(i));
-            if(height > maxHeight) {
-                maxHeight = height;
-                gridLine[i] = true;
-            }
-        }
-        return gridLine;
-    }
-
-    public boolean[] getVisibleFromTheEnd(boolean[] gridLine, String treeLine) {
-        int maxHeight = -1;
-        for(int i = treeLine.length() - 1; i > 0; i--) {
+        for(
+                int i = (reverse ? treeLine.length() - 1 : 0);
+                reverse ? i > 0 : i < treeLine.length();
+                i += (reverse ? -1 : 1)
+        ) {
             int height = Character.getNumericValue(treeLine.charAt(i));
             if(height > maxHeight) {
                 maxHeight = height;
@@ -48,8 +51,8 @@ public class EightPuzzle extends Puzzle<Integer> {
     }
 
     public boolean[] getVisibleFromEitherSide(boolean[] gridLine, String treeLine) {
-        gridLine = getVisibleFromTheStart(gridLine, treeLine);
-        gridLine = getVisibleFromTheEnd(gridLine, treeLine);
+        gridLine = getVisible(gridLine, treeLine, false);
+        gridLine = getVisible(gridLine, treeLine, true);
         return gridLine;
     }
 
@@ -154,6 +157,14 @@ public class EightPuzzle extends Puzzle<Integer> {
         return scenicScore;
     }
 
+    public int getScenicScore(int[][] grid, int row, int col) {
+        int up = getUpwardsFacingScenicScore(grid, row, col);
+        int down = getDownwardsFacingScenicScore(grid, row, col);
+        int left = getLeftFacingScenicScore(grid, row, col);
+        int right = getRightFacingScenicScore(grid, row, col);
+        return up * down * left * right;
+    }
+
     @Override
     public Integer solvePartTwo(String filePath) {
         List<String> lines = getFileContent(filePath);
@@ -168,13 +179,5 @@ public class EightPuzzle extends Puzzle<Integer> {
             }
         }
         return topScenicScore;
-    }
-
-    public int getScenicScore(int[][] grid, int i, int j) {
-        int up = getUpwardsFacingScenicScore(grid, i, j);
-        int down = getDownwardsFacingScenicScore(grid, i, j);
-        int left = getLeftFacingScenicScore(grid, i, j);
-        int right = getRightFacingScenicScore(grid, i, j);
-        return up * down * left * right;
     }
 }

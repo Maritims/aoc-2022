@@ -33,24 +33,11 @@ class EightPuzzleTest extends PuzzleTest<Integer, EightPuzzle> {
         );
     }
 
-    public Stream<Arguments> getVisible() {
-        return Stream.of(
-                Arguments.arguments(new boolean[5], "65332", new boolean[] { true, false, false, false, false }),
-                Arguments.arguments(new boolean[5], "23356", new boolean[] { true, true, false, true, true })
-        );
-    }
-
     public Stream<Arguments> getVisibleFromEitherSide() {
         return Stream.of(
                 Arguments.arguments(new boolean[5], "65332", new boolean[] { true, true, false, true, true }),
                 Arguments.arguments(new boolean[5], "35353", new boolean[] { true, true, false, true, true })
         );
-    }
-
-    @ParameterizedTest
-    @MethodSource
-    public void getVisible(boolean[] gridLine, String treeLine, boolean[] expectedResult) {
-        assertArrayEquals(expectedResult, new EightPuzzle().getVisibleFromTheStart(gridLine, treeLine));
     }
 
     @ParameterizedTest
