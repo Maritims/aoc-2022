@@ -35,14 +35,14 @@ class EightPuzzleTest extends PuzzleTest<Integer, EightPuzzle> {
 
     public Stream<Arguments> getVisibleFromEitherSide() {
         return Stream.of(
-                Arguments.arguments(new boolean[5], "65332", new boolean[] { true, true, false, true, true }),
-                Arguments.arguments(new boolean[5], "35353", new boolean[] { true, true, false, true, true })
+                Arguments.arguments(new Boolean[5], "65332", new Boolean[] { true, true, null, true, true }),
+                Arguments.arguments(new Boolean[5], "35353", new Boolean[] { true, true, null, true, true })
         );
     }
 
     @ParameterizedTest
     @MethodSource
-    public void getVisibleFromEitherSide(boolean[] gridLine, String treeLine, boolean[] expectedResult) {
+    public void getVisibleFromEitherSide(Boolean[] gridLine, String treeLine, Boolean[] expectedResult) {
         assertArrayEquals(expectedResult, new EightPuzzle().getVisibleFromEitherSide(gridLine, treeLine));
     }
 
@@ -56,12 +56,12 @@ class EightPuzzleTest extends PuzzleTest<Integer, EightPuzzle> {
     @Test
     public void getNormalizedBooleanColumn() {
         EightPuzzle sut = new EightPuzzle();
-        boolean[][] grid = new boolean[][] {
-                new boolean[] { true, true, true },
-                new boolean[] { false, true, false },
-                new boolean[] { true, true, false }
+        Boolean[][] grid = new Boolean[][] {
+                new Boolean[] { true, true, true },
+                new Boolean[] { false, true, false },
+                new Boolean[] { true, true, false }
         };
-        assertArrayEquals(new boolean[] { true, false, true }, sut.getRotatedColumn(grid, 0));
+        assertArrayEquals(new Boolean[] { true, false, true }, sut.getRotatedColumn(grid, 0));
     }
 
     public Stream<Arguments> getUpwardsFacingScenicScore() {

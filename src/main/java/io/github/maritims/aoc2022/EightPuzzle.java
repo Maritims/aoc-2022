@@ -25,16 +25,16 @@ public class EightPuzzle extends Puzzle<Integer> {
                 .collect(Collectors.joining());
     }
 
-    public boolean[] getRotatedColumn(boolean[][] lines, int column) {
+    public Boolean[] getRotatedColumn(Boolean[][] lines, int column) {
         List<Boolean> list = Arrays.stream(lines)
                 .map(line -> line[column])
                 .collect(Collectors.toCollection(LinkedList::new));
-        boolean[] normalizedColumn = new boolean[list.size()];
+        Boolean[] normalizedColumn = new Boolean[list.size()];
         IntStream.range(0, list.size()).forEach(i -> normalizedColumn[i] = list.get(i));
         return normalizedColumn;
     }
 
-    public boolean[] getVisible(boolean[] gridLine, String treeLine, boolean reverse) {
+    public Boolean[] getVisible(Boolean[] gridLine, String treeLine, boolean reverse) {
         int maxHeight = -1;
         for(
                 int i = (reverse ? treeLine.length() - 1 : 0);
@@ -50,7 +50,7 @@ public class EightPuzzle extends Puzzle<Integer> {
         return gridLine;
     }
 
-    public boolean[] getVisibleFromEitherSide(boolean[] gridLine, String treeLine) {
+    public Boolean[] getVisibleFromEitherSide(Boolean[] gridLine, String treeLine) {
         gridLine = getVisible(gridLine, treeLine, false);
         gridLine = getVisible(gridLine, treeLine, true);
         return gridLine;
@@ -60,16 +60,16 @@ public class EightPuzzle extends Puzzle<Integer> {
     public Integer solvePartOne(String filePath) {
         List<String> lines = getFileContent(filePath);
         int columns = lines.get(0).length();
-        boolean[][] grid = new boolean[lines.size()][columns];
+        Boolean[][] grid = new Boolean[lines.size()][columns];
 
         // Check the sides.
         for(int row = 0; row < lines.size(); row++) {
-            grid[row] = getVisibleFromEitherSide(new boolean[lines.get(row).length()], lines.get(row));
+            grid[row] = getVisibleFromEitherSide(new Boolean[lines.get(row).length()], lines.get(row));
         }
 
         // Check above and below.
         for(int col = 0; col < columns; col++) {
-            boolean[] rotatedColumn = getVisibleFromEitherSide(
+            Boolean[] rotatedColumn = getVisibleFromEitherSide(
                     getRotatedColumn(grid, col),
                     getRotatedColumn(lines, col)
             );
@@ -78,13 +78,11 @@ public class EightPuzzle extends Puzzle<Integer> {
             }
         }
 
-        int visible = 0;
-        for (boolean[] line : grid) {
-            for (boolean tree : line) {
-                visible += tree ? 1 : 0;
-            }
-        }
-        return visible;
+        return Arrays.stream(grid)
+                .mapToInt(line -> Arrays.stream(line)
+                        .mapToInt(tree -> tree == null || !tree ? 0 : 1)
+                        .sum())
+                .sum();
     }
 
     public int[][] getGrid(List<String> lines) {
