@@ -1,9 +1,7 @@
 package io.github.maritims.aoc2022;
 
 import java.awt.*;
-import java.util.Arrays;
 import java.util.LinkedHashSet;
-import java.util.stream.IntStream;
 
 public class NinthPuzzle extends Puzzle<Integer> {
     static class Move {
@@ -66,32 +64,32 @@ public class NinthPuzzle extends Puzzle<Integer> {
             return visitedByTail;
         }
 
-        private void move(Move move) {
-            for (int step = 0; step < move.getSteps(); step++) {
-                switch (move.getDirection()) {
-                    case 'U':
-                    case 'D':
-                        head.y += move.isDirection('U') ? 1 : -1;
-                        tail.y = head.y - 1;
-                        if(tail.x != head.x) {
-                            tail.x = head.x;
-                        }
-                        break;
-                    case 'R':
-                    case 'L':
-                        head.x += move.isDirection('R') ? 1 : -1;
-                        tail.x = head.x - 1;
-                        if(tail.y != head.y) {
-                            tail.y = head.y;
-                        }
-                        break;
-                }
-                visitedByTail.add(tail.x + "," + tail.y);
-            }
-        }
-
         public Rope move(Move... moves) {
-            Arrays.stream(moves).forEach(this::move);
+            for(Move move : moves) {
+                for (int step = 0; step < move.getSteps(); step++) {
+                    switch (move.getDirection()) {
+                        case 'U':
+                        case 'D':
+                            head.y += move.isDirection('U') ? 1 : -1;
+                            break;
+                        case 'R':
+                        case 'L':
+                            head.x += move.isDirection('R') ? 1 : -1;
+                            break;
+                    }
+
+                    // Is it time to move the tail?
+                    int deltaX = head.x - tail.x;
+                    if(Math.abs(deltaX) > 1) {
+                        tail.x += deltaX > 0 ? 1 : -1;
+                    }
+
+                    int deltaY = head.y - tail.y;
+                    if(Math.abs(deltaY) > 1) {
+                        tail.y += deltaY > 0 ? 1 : -1;
+                    }
+                }
+            }
             return this;
         }
     }

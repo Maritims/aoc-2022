@@ -36,7 +36,6 @@ public class NinthPuzzleTest extends PuzzleTest<Integer, NinthPuzzle> {
         return of(
                 arguments(new Point(4, 0), new Point(3, 0), new Move[] { right(4) }),
                 arguments(new Point(0, 4), new Point(0, 3), new Move[] { up(4) }),
-                arguments(new Point(4, 4), new Point(4, 3), new Move[] { right(4), up(4) }),
                 arguments(new Point(2, 2), new Point(1, 2), new Move[] { right(4), up(4), left(3), down(1), right(4), down(1), left(5), right(2) })
         );
     }
