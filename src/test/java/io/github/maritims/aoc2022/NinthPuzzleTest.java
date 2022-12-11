@@ -29,7 +29,10 @@ public class NinthPuzzleTest extends PuzzleTest<Integer, NinthPuzzle> {
 
     @Override
     public Stream<Arguments> solvePartTwo() {
-        return null;
+        return of(
+                arguments("ninth/example.txt", 1),
+                arguments("ninth/input.txt", 2327)
+        );
     }
 
     public Stream<Arguments> moveRope() {
@@ -47,10 +50,10 @@ public class NinthPuzzleTest extends PuzzleTest<Integer, NinthPuzzle> {
         Rope rope = new Rope();
 
         // act
-        rope.move(moves);
+        rope.move(1, moves);
 
         // assert
         assertEquals(expectedHead, rope.getHead());
-        assertEquals(expectedTail, rope.getTail());
+        assertEquals(expectedTail, rope.getKnots().get(0));
     }
 }
