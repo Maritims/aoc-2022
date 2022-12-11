@@ -1,5 +1,8 @@
 # Changelog
 
+## [Day 9] - 2022-12-08
+WIP. Ninth puzzle of AOC 2022.
+
 ## [Day 8] - 2022-12-08
 Solved the eight puzzle of AOC 2022.
 
@@ -24,6 +27,7 @@ Solved the second puzzle of AOC 2022.
 ## [Day 1] - 2022-12-01
 Solved the first puzzle of AOC 2022.
 
+[Day 9]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/NinthPuzzle.java
 [Day 8]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/EightPuzzle.java
 [Day 7]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/SeventhPuzzle.java
 [Day 6]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/SixthPuzzle.java
