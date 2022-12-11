@@ -80,14 +80,21 @@ public class NinthPuzzle extends Puzzle<Integer> {
 
                     // Is it time to move the tail?
                     int deltaX = head.x - tail.x;
-                    if(Math.abs(deltaX) > 1) {
+                    int deltaY = head.y - tail.y;
+
+                    // Condition 1: The head is moving horizontally.
+                    // Condition 2: The head is moving diagonally. The tail is now one step to the left or right of the head, but more than one step above or below it.
+                    if (Math.abs(deltaX) > 1 || Math.abs(deltaX) == 1 && Math.abs(deltaY) > 1) {
                         tail.x += deltaX > 0 ? 1 : -1;
                     }
 
-                    int deltaY = head.y - tail.y;
-                    if(Math.abs(deltaY) > 1) {
+                    // Condition 1: The head is moving vertically.
+                    // Condition 2: The head is moving diagonally. The tail is now one step above or below the head, but more than one step to the left or right of it.
+                    if (Math.abs(deltaY) > 1 || Math.abs(deltaY) == 1 && Math.abs(deltaX) > 1) {
                         tail.y += deltaY > 0 ? 1 : -1;
                     }
+
+                    visitedByTail.add(tail.x + "," + tail.y);
                 }
             }
             return this;
