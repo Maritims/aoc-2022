@@ -23,7 +23,7 @@ public class NinthPuzzleTest extends PuzzleTest<Integer, NinthPuzzle> {
     public Stream<Arguments> solvePartOne() {
         return of(
                 arguments("ninth/example.txt", 13),
-                arguments("ninth/input.txt", 14)
+                arguments("ninth/input.txt", 5960)
         );
     }
 
