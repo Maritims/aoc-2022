@@ -49,7 +49,6 @@ public class NinthPuzzle extends Puzzle<Integer> {
     }
 
     static class Rope {
-        private final Point head = new Point(0, 0);
         private final LinkedList<Point> knots = new LinkedList<>();
         private final LinkedHashSet<String> visitedByTrackedKnot = new LinkedHashSet<>();
 
@@ -59,12 +58,8 @@ public class NinthPuzzle extends Puzzle<Integer> {
             }
         }
 
-        public Rope() {
-            this(1);
-        }
-
         public Point getHead() {
-            return head;
+            return knots.get(0);
         }
 
         public LinkedList<Point> getKnots() {
@@ -75,61 +70,42 @@ public class NinthPuzzle extends Puzzle<Integer> {
             return visitedByTrackedKnot;
         }
 
-        public Rope move(int tailToTrack, Move... moves) {
+        public Rope move(int knotToTrack, Move... moves) {
             for(Move move : moves) {
                 for (int step = 0; step < move.getSteps(); step++) {
                     switch (move.getDirection()) {
                         case 'U':
                         case 'D':
-                            head.y += move.isDirection('U') ? 1 : -1;
+                            getHead().y += move.isDirection('U') ? 1 : -1;
                             break;
                         case 'R':
                         case 'L':
-                            head.x += move.isDirection('R') ? 1 : -1;
+                            getHead().x += move.isDirection('R') ? 1 : -1;
                             break;
                     }
 
-                    // Is it time to move the tails?
-                    for(int i = 0; i < knots.size(); i++) {
-                        Point reference = i == 0 ? head : knots.get(i - 1);
-                        int deltaX = reference.x - knots.get(i).x;
-                        int deltaY = reference.y - knots.get(i).y;
+                    // Is it time to move the knots?
+                    for(int i = 1; i < knots.size(); i++) {
+                        Point previousKnot = knots.get(i - 1);
+                        int deltaX = previousKnot.x - knots.get(i).x;
+                        int deltaY = previousKnot.y - knots.get(i).y;
 
-                        // Condition 1: The head is moving horizontally.
-                        // Condition 2: The head is moving diagonally. The tail is now one step to the left or right of the head, but more than one step above or below it.
+                        // Condition 1: The previous knot is moving horizontally.
+                        // Condition 2: The previous knot is moving diagonally. The knot is now one step to the left or right of the previous knot, but more than one step above or below it.
                         if (Math.abs(deltaX) > 1 || Math.abs(deltaX) == 1 && Math.abs(deltaY) > 1) {
                             knots.get(i).x += deltaX > 0 ? 1 : -1;
                         }
 
-                        // Condition 1: The head is moving vertically.
-                        // Condition 2: The head is moving diagonally. The tail is now one step above or below the head, but more than one step to the left or right of it.
+                        // Condition 1: The previous knot is moving vertically.
+                        // Condition 2: The previous knot is moving diagonally. The knot is now one step above or below the previous knot, but more than one step to the left or right of it.
                         if (Math.abs(deltaY) > 1 || Math.abs(deltaY) == 1 && Math.abs(deltaX) > 1) {
                             knots.get(i).y += deltaY > 0 ? 1 : -1;
                         }
 
-                        if(tailToTrack == i + 1) {
+                        if(knotToTrack == i + 1) {
                             visitedByTrackedKnot.add(knots.get(i).x + "," + knots.get(i).y);
                         }
                     }
-
-/*                    for(Point tail : tails) {
-                        int deltaX = head.x - tail.x;
-                        int deltaY = head.y - tail.y;
-
-                        // Condition 1: The head is moving horizontally.
-                        // Condition 2: The head is moving diagonally. The tail is now one step to the left or right of the head, but more than one step above or below it.
-                        if (Math.abs(deltaX) > 1 || Math.abs(deltaX) == 1 && Math.abs(deltaY) > 1) {
-                            tail.x += deltaX > 0 ? 1 : -1;
-                        }
-
-                        // Condition 1: The head is moving vertically.
-                        // Condition 2: The head is moving diagonally. The tail is now one step above or below the head, but more than one step to the left or right of it.
-                        if (Math.abs(deltaY) > 1 || Math.abs(deltaY) == 1 && Math.abs(deltaX) > 1) {
-                            tail.y += deltaY > 0 ? 1 : -1;
-                        }
-
-                        visitedByTail.add(tail.x + "," + tail.y);
-                    }*/
                 }
             }
             return this;
@@ -141,7 +117,7 @@ public class NinthPuzzle extends Puzzle<Integer> {
         Move[] moves = getFileContent(filePath).stream()
                 .map(Move::new)
                 .toArray(Move[]::new);
-        Rope rope = new Rope().move(1, moves);
+        Rope rope = new Rope(2).move(2, moves);
         return rope.getVisitedByTrackedKnot().size();
     }
 
@@ -150,7 +126,7 @@ public class NinthPuzzle extends Puzzle<Integer> {
         Move[] moves = getFileContent(filePath).stream()
                 .map(Move::new)
                 .toArray(Move[]::new);
-        Rope rope = new Rope(9).move(9, moves);
+        Rope rope = new Rope(10).move(10, moves);
         return rope.getVisitedByTrackedKnot().size();
     }
 }

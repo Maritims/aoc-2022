@@ -47,13 +47,13 @@ public class NinthPuzzleTest extends PuzzleTest<Integer, NinthPuzzle> {
     @MethodSource
     public void moveRope(Point expectedHead, Point expectedTail, Move... moves) {
         // arrange
-        Rope rope = new Rope();
+        Rope rope = new Rope(2);
 
         // act
-        rope.move(1, moves);
+        rope.move(2, moves);
 
         // assert
         assertEquals(expectedHead, rope.getHead());
-        assertEquals(expectedTail, rope.getKnots().get(0));
+        assertEquals(expectedTail, rope.getKnots().get(1));
     }
 }
