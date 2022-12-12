@@ -16,7 +16,11 @@ public class TenthPuzzle extends Puzzle<Integer> {
     }
 
     static class CRT {
-        private boolean[][] pixels = new boolean[6][40];
+        private final boolean[][] pixels;
+
+        public CRT(int width, int height) {
+            pixels = new boolean[height][width];
+        }
 
         public void draw(int x, int y, boolean isLit) {
             pixels[y][x] = isLit;
@@ -41,10 +45,16 @@ public class TenthPuzzle extends Puzzle<Integer> {
 
         private void cycle() {
             cycles++;
+
+            // Accumulate total signal strength
             if (cycles == nextInterestingCycle) {
                 totalSignalStrength += cycles * cpu.getX();
                 nextInterestingCycle += 40;
             }
+
+            // Draw pixel
+            // If the sprite is positioned such that one of its three pixels is the pixel currently being drawn,
+            // the screen produces a lit pixel (#); otherwise, the screen leaves the pixel dark (.).
         }
 
         public void run(String instruction) {
@@ -59,7 +69,7 @@ public class TenthPuzzle extends Puzzle<Integer> {
 
     @Override
     public Integer solvePartOne(String filePath) {
-        ClockCircuit clockCircuit = new ClockCircuit(new CPU(), new CRT());
+        ClockCircuit clockCircuit = new ClockCircuit(new CPU(), new CRT(40, 6));
         getFileContent(filePath).forEach(clockCircuit::run);
         return clockCircuit.getTotalSignalStrength();
     }
