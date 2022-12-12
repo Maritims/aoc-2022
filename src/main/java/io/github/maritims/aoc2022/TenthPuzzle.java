@@ -9,11 +9,11 @@ public class TenthPuzzle extends Puzzle<Integer> {
         private int nextInterestingCycle = 20;
         private int totalSignalStrength = 0;
 
-        public int getX() {
-            return X;
+        public int getTotalSignalStrength() {
+            return totalSignalStrength;
         }
 
-        public void cycle() {
+        private void cycle() {
             cycles++;
             if (cycles == nextInterestingCycle) {
                 totalSignalStrength += cycles * X;
@@ -21,26 +21,20 @@ public class TenthPuzzle extends Puzzle<Integer> {
             }
         }
 
-        public void addX(int V) {
-            X += V;
-        }
-
-        public int getTotalSignalStrength() {
-            return totalSignalStrength;
+        public void run(String instruction) {
+            if(instruction.startsWith("noop")) {
+                cycle();
+            } else if(instruction.startsWith("addx")) {
+                IntStream.of(0, 2).forEach(i -> cycle());
+                X += Integer.parseInt(instruction.split(" ")[1]);
+            }
         }
     }
 
     @Override
     public Integer solvePartOne(String filePath) {
         CPU cpu = new CPU();
-        for(String instruction : getFileContent(filePath)) {
-            if(instruction.startsWith("noop")) {
-                cpu.cycle();
-            } else if(instruction.startsWith("addx")) {
-                IntStream.of(0, 2).forEach(i -> cpu.cycle());
-                cpu.addX(Integer.parseInt(instruction.split(" ")[1]));
-            }
-        }
+        getFileContent(filePath).forEach(cpu::run);
         return cpu.getTotalSignalStrength();
     }
 
