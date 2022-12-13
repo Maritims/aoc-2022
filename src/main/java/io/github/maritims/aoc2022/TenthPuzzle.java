@@ -1,6 +1,5 @@
 package io.github.maritims.aoc2022;
 
-import java.util.Arrays;
 import java.util.stream.IntStream;
 
 public class TenthPuzzle extends Puzzle<Integer, String> {
@@ -65,7 +64,7 @@ public class TenthPuzzle extends Puzzle<Integer, String> {
             }
         }
 
-        public void run(String instruction) {
+        public void tick(String instruction) {
             if(instruction.startsWith("noop")) {
                 cycle();
             } else if(instruction.startsWith("addx")) {
@@ -78,7 +77,7 @@ public class TenthPuzzle extends Puzzle<Integer, String> {
     @Override
     public Integer solvePartOne(String filePath) {
         ClockCircuit clockCircuit = new ClockCircuit(new CPU(), null);
-        getFileContent(filePath).forEach(clockCircuit::run);
+        getFileContent(filePath).forEach(clockCircuit::tick);
         return clockCircuit.getTotalSignalStrength();
     }
 
@@ -86,7 +85,7 @@ public class TenthPuzzle extends Puzzle<Integer, String> {
     public String solvePartTwo(String filePath) {
         CRT crt = new CRT(40, 6);
         ClockCircuit clockCircuit = new ClockCircuit(new CPU(), crt);
-        getFileContent(filePath).forEach(clockCircuit::run);
+        getFileContent(filePath).forEach(clockCircuit::tick);
 
         StringBuilder sb = new StringBuilder();
         boolean[][] pixels = crt.getPixels();
