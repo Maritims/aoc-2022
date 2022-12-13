@@ -4,7 +4,7 @@ import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.stream.Stream;
 
-public class TenthPuzzleTest extends PuzzleTest<Integer, TenthPuzzle> {
+public class TenthPuzzleTest extends PuzzleTest<Integer, String, TenthPuzzle> {
     public TenthPuzzleTest() {
         super(TenthPuzzle.class);
     }
@@ -19,6 +19,25 @@ public class TenthPuzzleTest extends PuzzleTest<Integer, TenthPuzzle> {
 
     @Override
     public Stream<Arguments> solvePartTwo() {
-        return null;
+        return Stream.of(
+                Arguments.arguments(
+                        "tenth/example.txt",
+                        "##..##..##..##..##..##..##..##..##..##..\n" +
+                        "###...###...###...###...###...###...###.\n" +
+                        "####....####....####....####....####....\n" +
+                        "#####.....#####.....#####.....#####.....\n" +
+                        "######......######......######......####\n" +
+                        "#######.......#######.......#######....."
+                ),
+                Arguments.arguments(
+                        "tenth/input.txt",
+                        "###..#.....##..####.#..#..##..####..##..\n" +
+                        "#..#.#....#..#.#....#.#..#..#....#.#..#.\n" +
+                        "#..#.#....#....###..##...#..#...#..#....\n" +
+                        "###..#....#.##.#....#.#..####..#...#.##.\n" +
+                        "#....#....#..#.#....#.#..#..#.#....#..#.\n" +
+                        "#....####..###.#....#..#.#..#.####..###."
+                )
+        );
     }
 }

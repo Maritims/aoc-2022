@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class FourthPuzzle extends Puzzle<Integer> {
+public class FourthPuzzle extends Puzzle<Integer, Integer> {
     public int[] getRange(String[] assignments) {
         return new int[] { Integer.parseInt(assignments[0]), Integer.parseInt(assignments[1]) };
     }

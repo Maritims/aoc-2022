@@ -4,7 +4,7 @@ import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.stream.Stream;
 
-public class SecondPuzzleTest extends PuzzleTest<Integer, SecondPuzzle> {
+public class SecondPuzzleTest extends PuzzleTest<Integer, Integer, SecondPuzzle> {
     public SecondPuzzleTest() {
         super(SecondPuzzle.class);
     }

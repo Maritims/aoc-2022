@@ -14,7 +14,7 @@ import static java.util.stream.Stream.of;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-public class NinthPuzzleTest extends PuzzleTest<Integer, NinthPuzzle> {
+public class NinthPuzzleTest extends PuzzleTest<Integer, Integer, NinthPuzzle> {
     public NinthPuzzleTest() {
         super(NinthPuzzle.class);
     }

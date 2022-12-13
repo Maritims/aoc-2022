@@ -1,8 +1,9 @@
 package io.github.maritims.aoc2022;
 
+import java.util.Arrays;
 import java.util.stream.IntStream;
 
-public class TenthPuzzle extends Puzzle<Integer> {
+public class TenthPuzzle extends Puzzle<Integer, String> {
     static class CPU {
         private int X = 1;
 
@@ -22,8 +23,12 @@ public class TenthPuzzle extends Puzzle<Integer> {
             pixels = new boolean[height][width];
         }
 
-        public void draw(int x, int y, boolean isLit) {
-            pixels[y][x] = isLit;
+        public boolean[][] getPixels() {
+            return pixels;
+        }
+
+        public void draw(int x, int y) {
+            pixels[y][x] = true;
         }
     }
 
@@ -44,17 +49,20 @@ public class TenthPuzzle extends Puzzle<Integer> {
         }
 
         private void cycle() {
+            if(crt != null) {
+                int pixelX = cycles % 40;
+                int pixelY = cycles / 40;
+                if(pixelX == cpu.getX() || pixelX == cpu.getX() - 1 || pixelX == cpu.getX() + 1) {
+                    crt.draw(pixelX, pixelY);
+                }
+            }
+
             cycles++;
 
-            // Accumulate total signal strength
             if (cycles == nextInterestingCycle) {
                 totalSignalStrength += cycles * cpu.getX();
                 nextInterestingCycle += 40;
             }
-
-            // Draw pixel
-            // If the sprite is positioned such that one of its three pixels is the pixel currently being drawn,
-            // the screen produces a lit pixel (#); otherwise, the screen leaves the pixel dark (.).
         }
 
         public void run(String instruction) {
@@ -69,13 +77,28 @@ public class TenthPuzzle extends Puzzle<Integer> {
 
     @Override
     public Integer solvePartOne(String filePath) {
-        ClockCircuit clockCircuit = new ClockCircuit(new CPU(), new CRT(40, 6));
+        ClockCircuit clockCircuit = new ClockCircuit(new CPU(), null);
         getFileContent(filePath).forEach(clockCircuit::run);
         return clockCircuit.getTotalSignalStrength();
     }
 
     @Override
-    public Integer solvePartTwo(String filePath) {
-        return null;
+    public String solvePartTwo(String filePath) {
+        CRT crt = new CRT(40, 6);
+        ClockCircuit clockCircuit = new ClockCircuit(new CPU(), crt);
+        getFileContent(filePath).forEach(clockCircuit::run);
+
+        StringBuilder sb = new StringBuilder();
+        boolean[][] pixels = crt.getPixels();
+        for(int i = 0; i < pixels.length; i++) {
+            for(boolean pixel : pixels[i]) {
+                sb.append(pixel ? "#" : ".");
+            }
+            if(i < pixels.length - 1) {
+                sb.append("\n");
+            }
+        }
+        System.out.println(sb);
+        return sb.toString();
     }
 }

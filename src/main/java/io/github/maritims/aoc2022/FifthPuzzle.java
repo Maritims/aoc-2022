@@ -5,7 +5,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class FifthPuzzle extends Puzzle<String> {
+public class FifthPuzzle extends Puzzle<String, String> {
 
     public static final Pattern CRATE_NUMBER_PATTERN = Pattern.compile("\\s+(\\d+)\\s");
 

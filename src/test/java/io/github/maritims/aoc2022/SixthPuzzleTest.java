@@ -4,7 +4,7 @@ import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.stream.Stream;
 
-public class SixthPuzzleTest extends PuzzleTest<Integer, SixthPuzzle> {
+public class SixthPuzzleTest extends PuzzleTest<Integer, Integer, SixthPuzzle> {
     public SixthPuzzleTest() {
         super(SixthPuzzle.class);
     }
@@ -29,7 +29,7 @@ public class SixthPuzzleTest extends PuzzleTest<Integer, SixthPuzzle> {
                 Arguments.arguments("sixth/example3.txt", 23),
                 Arguments.arguments("sixth/example4.txt", 29),
                 Arguments.arguments("sixth/example5.txt", 26),
-                Arguments.arguments("sixth/input.txt", 1855)
+                Arguments.arguments("sixth/input.txt", 3256)
         );
     }
 }

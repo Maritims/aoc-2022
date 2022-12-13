@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class EightPuzzleTest extends PuzzleTest<Integer, EightPuzzle> {
+class EightPuzzleTest extends PuzzleTest<Integer, Integer, EightPuzzle> {
 
     public EightPuzzleTest() {
         super(EightPuzzle.class);

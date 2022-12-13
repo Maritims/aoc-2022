@@ -3,7 +3,6 @@ package io.github.maritims.aoc2022;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.provider.Arguments;
 
-import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,7 +11,7 @@ import java.util.stream.Stream;
 import static io.github.maritims.aoc2022.SeventhPuzzle.FileStructure;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class SeventhPuzzleTest extends PuzzleTest<Integer, SeventhPuzzle> {
+public class SeventhPuzzleTest extends PuzzleTest<Integer, Integer, SeventhPuzzle> {
     public SeventhPuzzleTest() {
         super(SeventhPuzzle.class);
     }

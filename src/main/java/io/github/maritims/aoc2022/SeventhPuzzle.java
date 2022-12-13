@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class SeventhPuzzle extends Puzzle<Integer> {
+public class SeventhPuzzle extends Puzzle<Integer, Integer> {
     static class FileStructure {
         private final String name;
         private final Integer size;

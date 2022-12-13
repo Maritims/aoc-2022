@@ -4,7 +4,7 @@ import java.awt.*;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 
-public class NinthPuzzle extends Puzzle<Integer> {
+public class NinthPuzzle extends Puzzle<Integer, Integer> {
     static class Move {
         private final char direction;
         private final int steps;

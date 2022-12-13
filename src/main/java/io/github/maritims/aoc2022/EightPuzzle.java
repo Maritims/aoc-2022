@@ -4,7 +4,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class EightPuzzle extends Puzzle<Integer> {
+public class EightPuzzle extends Puzzle<Integer, Integer> {
     public static <T> List<List<T>> getTransposed(List<List<T>> table) {
         List<List<T>> transposedTable = new LinkedList<>();
         int tableWidth = table.get(0).size();

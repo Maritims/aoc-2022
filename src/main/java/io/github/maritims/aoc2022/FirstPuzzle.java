@@ -5,7 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class FirstPuzzle extends Puzzle<Integer> {
+public class FirstPuzzle extends Puzzle<Integer, Integer> {
     protected final List<List<String>> splitListToLists(List<String> input) {
         List<List<String>> listOfLists = new ArrayList<>();
         int previous = 0;
