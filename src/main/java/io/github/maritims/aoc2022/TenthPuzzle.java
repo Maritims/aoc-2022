@@ -1,5 +1,8 @@
 package io.github.maritims.aoc2022;
 
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.stream.IntStream;
 
 public class TenthPuzzle extends Puzzle<Integer, String> {
@@ -28,6 +31,17 @@ public class TenthPuzzle extends Puzzle<Integer, String> {
 
         public void draw(int x, int y) {
             pixels[y][x] = true;
+        }
+
+        public void render(Writer writer) throws IOException {
+            for(int i = 0; i < pixels.length; i++) {
+                for(boolean pixel : pixels[i]) {
+                    writer.write(pixel ? "#" : ".");
+                }
+                if(i < pixels.length - 1) {
+                    writer.write("\n");
+                }
+            }
         }
     }
 
@@ -86,18 +100,13 @@ public class TenthPuzzle extends Puzzle<Integer, String> {
         CRT crt = new CRT(40, 6);
         ClockCircuit clockCircuit = new ClockCircuit(new CPU(), crt);
         getFileContent(filePath).forEach(clockCircuit::tick);
-
-        StringBuilder sb = new StringBuilder();
-        boolean[][] pixels = crt.getPixels();
-        for(int i = 0; i < pixels.length; i++) {
-            for(boolean pixel : pixels[i]) {
-                sb.append(pixel ? "#" : ".");
-            }
-            if(i < pixels.length - 1) {
-                sb.append("\n");
-            }
+        StringWriter stringWriter = new StringWriter();
+        try {
+            crt.render(stringWriter);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        System.out.println(sb);
-        return sb.toString();
+        System.out.println(stringWriter);
+        return stringWriter.toString();
     }
 }
