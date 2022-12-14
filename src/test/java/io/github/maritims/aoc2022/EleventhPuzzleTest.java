@@ -20,7 +20,8 @@ public class EleventhPuzzleTest extends PuzzleTest<Integer, Long, EleventhPuzzle
     @Override
     public Stream<Arguments> solvePartTwo() {
         return Stream.of(
-                Arguments.arguments("eleventh/example.txt", 2713310158L)
+                Arguments.arguments("eleventh/example.txt", 2713310158L),
+                Arguments.arguments("eleventh/input.txt", 20151213744L)
         );
     }
 }

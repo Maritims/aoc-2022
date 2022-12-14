@@ -1,21 +1,20 @@
 package io.github.maritims.aoc2022;
 
 import java.util.*;
-import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class EleventhPuzzle extends Puzzle<Integer, Long> {
     static class Monkey {
-        private final LinkedList<Integer> items;
-        private final Function<Integer, Integer> operation;
+        private final LinkedList<Long> items;
+        private final Function<Long, Long> operation;
         private final Integer divisor;
         private final Integer targetMonkeyIfTestPasses;
         private final Integer targetMonkeyIfTestFails;
         private Long inspected = 0L;
 
-        public Monkey(LinkedList<Integer> items, Function<Integer, Integer> operation, Integer divisor, Integer targetMonkeyIfTestPasses, Integer targetMonkeyIfTestFails) {
+        public Monkey(LinkedList<Long> items, Function<Long, Long> operation, Integer divisor, Integer targetMonkeyIfTestPasses, Integer targetMonkeyIfTestFails) {
             this.items = items;
             this.operation = operation;
             this.divisor = divisor;
@@ -23,7 +22,7 @@ public class EleventhPuzzle extends Puzzle<Integer, Long> {
             this.targetMonkeyIfTestFails = targetMonkeyIfTestFails;
         }
 
-        public LinkedList<Integer> getItems() {
+        public LinkedList<Long> getItems() {
             return items;
         }
 
@@ -43,15 +42,15 @@ public class EleventhPuzzle extends Puzzle<Integer, Long> {
             return inspected;
         }
 
-        public Integer inspect(Integer item) {
+        public Long inspect(Long item) {
             inspected++;
             return operation.apply(item);
         }
 
-        private static Function<Integer, Integer> buildOperationFromDefinition(String definition) {
+        private static Function<Long, Long> buildOperationFromDefinition(String definition) {
             String[] parts = definition.substring(definition.indexOf('=') + 1).split(" ");
             char operator = parts[2].charAt(0);
-            Optional<Integer> value = "old".equalsIgnoreCase(parts[3]) ? Optional.empty() : Optional.of(Integer.parseInt(parts[3]));
+            Optional<Long> value = "old".equalsIgnoreCase(parts[3]) ? Optional.empty() : Optional.of(Long.parseLong(parts[3]));
             return worryLevel -> {
                 switch(operator) {
                     case '+':
@@ -67,17 +66,17 @@ public class EleventhPuzzle extends Puzzle<Integer, Long> {
             };
         }
 
-        private static LinkedList<Integer> buildItemsFromDefinition(String input) {
+        private static LinkedList<Long> buildItemsFromDefinition(String input) {
             String[] parts = input.substring(input.indexOf(':') + 1).split(",");
             return Arrays.stream(parts)
                     .map(String::trim)
-                    .map(Integer::parseInt)
+                    .map(Long::parseLong)
                     .collect(Collectors.toCollection(LinkedList::new));
         }
 
         public static Monkey buildFromDefinition(List<String> monkeyDefinition) {
-            LinkedList<Integer> items = Monkey.buildItemsFromDefinition(monkeyDefinition.get(1));
-            Function<Integer, Integer> operation = Monkey.buildOperationFromDefinition(monkeyDefinition.get(2));
+            LinkedList<Long> items = Monkey.buildItemsFromDefinition(monkeyDefinition.get(1));
+            Function<Long, Long> operation = Monkey.buildOperationFromDefinition(monkeyDefinition.get(2));
             Integer divisor = Integer.parseInt(monkeyDefinition.get(3).substring(monkeyDefinition.get(3).indexOf(':') + 1).split(" ")[3]);
             Integer targetMonkeyIfTestPasses = Integer.parseInt(monkeyDefinition.get(4).substring(monkeyDefinition.get(4).indexOf(':') + 1).split(" ")[4]);
             Integer targetMonkeyIfTestFails = Integer.parseInt(monkeyDefinition.get(5).substring(monkeyDefinition.get(4).indexOf(':') + 1).split(" ")[4]);
@@ -85,12 +84,11 @@ public class EleventhPuzzle extends Puzzle<Integer, Long> {
         }
     }
 
-    private static void playRound(LinkedList<Monkey> monkeys, Function<Integer, Integer> manageWorryLevel) {
+    private static void playRound(LinkedList<Monkey> monkeys, Function<Long, Long> manageWorryLevel) {
         for(Monkey monkey : monkeys) {
-            Iterator<Integer> iterator = monkey.getItems().iterator();
+            Iterator<Long> iterator = monkey.getItems().iterator();
             while(iterator.hasNext()) {
-                Integer item = iterator.next();
-                System.out.println(item);
+                Long item = iterator.next();
 
                 // monkey inspects item
                 item = monkey.inspect(item);
@@ -114,7 +112,7 @@ public class EleventhPuzzle extends Puzzle<Integer, Long> {
         LinkedList<Monkey> monkeys = splitListToLists(getFileContent(filePath)).stream()
                 .map(Monkey::buildFromDefinition)
                 .collect(Collectors.toCollection(LinkedList::new));
-        IntStream.range(0, 20).forEach(round -> playRound(monkeys, item -> (int) Math.floor((double) item / 3)));
+        IntStream.range(0, 20).forEach(round -> playRound(monkeys, item -> (long) Math.floor((double) item / 3)));
         return monkeys.stream()
                 .map(Monkey::getInspected)
                 .sorted(Comparator.reverseOrder())
