@@ -1,145 +1,131 @@
 package io.github.maritims.aoc2022;
 
 import java.util.*;
-import java.util.function.BinaryOperator;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class EleventhPuzzle extends Puzzle<Integer, Integer> {
     @FunctionalInterface
-    interface Inspection {
-        Integer increaseWorryLevel(Integer old);
+    interface TestWorryLevel {
+        boolean execute(Integer left, Integer right, char operator);
     }
 
     static class Monkey {
         private final LinkedList<Integer> items;
-        private final Inspection inspection;
-        private final Function<Integer, Boolean> test;
-        private final Supplier<Integer> targetMonkeyWhenPassingTest;
-        private final Supplier<Integer> targetMonkeyWhenFailingTest;
-        private int inspected = 0;
+        private final Function<Integer, Integer> operation;
+        private final Integer divisor;
+        private final Integer targetMonkeyIfTestPasses;
+        private final Integer targetMonkeyIfTestFails;
+        private Integer inspected = 0;
 
-        public Monkey(
-                LinkedList<Integer> items,
-                Inspection inspection,
-                Function<Integer, Boolean> test,
-                Supplier<Integer> targetMonkeySupplierForPassingTest,
-                Supplier<Integer> targetMonkeySupplierForFailingTest
-        ) {
+        public Monkey(LinkedList<Integer> items, Function<Integer, Integer> operation, Integer divisor, Integer targetMonkeyIfTestPasses, Integer targetMonkeyIfTestFails) {
             this.items = items;
-            this.inspection = inspection;
-            this.test = test;
-            this.targetMonkeyWhenPassingTest = targetMonkeySupplierForPassingTest;
-            this.targetMonkeyWhenFailingTest = targetMonkeySupplierForFailingTest;
+            this.operation = operation;
+            this.divisor = divisor;
+            this.targetMonkeyIfTestPasses = targetMonkeyIfTestPasses;
+            this.targetMonkeyIfTestFails = targetMonkeyIfTestFails;
         }
 
         public LinkedList<Integer> getItems() {
             return items;
         }
 
-        public Monkey inspect(Integer item) {
-            inspection.increaseWorryLevel(item);
-            System.out.println("\t\tWorry level is multiplied to " + item);
-            inspected++;
-            return this;
+
+        public Integer getDivisor() {
+            return divisor;
         }
 
-        public Monkey relieve(Integer item) {
-            int worryLevel = (int) Math.floor((double) item / 3);
-            System.out.println("\t\tMonkey gets bored with item. Worry level is divided by 3 to " + worryLevel);
-            return this;
+        public Integer getTargetMonkeyIfTestPasses() {
+            return targetMonkeyIfTestPasses;
         }
 
-        public Integer getTargetMonkey(Integer item) {
-            int targetMonkey;
-            if(test.apply(item)) {
-                targetMonkey = targetMonkeyWhenPassingTest.get();
-                System.out.println("\t\tTest passed.\n\t\tItem with worry level " + item + " is thrown to monkey " + targetMonkey);
-            } else {
-                targetMonkey = targetMonkeyWhenFailingTest.get();
-                System.out.println("\t\tTest failed.\n\t\tItem with worry level " + item + " is thrown to monkey " + targetMonkey);
-            }
-            return targetMonkey;
+        public Integer getTargetMonkeyIfTestFails() {
+            return targetMonkeyIfTestFails;
         }
 
-        public int getInspected() {
+        public Integer getInspected() {
             return inspected;
         }
-    }
 
-    LinkedList<Integer> getItems(String input) {
-        int start = input.indexOf(':') + 1;
-        String[] parts = input.substring(start).split(",");
-        return Arrays.stream(parts)
-                .map(String::trim)
-                .map(Integer::parseInt)
-                .collect(Collectors.toCollection(LinkedList::new));
-    }
+        public Integer inspect(Integer item) {
+            inspected++;
+            return operation.apply(item);
+        }
 
-    Inspection getInspection(String input) {
-        int start = input.indexOf('=') + 1;
-        String[] parts = input.substring(start).split(" ");
-        return old -> {
+        private static Function<Integer, Integer> buildOperationFromDefinition(String definition) {
+            String[] parts = definition.substring(definition.indexOf('=') + 1).split(" ");
             char operator = parts[2].charAt(0);
-            Integer left = "old".equalsIgnoreCase(parts[1]) ? old : Integer.parseInt(parts[1]);
-            Integer right = "old".equalsIgnoreCase(parts[3]) ? old : Integer.parseInt(parts[3]);
-            switch (operator) {
-                case '+':
-                    return left + right;
-                case '-':
-                    return left - right;
-                case '/':
-                    return left / right;
-                case '*':
-                    return left * right;
-            }
-            throw new UnsupportedOperationException();
-        };
-    }
-
-    Function<Integer, Boolean> getTest(String input) {
-        int start = input.indexOf(':') + 1;
-        int divisor = Integer.parseInt(input.trim().substring(start).split(" ")[2]);
-        return item -> item % divisor == 0;
-    }
-
-    Supplier<Integer> getTargetMonkey(String input) {
-        return () -> Integer.parseInt(input.substring(input.length() - 1));
-    }
-
-    @Override
-    public Integer solvePartOne(String filePath) {
-        List<List<String>> monkeyDefinitions = splitListToLists(getFileContent(filePath));
-        LinkedList<Monkey> monkeys = monkeyDefinitions.stream().map(list -> {
-            LinkedList<Integer> items = getItems(list.get(1));
-            Inspection inspection = getInspection(list.get(2));
-            Function<Integer, Boolean> test = getTest(list.get(3));
-            Supplier<Integer> targetMonkeyForPassingTest = getTargetMonkey(list.get(4));
-            Supplier<Integer> targetMonkeyForFailingTest = getTargetMonkey(list.get(5));
-            return new Monkey(items, inspection, test, targetMonkeyForPassingTest, targetMonkeyForFailingTest);
-        }).collect(Collectors.toCollection(LinkedList::new));
-
-        for(int round = 0; round < 20; round++) {
-            for(int i = 0; i < monkeys.size(); i++) {
-                System.out.println("Monkey " + i);
-                Monkey monkey = monkeys.get(i);
-
-                Iterator<Integer> itemIterator = monkey.getItems().iterator();
-                while(itemIterator.hasNext()) {
-                    Integer item = itemIterator.next();
-                    System.out.println("\tMonkey inspects an item with a worry level of " + item);
-                    int targetMonkey = monkey.inspect(item).relieve(item).getTargetMonkey(item);
-                    monkeys.get(targetMonkey).getItems().add(item);
-                    itemIterator.remove();
+            Optional<Integer> value = "old".equalsIgnoreCase(parts[3]) ? Optional.empty() : Optional.of(Integer.parseInt(parts[3]));
+            return worryLevel -> {
+                switch(operator) {
+                    case '+':
+                        return worryLevel + value.orElse(worryLevel);
+                    case '-':
+                        return worryLevel - value.orElse(worryLevel);
+                    case '*':
+                        return worryLevel * value.orElse(worryLevel);
+                    case '/':
+                        return worryLevel / value.orElse(worryLevel);
                 }
+                throw new UnsupportedOperationException();
+            };
+        }
+
+        private static LinkedList<Integer> buildItemsFromDefinition(String input) {
+            String[] parts = input.substring(input.indexOf(':') + 1).split(",");
+            return Arrays.stream(parts)
+                    .map(String::trim)
+                    .map(Integer::parseInt)
+                    .collect(Collectors.toCollection(LinkedList::new));
+        }
+
+        public static Monkey buildFromDefinition(List<String> monkeyDefinition) {
+            LinkedList<Integer> items = Monkey.buildItemsFromDefinition(monkeyDefinition.get(1));
+            Function<Integer, Integer> operation = Monkey.buildOperationFromDefinition(monkeyDefinition.get(2));
+            Integer divisor = Integer.parseInt(monkeyDefinition.get(3).substring(monkeyDefinition.get(3).indexOf(':') + 1).split(" ")[3]);
+            Integer targetMonkeyIfTestPasses = Integer.parseInt(monkeyDefinition.get(4).substring(monkeyDefinition.get(4).indexOf(':') + 1).split(" ")[4]);
+            Integer targetMonkeyIfTestFails = Integer.parseInt(monkeyDefinition.get(5).substring(monkeyDefinition.get(4).indexOf(':') + 1).split(" ")[4]);
+            return new Monkey(items, operation, divisor, targetMonkeyIfTestPasses, targetMonkeyIfTestFails);
+        }
+    }
+
+    private static void playRound(LinkedList<Monkey> monkeys) {
+        for(Monkey monkey : monkeys) {
+            Iterator<Integer> iterator = monkey.getItems().iterator();
+            while(iterator.hasNext()) {
+                Integer item = iterator.next();
+
+                // monkey inspects item
+                item = monkey.inspect(item);
+
+                // you're relieved the monkey didn't break it -> your worry level decreases
+                item = (int) Math.floor((double) item / 3);
+
+                // monkey tests your worry level
+                int targetMonkey = (item % monkey.getDivisor()) == 0 ? monkey.getTargetMonkeyIfTestPasses() : monkey.getTargetMonkeyIfTestFails();
+
+                // monkey throws item based on test result
+                monkeys.get(targetMonkey)
+                        .getItems()
+                        .add(item);
+                iterator.remove();
             }
         }
+    }
+
+    public Integer solvePartOne(String filePath) {
+        LinkedList<Monkey> monkeys = splitListToLists(getFileContent(filePath)).stream()
+                .map(Monkey::buildFromDefinition)
+                .collect(Collectors.toCollection(LinkedList::new));
+        IntStream.range(0, 20)
+                .mapToObj(round -> monkeys)
+                .forEach(EleventhPuzzle::playRound);
         return monkeys.stream()
                 .map(Monkey::getInspected)
                 .sorted(Comparator.reverseOrder())
                 .limit(2)
-                .reduce((i1, i2) -> i1 * i2)
+                .reduce((o1, o2) -> o1 * o2)
                 .orElse(0);
     }
 
