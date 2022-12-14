@@ -1,18 +1,19 @@
 package io.github.maritims.aoc2022;
 
 import java.util.*;
+import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class EleventhPuzzle extends Puzzle<Integer, Integer> {
+public class EleventhPuzzle extends Puzzle<Integer, Long> {
     static class Monkey {
         private final LinkedList<Integer> items;
         private final Function<Integer, Integer> operation;
         private final Integer divisor;
         private final Integer targetMonkeyIfTestPasses;
         private final Integer targetMonkeyIfTestFails;
-        private Integer inspected = 0;
+        private Long inspected = 0L;
 
         public Monkey(LinkedList<Integer> items, Function<Integer, Integer> operation, Integer divisor, Integer targetMonkeyIfTestPasses, Integer targetMonkeyIfTestFails) {
             this.items = items;
@@ -26,7 +27,6 @@ public class EleventhPuzzle extends Puzzle<Integer, Integer> {
             return items;
         }
 
-
         public Integer getDivisor() {
             return divisor;
         }
@@ -39,7 +39,7 @@ public class EleventhPuzzle extends Puzzle<Integer, Integer> {
             return targetMonkeyIfTestFails;
         }
 
-        public Integer getInspected() {
+        public Long getInspected() {
             return inspected;
         }
 
@@ -85,17 +85,18 @@ public class EleventhPuzzle extends Puzzle<Integer, Integer> {
         }
     }
 
-    private static void playRound(LinkedList<Monkey> monkeys) {
+    private static void playRound(LinkedList<Monkey> monkeys, Function<Integer, Integer> manageWorryLevel) {
         for(Monkey monkey : monkeys) {
             Iterator<Integer> iterator = monkey.getItems().iterator();
             while(iterator.hasNext()) {
                 Integer item = iterator.next();
+                System.out.println(item);
 
                 // monkey inspects item
                 item = monkey.inspect(item);
 
                 // you're relieved the monkey didn't break it -> your worry level decreases
-                item = (int) Math.floor((double) item / 3);
+                item = manageWorryLevel.apply(item);
 
                 // monkey tests your worry level
                 int targetMonkey = (item % monkey.getDivisor()) == 0 ? monkey.getTargetMonkeyIfTestPasses() : monkey.getTargetMonkeyIfTestFails();
@@ -113,19 +114,30 @@ public class EleventhPuzzle extends Puzzle<Integer, Integer> {
         LinkedList<Monkey> monkeys = splitListToLists(getFileContent(filePath)).stream()
                 .map(Monkey::buildFromDefinition)
                 .collect(Collectors.toCollection(LinkedList::new));
-        IntStream.range(0, 20)
-                .mapToObj(round -> monkeys)
-                .forEach(EleventhPuzzle::playRound);
+        IntStream.range(0, 20).forEach(round -> playRound(monkeys, item -> (int) Math.floor((double) item / 3)));
         return monkeys.stream()
                 .map(Monkey::getInspected)
                 .sorted(Comparator.reverseOrder())
                 .limit(2)
                 .reduce((o1, o2) -> o1 * o2)
+                .map(Long::intValue)
                 .orElse(0);
     }
 
     @Override
-    public Integer solvePartTwo(String filePath) {
-        return null;
+    public Long solvePartTwo(String filePath) {
+        LinkedList<Monkey> monkeys = splitListToLists(getFileContent(filePath)).stream()
+                .map(Monkey::buildFromDefinition)
+                .collect(Collectors.toCollection(LinkedList::new));
+        int divisor = monkeys.stream().map(Monkey::getDivisor).reduce((d1, d2) -> d1 * d2).orElse(0);
+        for (int round = 0; round < 10000; round++) {
+            playRound(monkeys, (item) -> item % divisor);
+        }
+        return monkeys.stream()
+                .map(Monkey::getInspected)
+                .sorted(Comparator.reverseOrder())
+                .limit(2)
+                .reduce((o1, o2) -> o1 * o2)
+                .orElse(0L);
     }
 }
