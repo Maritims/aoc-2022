@@ -13,7 +13,7 @@ public class EleventhPuzzleTest extends PuzzleTest<Integer, Integer, EleventhPuz
     public Stream<Arguments> solvePartOne() {
         return Stream.of(
                 Arguments.arguments("eleventh/example.txt", 10605),
-                Arguments.arguments("eleventh/input.txt", 0)
+                Arguments.arguments("eleventh/input.txt", 58794)
         );
     }
 
