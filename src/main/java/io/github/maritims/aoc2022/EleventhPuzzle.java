@@ -6,11 +6,6 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class EleventhPuzzle extends Puzzle<Integer, Integer> {
-    @FunctionalInterface
-    interface TestWorryLevel {
-        boolean execute(Integer left, Integer right, char operator);
-    }
-
     static class Monkey {
         private final LinkedList<Integer> items;
         private final Function<Integer, Integer> operation;
