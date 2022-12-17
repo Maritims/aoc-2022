@@ -12,12 +12,16 @@ public class TwelfthPuzzleTest extends PuzzleTest<Integer, Integer, TwelfthPuzzl
     @Override
     public Stream<Arguments> solvePartOne() {
         return Stream.of(
-                Arguments.arguments("twelfth/example.txt", 31)
+                Arguments.arguments("twelfth/example.txt", 31),
+                Arguments.arguments("twelfth/input.txt", 339)
         );
     }
 
     @Override
     public Stream<Arguments> solvePartTwo() {
-        return null;
+        return Stream.of(
+                Arguments.arguments("twelfth/example.txt", 29),
+                Arguments.arguments("twelfth/input.txt", 0)
+        );
     }
 }

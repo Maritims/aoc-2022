@@ -1,5 +1,8 @@
 # Changelog
 
+## [Day 12] - 2022-12-12
+Solved the twelfth puzzle of AOC 2022.
+
 ## [Day 11] - 2022-12-12
 Solved the eleventh puzzle of AOC 2022.
 
@@ -33,6 +36,7 @@ Solved the second puzzle of AOC 2022.
 ## [Day 1] - 2022-12-01
 Solved the first puzzle of AOC 2022.
 
+[Day 12]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/TwelfthPuzzle.java
 [Day 11]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/EleventhPuzzle.java
 [Day 10]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/TenthPuzzle.java
 [Day 9]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/NinthPuzzle.java
