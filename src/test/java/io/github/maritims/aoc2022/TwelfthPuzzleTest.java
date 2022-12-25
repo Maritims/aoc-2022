@@ -4,7 +4,7 @@ import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.stream.Stream;
 
-public class TwelfthPuzzleTest extends PuzzleTest<Integer, Integer, TwelfthPuzzle> {
+public class  TwelfthPuzzleTest extends PuzzleTest<Integer, Integer, TwelfthPuzzle> {
     public TwelfthPuzzleTest() {
         super(TwelfthPuzzle.class);
     }
@@ -21,7 +21,7 @@ public class TwelfthPuzzleTest extends PuzzleTest<Integer, Integer, TwelfthPuzzl
     public Stream<Arguments> solvePartTwo() {
         return Stream.of(
                 Arguments.arguments("twelfth/example.txt", 29),
-                Arguments.arguments("twelfth/input.txt", 0)
+                Arguments.arguments("twelfth/input.txt", 332)
         );
     }
 }
