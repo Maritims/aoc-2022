@@ -4,9 +4,9 @@ import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.stream.Stream;
 
-public class SecondPuzzleTest extends PuzzleTest<Integer, Integer, SecondPuzzle> {
-    public SecondPuzzleTest() {
-        super(SecondPuzzle.class);
+public class Day2Test extends PuzzleTest<Integer, Integer, Day2> {
+    public Day2Test() {
+        super(Day2.class);
     }
 
     @Override

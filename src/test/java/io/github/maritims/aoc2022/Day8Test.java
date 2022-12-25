@@ -11,10 +11,10 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class EightPuzzleTest extends PuzzleTest<Integer, Integer, EightPuzzle> {
+class Day8Test extends PuzzleTest<Integer, Integer, Day8> {
 
-    public EightPuzzleTest() {
-        super(EightPuzzle.class);
+    public Day8Test() {
+        super(Day8.class);
     }
 
     @Override
@@ -43,19 +43,19 @@ class EightPuzzleTest extends PuzzleTest<Integer, Integer, EightPuzzle> {
     @ParameterizedTest
     @MethodSource
     public void getVisibleFromEitherSide(Boolean[] gridLine, String treeLine, Boolean[] expectedResult) {
-        assertArrayEquals(expectedResult, new EightPuzzle().getVisibleFromEitherSide(gridLine, treeLine));
+        assertArrayEquals(expectedResult, new Day8().getVisibleFromEitherSide(gridLine, treeLine));
     }
 
     @Test
     public void getNormalizedStringColumn() {
-        EightPuzzle sut = new EightPuzzle();
+        Day8 sut = new Day8();
         List<String> fileContent = sut.getFileContent("eight/example.txt");
         assertEquals("32633", sut.getRotatedColumn(fileContent, 0));
     }
 
     @Test
     public void getNormalizedBooleanColumn() {
-        EightPuzzle sut = new EightPuzzle();
+        Day8 sut = new Day8();
         Boolean[][] grid = new Boolean[][] {
                 new Boolean[] { true, true, true },
                 new Boolean[] { false, true, false },
@@ -77,7 +77,7 @@ class EightPuzzleTest extends PuzzleTest<Integer, Integer, EightPuzzle> {
     @ParameterizedTest
     @MethodSource
     public void getUpwardsFacingScenicScore(int row, int col, int expectedResult) {
-        EightPuzzle sut = new EightPuzzle();
+        Day8 sut = new Day8();
         List<String> lines = sut.getFileContent("eight/example.txt");
         int[][] grid = sut.getGrid(lines);
         int scenicScore = sut.getUpwardsFacingScenicScore(grid, row, col);
@@ -96,7 +96,7 @@ class EightPuzzleTest extends PuzzleTest<Integer, Integer, EightPuzzle> {
     @ParameterizedTest
     @MethodSource
     public void getDownwardsFacingScenicScore(int row, int col, int expectedResult) {
-        EightPuzzle sut = new EightPuzzle();
+        Day8 sut = new Day8();
         List<String> lines = sut.getFileContent("eight/example.txt");
         int[][] grid = sut.getGrid(lines);
         int scenicScore = sut.getDownwardsFacingScenicScore(grid, row, col);
@@ -113,7 +113,7 @@ class EightPuzzleTest extends PuzzleTest<Integer, Integer, EightPuzzle> {
     @ParameterizedTest
     @MethodSource
     public void getScenicScore(int row, int col, int expectedResult) {
-        EightPuzzle sut = new EightPuzzle();
+        Day8 sut = new Day8();
         List<String> lines = sut.getFileContent("eight/example.txt");
         int[][] grid = sut.getGrid(lines);
         assertEquals(expectedResult, sut.getScenicScore(grid, row, col));

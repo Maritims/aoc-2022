@@ -36,15 +36,15 @@ Solved the second puzzle of AOC 2022.
 ## [Day 1] - 2022-12-01
 Solved the first puzzle of AOC 2022.
 
-[Day 12]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/TwelfthPuzzle.java
-[Day 11]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/EleventhPuzzle.java
-[Day 10]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/TenthPuzzle.java
-[Day 9]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/NinthPuzzle.java
-[Day 8]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/EightPuzzle.java
-[Day 7]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/SeventhPuzzle.java
-[Day 6]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/SixthPuzzle.java
-[Day 5]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/FifthPuzzle.java
-[Day 4]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/FourthPuzzle.java
-[Day 3]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/ThirdPuzzle.java
-[Day 2]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/SecondPuzzle.java
-[Day 1]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/FirstPuzzle.java
+[Day 12]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/Day12.java
+[Day 11]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/Day11.java
+[Day 10]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/Day10.java
+[Day 9]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/Day9.java
+[Day 8]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/Day8.java
+[Day 7]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/Day7.java
+[Day 6]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/Day6.java
+[Day 5]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/Day5.java
+[Day 4]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/Day4.java
+[Day 3]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/Day3.java
+[Day 2]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/Day2.java
+[Day 1]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/Day1.java

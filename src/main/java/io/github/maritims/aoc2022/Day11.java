@@ -5,7 +5,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class EleventhPuzzle extends Puzzle<Integer, Long> {
+public class Day11 extends Puzzle<Integer, Long> {
     static class Monkey {
         private final LinkedList<Long> items;
         private final Function<Long, Long> operation;

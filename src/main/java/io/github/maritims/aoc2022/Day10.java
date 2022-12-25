@@ -5,7 +5,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.stream.IntStream;
 
-public class TenthPuzzle extends Puzzle<Integer, String> {
+public class Day10 extends Puzzle<Integer, String> {
     static class CPU {
         private int X = 1;
 

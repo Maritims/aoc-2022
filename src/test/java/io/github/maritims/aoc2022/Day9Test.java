@@ -7,16 +7,16 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.awt.*;
 import java.util.stream.Stream;
 
-import static io.github.maritims.aoc2022.NinthPuzzle.Move;
-import static io.github.maritims.aoc2022.NinthPuzzle.Move.*;
-import static io.github.maritims.aoc2022.NinthPuzzle.Rope;
+import static io.github.maritims.aoc2022.Day9.Move;
+import static io.github.maritims.aoc2022.Day9.Move.*;
+import static io.github.maritims.aoc2022.Day9.Rope;
 import static java.util.stream.Stream.of;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-public class NinthPuzzleTest extends PuzzleTest<Integer, Integer, NinthPuzzle> {
-    public NinthPuzzleTest() {
-        super(NinthPuzzle.class);
+public class Day9Test extends PuzzleTest<Integer, Integer, Day9> {
+    public Day9Test() {
+        super(Day9.class);
     }
 
     @Override

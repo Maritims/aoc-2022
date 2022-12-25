@@ -8,12 +8,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.github.maritims.aoc2022.SeventhPuzzle.FileStructure;
+import static io.github.maritims.aoc2022.Day7.FileStructure;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class SeventhPuzzleTest extends PuzzleTest<Integer, Integer, SeventhPuzzle> {
-    public SeventhPuzzleTest() {
-        super(SeventhPuzzle.class);
+public class Day7Test extends PuzzleTest<Integer, Integer, Day7> {
+    public Day7Test() {
+        super(Day7.class);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class SeventhPuzzleTest extends PuzzleTest<Integer, Integer, SeventhPuzzl
 
     @Test
     public void getDirs() {
-        SeventhPuzzle puzzle = new SeventhPuzzle();
+        Day7 puzzle = new Day7();
         List<String> lines = puzzle.getFileContent("seventh/example.txt");
         FileStructure fileStructure = FileStructure.build(lines);
         LinkedHashSet<FileStructure> hashSet = new LinkedHashSet<>();

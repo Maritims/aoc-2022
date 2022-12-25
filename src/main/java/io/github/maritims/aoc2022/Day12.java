@@ -2,7 +2,7 @@ package io.github.maritims.aoc2022;
 
 import java.util.*;
 
-public class TwelfthPuzzle extends Puzzle<Integer, Integer> {
+public class Day12 extends Puzzle<Integer, Integer> {
     static class HeightMap {
         private final char[][] grid;
         private final Point startingPoint;

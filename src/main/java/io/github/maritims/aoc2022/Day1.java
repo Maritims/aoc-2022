@@ -1,11 +1,10 @@
 package io.github.maritims.aoc2022;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class FirstPuzzle extends Puzzle<Integer, Integer> {
+public class Day1 extends Puzzle<Integer, Integer> {
     protected List<Integer> getCalories(String filePath) {
         return splitListToLists(getFileContent(filePath)).stream()
                 .map(caloriesPerElf -> caloriesPerElf.stream().mapToInt(Integer::parseInt).sum())

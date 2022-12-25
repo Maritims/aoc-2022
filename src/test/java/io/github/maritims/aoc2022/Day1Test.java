@@ -6,15 +6,13 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
-import static java.util.stream.Stream.*;
 import static java.util.stream.Stream.of;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.params.provider.Arguments.*;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-class FirstPuzzleTest extends PuzzleTest<Integer, Integer, FirstPuzzle> {
-    public FirstPuzzleTest() {
-        super(FirstPuzzle.class);
+class Day1Test extends PuzzleTest<Integer, Integer, Day1> {
+    public Day1Test() {
+        super(Day1.class);
     }
 
     public static Stream<Arguments> getCalories() {
@@ -24,7 +22,7 @@ class FirstPuzzleTest extends PuzzleTest<Integer, Integer, FirstPuzzle> {
     @ParameterizedTest
     @MethodSource
     public void getCalories(String filePath, int expectedResult) {
-        assertEquals(expectedResult, new FirstPuzzle().getCalories(filePath).size());
+        assertEquals(expectedResult, new Day1().getCalories(filePath).size());
     }
 
     @Override

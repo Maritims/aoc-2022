@@ -1,6 +1,6 @@
 package io.github.maritims.aoc2022;
 
-public class SecondPuzzle extends Puzzle<Integer, Integer> {
+public class Day2 extends Puzzle<Integer, Integer> {
 
     static class Rochambeau {
         /**
