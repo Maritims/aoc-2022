@@ -1,5 +1,8 @@
 # Changelog
 
+## [Day 13] - 2022-12-26
+Solved the thirteenth puzzle of AOC 2022.
+
 ## [Day 12] - 2022-12-12
 Solved the twelfth puzzle of AOC 2022.
 

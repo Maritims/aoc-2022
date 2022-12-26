@@ -2,6 +2,7 @@ package io.github.maritims.aoc2022;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.Collections.singletonList;
 
@@ -72,65 +73,69 @@ public class Day13 extends Puzzle<Integer, Integer> {
         return new Tuple2<>(node, startIndex);
     }
 
-    public boolean isInRightOrder(List<Object> left, List<Object> right) {
-        for(int l = 0; l < left.size(); l++) {
-            Object oL = left.get(l);
-            Object oR = right.get(l);
-            if(oL instanceof Integer && oR instanceof Integer) {
-                if((Integer) oL < (Integer) oR) {
-                    System.out.println("Left side is smaller, so inputs are in the right order");
-                    return true;
-                }
+    @SuppressWarnings({"unchecked", "ConstantConditions"})
+    public Optional<Integer> isInRightOrder(List<Object> leftList, List<Object> rightList) {
+        int sum = 0;
+        System.out.println(" - Compare " + leftList + " vs " + rightList);
 
-                if((Integer) oL > (Integer) oR) {
-                    System.out.println("Right side is smaller, so inputs are not in the right order");
-                    return false;
-                }
+        for(int i = 0; i < leftList.size(); i++) {
+            if(sum != 0) {
+                return Optional.of(sum);
             }
 
-            int result = 0;
+            if(i >= rightList.size()) {
+                System.out.println("     - Right side ran out of items, so inputs are not in the right order");
+                sum += 1;
+                break;
+            }
 
-            if(oL instanceof List && oR instanceof Integer) {
+            Object leftObject = leftList.get(i);
+            Object rightObject = rightList.get(i);
 
-            } else if(oL instanceof Integer && oR instanceof List) {
-
-            } else if(oL instanceof List && oR instanceof List) {
-
+            if(leftObject instanceof Integer && rightObject instanceof List) {
+                System.out.println("   - Mixed types; convert left and retry comparison");
+                sum += isInRightOrder(singletonList(leftObject), (List<Object>) rightObject).orElse(0);
+            } else if(leftObject instanceof List && rightObject instanceof Integer) {
+                System.out.println("   - Mixed types; convert right and retry comparison");
+                sum += isInRightOrder((List<Object>) leftObject, singletonList(rightObject)).orElse(0);
+            } else if(leftObject instanceof List && rightObject instanceof List) {
+                sum += isInRightOrder((List<Object>) leftObject, (List<Object>) rightObject).orElse(0);
             } else {
-                Integer iL = (Integer) oL;
-                Integer iR = (Integer) oR;
-                if(iL > iR) {
-                    result = 1;
-                } else if(iR > iL) {
-                    result = -1;
-                }
-            }
+                Integer leftNumber = (Integer) leftObject;
+                Integer rightNumber = (Integer) rightObject;
+                System.out.println("   - Compare " + leftNumber + " vs " + rightNumber);
 
-            if(result != 0) {
-                return true;
+                int comparison = leftNumber.compareTo(rightNumber);
+                sum += comparison;
+
+                if(comparison < 0) {
+                    System.out.println("     - Left side is smaller, so inputs are in the right order");
+                    break;
+                } else if(comparison > 0) {
+                    System.out.println("     - Right side is smaller, so inputs are not in the right order");
+                    break;
+                }
             }
         }
 
-        return true;
+        if(sum == 0 && leftList.size() < rightList.size()) {
+            System.out.println("     - Left side ran out of items, so inputs are in the right order");
+            sum += -1;
+        }
+
+        return Optional.of(sum);
     }
 
     @Override
     public Integer solvePartOne(String filePath) {
         List<List<String>> pairs = splitListToLists(getFileContent(filePath));
-        int i = 1;
+        int i = 0;
         int sum = 0;
         for(List<String> pair : pairs) {
+            i++;
             List<Object> left = parse(pair.get(0), 1).getItem1();
             List<Object> right = parse(pair.get(1), 1).getItem1();
-
-            try {
-                if (isInRightOrder(left, right)) {
-                    sum += i;
-                }
-            } catch(IndexOutOfBoundsException e) {
-                System.out.println("Unable to compare lines: " + left + " vs. " + right);
-            }
-            i++;
+            sum += isInRightOrder(left, right).orElse(0) == -1 ? i : 0;
         }
         return sum;
     }
