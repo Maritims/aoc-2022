@@ -35,4 +35,17 @@ public abstract class Puzzle<TPartOneOutput, TPartTwoOutput> {
     public abstract TPartOneOutput solvePartOne(String filePath);
 
     public abstract TPartTwoOutput solvePartTwo(String filePath);
+
+    protected boolean isLogEnabled = false;
+
+    protected final void log(String message) {
+        if(isLogEnabled) {
+            System.out.println(message);
+        }
+    }
+
+    protected final void log(String message, boolean enableLogging) {
+        isLogEnabled = enableLogging;
+        log(message);
+    }
 }

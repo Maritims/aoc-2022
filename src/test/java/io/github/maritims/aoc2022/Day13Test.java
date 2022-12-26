@@ -5,7 +5,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
@@ -36,7 +35,7 @@ class Day13Test extends PuzzleTest<Integer, Integer, Day13> {
         assertEquals(expectedResult, tuple.getItem1());
     }
 
-    public Stream<Arguments> isInRightOrder() {
+    public Stream<Arguments> compare() {
         return Stream.of(
                 arguments(asList(1, 1, 3, 1, 1), asList(1, 1, 5, 1, 1), -1),
                 arguments(asList(singletonList(1), asList(2, 3, 4)), asList(singletonList(1), 4), -1),
@@ -51,28 +50,26 @@ class Day13Test extends PuzzleTest<Integer, Integer, Day13> {
 
     @ParameterizedTest
     @MethodSource
-    public void isInRightOrder(List<Object> left, List<Object> right, int expectedResult) {
+    public void compare(List<Object> left, List<Object> right, int expectedResult) {
         // arrange
         Day13 sut = new Day13();
-
-        // act
-        Optional<Integer> result = sut.isInRightOrder(left, right);
-
-        // assert
-        assertTrue(result.isPresent(), "No condition was encountered");
-        assertEquals(expectedResult, result.get());
+        sut.isLogEnabled = true;
+        assertEquals(expectedResult, sut.COMPARATOR.compare(left, right));
     }
 
     @Override
     public Stream<Arguments> solvePartOne() {
         return Stream.of(
                 arguments("13/example.txt", 13),
-                arguments("13/input.txt", 0)
+                arguments("13/input.txt", 5623)
         );
     }
 
     @Override
     public Stream<Arguments> solvePartTwo() {
-        return null;
+        return Stream.of(
+                arguments("13/example.txt", 140),
+                arguments("13/input.txt", 20570)
+        );
     }
 }
