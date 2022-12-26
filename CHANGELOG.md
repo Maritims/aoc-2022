@@ -39,6 +39,7 @@ Solved the second puzzle of AOC 2022.
 ## [Day 1] - 2022-12-01
 Solved the first puzzle of AOC 2022.
 
+[Day 13]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/Day13.java
 [Day 12]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/Day12.java
 [Day 11]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/Day11.java
 [Day 10]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/Day10.java
