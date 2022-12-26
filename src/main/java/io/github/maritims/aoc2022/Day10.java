@@ -1,8 +1,12 @@
 package io.github.maritims.aoc2022;
 
+import io.github.maritims.lib.GridRenderer;
+
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.Arrays;
+import java.util.function.BiConsumer;
 import java.util.stream.IntStream;
 
 public class Day10 extends Puzzle<Integer, String> {

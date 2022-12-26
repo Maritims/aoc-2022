@@ -1,6 +1,7 @@
 package io.github.maritims.aoc2022;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public abstract class Puzzle<TPartOneOutput, TPartTwoOutput> {
         return listOfLists;
     }
 
-    public abstract TPartOneOutput solvePartOne(String filePath);
+    public abstract TPartOneOutput solvePartOne(String filePath) throws IOException;
 
     public abstract TPartTwoOutput solvePartTwo(String filePath);
 
