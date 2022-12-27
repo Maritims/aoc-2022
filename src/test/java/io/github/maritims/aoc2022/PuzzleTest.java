@@ -35,7 +35,7 @@ public abstract class PuzzleTest<TPartOneOutput, TPartTwoOutput, T extends Puzzl
 
     @ParameterizedTest
     @MethodSource
-    public void solvePartTwo(String filePath, TPartTwoOutput expectedResult) {
+    public void solvePartTwo(String filePath, TPartTwoOutput expectedResult) throws IOException {
         assertEquals(expectedResult, puzzle.solvePartTwo(filePath));
     }
 

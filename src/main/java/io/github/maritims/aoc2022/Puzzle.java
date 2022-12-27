@@ -35,7 +35,7 @@ public abstract class Puzzle<TPartOneOutput, TPartTwoOutput> {
 
     public abstract TPartOneOutput solvePartOne(String filePath) throws IOException;
 
-    public abstract TPartTwoOutput solvePartTwo(String filePath);
+    public abstract TPartTwoOutput solvePartTwo(String filePath) throws IOException;
 
     protected boolean isLogEnabled = false;
 
