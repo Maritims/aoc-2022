@@ -7,7 +7,6 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -16,53 +15,60 @@ import static java.util.Arrays.fill;
 import static java.util.Arrays.stream;
 
 public class Day15 extends Puzzle<Integer, Integer> {
-    static class Sensor {
-        private final Point location;
+    static class PointWithType extends Point {
+        private final Character type;
 
-        Sensor(Point location) {
-            this.location = location;
+        public PointWithType(int x, int y, Character type) {
+            super(x, y);
+            this.type = type;
         }
 
-        public Point getLocation() {
-            return location;
+        public Character getType() {
+            return type;
+        }
+
+        public int getManhattanDistance(Point destination) {
+            return Math.abs(destination.getX() - getX()) + Math.abs(destination.getY() - getY());
         }
     }
 
-    private static final Pattern pattern = Pattern.compile("x=([0-9\\-]+),\\sy=([0-9\\-]+)");
+    private static List<PointWithType> getPoints(String line) {
+        List<PointWithType> sensors = new LinkedList<>();
+        Matcher matcher = Pattern.compile("x=([0-9\\-]+),\\sy=([0-9\\-]+)").matcher(line);
 
-    private List<Point> getSensorLocations(String line) {
-        List<Point> points = new LinkedList<>();
-        Matcher matcher = pattern.matcher(line);
-        while(matcher.find()) {
-            points.add(new Point(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2))));
-        }
-        return points;
+        matcher.find();
+        sensors.add(new PointWithType(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2)), 'S'));
+
+        matcher.find();
+        sensors.add(new PointWithType(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2)), 'B'));
+
+        return sensors;
     }
 
     @Override
     public Integer solvePartOne(String filePath) throws IOException {
         List<String> lines = getFileContent(filePath);
-        List<Point> sensors = lines.stream()
-                .map(this::getSensorLocations)
+        List<PointWithType> points = lines.stream()
+                .map(Day15::getPoints)
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
 
-        int maxX = 0;
-        int maxY = 0;
-        for(Point sensorLocation : sensors) {
-            if(sensorLocation.getX() > maxX) {
-                maxX = sensorLocation.getX();
-            }
-            if(sensorLocation.getY() > maxY) {
-                maxY = sensorLocation.getY();
+        int minX = points.stream().min(Comparator.comparing(Point::getX)).map(Point::getX).orElse(0);
+        int maxX = points.stream().max(Comparator.comparing(Point::getX)).map(Point::getX).orElse(0);
+        int minY = points.stream().min(Comparator.comparing(Point::getY)).map(Point::getY).orElse(0);
+        int maxY = points.stream().max(Comparator.comparing(Point::getY)).map(Point::getY).orElse(0);
+
+        Character[][] grid = new Character[(maxY - minY) + 1][(maxX - minX) + 1];
+        stream(grid).forEach(row -> fill(row, '.'));
+        points.forEach(point -> grid[point.getY() - minY][point.getX() - minX] = point.getType());
+
+        for(int row = 0; row < grid.length; row++) {
+            for(int col = 0; col < grid[row].length; col++) {
+                // Can this tile be a beacon?
             }
         }
 
-        Character[][] grid = new Character[maxY + 1][maxX + 1];
-        stream(grid).forEach(row -> fill(row, '.'));
         render(grid);
-
-        log(sensors.toString(), true);
 
         return null;
     }
