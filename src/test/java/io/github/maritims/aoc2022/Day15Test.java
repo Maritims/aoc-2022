@@ -18,7 +18,8 @@ public class Day15Test extends PuzzleTest<Integer, Integer, Day15> {
     @Override
     public Stream<Arguments> solvePartOne() {
         return Stream.of(
-                Arguments.arguments("15/example.txt", 1)
+                Arguments.arguments("15/example.txt", 26),
+                Arguments.arguments("15/input.txt", 26)
         );
     }
 

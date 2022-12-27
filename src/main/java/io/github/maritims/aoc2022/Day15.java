@@ -66,23 +66,37 @@ public class Day15 extends Puzzle<Integer, Integer> {
             grid[sensor.getBeacon().getY() - minY][sensor.getBeacon().getX() - minX] = 'B';
         });
 
-        Sensor sensor = sensors.stream()
+        /*Sensor sensor = sensors.stream()
                 .filter(s -> s.getLocation().getX() == 8 && s.getLocation().getY() == 7)
                 .findFirst()
-                .orElse(null);
-        int y = sensor.getLocation().getY() - minY;
-        Character[] row = grid[y];
-        for(int col = 0; col < row.length; col++) {
-            int x = col + minX;
-            int d = sensor.getManhattanDistance(x, y);
-            if(row[col] == '.' && sensor.getManhattanDistance() >= d) {
-                row[col] = '#';
+                .orElse(null);*/
+        for(Sensor sensor : sensors) {
+            for (int y = 0; y < grid.length; y++) {
+                Character[] line = grid[y];
+                for (int col = 0; col < line.length; col++) {
+                    int x = col + minX;
+                    int d = sensor.getManhattanDistance(x, y);
+                    if (line[col] == '.' && sensor.getManhattanDistance() >= d) {
+                        line[col] = '#';
+                    }
+                }
             }
         }
 
         render(grid);
 
-        return null;
+        int sum = 0;
+        for(int row = 0; row < grid.length; row++) {
+            int y = row + minY;
+            if(y != 10) continue;
+            for(int col = 0; col < grid[row].length; col++) {
+                if(grid[row][col] == '#') {
+                    sum++;
+                }
+            }
+        }
+
+        return sum;
     }
 
     @Override
