@@ -1,12 +1,9 @@
 package io.github.maritims.aoc2022;
 
-import io.github.maritims.lib.GridRenderer;
 import io.github.maritims.lib.Point;
 
 import java.io.IOException;
-import java.io.StringWriter;
 import java.util.List;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.*;
@@ -131,18 +128,6 @@ public class Day14 extends Puzzle<Long, Long> {
                 break;
             }
         }
-    }
-
-    private void render(Character[][] grid) throws IOException {
-        StringWriter sw = new StringWriter();
-        new GridRenderer<Character>().render(grid, sw, (element, writer) -> {
-            try {
-                writer.write(element);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        log(sw.toString(), true);
     }
 
     @Override

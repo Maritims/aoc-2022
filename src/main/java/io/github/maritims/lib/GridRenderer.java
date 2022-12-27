@@ -8,9 +8,6 @@ public class GridRenderer<T> {
     public void render(T[][] grid, Writer writer, BiConsumer<T, Writer> writeAction) throws IOException {
         for(int row = 0; row < grid.length; row++) {
             for(int col = 0; col < grid[row].length; col++) {
-                if(col < 494) {
-                    continue;
-                }
                 T element = grid[row][col];
                 writeAction.accept(element, writer);
             }

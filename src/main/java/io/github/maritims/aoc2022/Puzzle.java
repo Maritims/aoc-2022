@@ -1,9 +1,8 @@
 package io.github.maritims.aoc2022;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import io.github.maritims.lib.GridRenderer;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -48,5 +47,17 @@ public abstract class Puzzle<TPartOneOutput, TPartTwoOutput> {
     protected final void log(String message, boolean enableLogging) {
         isLogEnabled = enableLogging;
         log(message);
+    }
+
+    protected final void render(Character[][] grid) throws IOException {
+        StringWriter sw = new StringWriter();
+        new GridRenderer<Character>().render(grid, sw, (element, writer) -> {
+            try {
+                writer.write(element);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        log(sw.toString(), true);
     }
 }
