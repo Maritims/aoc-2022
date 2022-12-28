@@ -3,6 +3,8 @@ package io.github.maritims.aoc2022;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static io.github.maritims.lib.FileHelper.getFileContent;
+
 public class Day3 extends Puzzle<Integer, Integer> {
     protected List<String> getCompartments(String rucksack) {
         return Arrays.asList(rucksack.substring(0, rucksack.length() / 2), rucksack.substring(rucksack.length() / 2));

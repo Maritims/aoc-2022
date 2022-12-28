@@ -9,6 +9,8 @@ import java.util.Arrays;
 import java.util.function.BiConsumer;
 import java.util.stream.IntStream;
 
+import static io.github.maritims.lib.FileHelper.getFileContent;
+
 public class Day10 extends Puzzle<Integer, String> {
     static class CPU {
         private int X = 1;

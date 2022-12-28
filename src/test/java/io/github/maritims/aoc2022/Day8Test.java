@@ -8,6 +8,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static io.github.maritims.lib.FileHelper.getFileContent;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -49,7 +50,7 @@ class Day8Test extends PuzzleTest<Integer, Integer, Day8> {
     @Test
     public void getNormalizedStringColumn() {
         Day8 sut = new Day8();
-        List<String> fileContent = sut.getFileContent("eight/example.txt");
+        List<String> fileContent = getFileContent("eight/example.txt");
         assertEquals("32633", sut.getRotatedColumn(fileContent, 0));
     }
 
@@ -78,7 +79,7 @@ class Day8Test extends PuzzleTest<Integer, Integer, Day8> {
     @MethodSource
     public void getUpwardsFacingScenicScore(int row, int col, int expectedResult) {
         Day8 sut = new Day8();
-        List<String> lines = sut.getFileContent("eight/example.txt");
+        List<String> lines = getFileContent("eight/example.txt");
         int[][] grid = sut.getGrid(lines);
         int scenicScore = sut.getUpwardsFacingScenicScore(grid, row, col);
         assertEquals(expectedResult, scenicScore);
@@ -97,7 +98,7 @@ class Day8Test extends PuzzleTest<Integer, Integer, Day8> {
     @MethodSource
     public void getDownwardsFacingScenicScore(int row, int col, int expectedResult) {
         Day8 sut = new Day8();
-        List<String> lines = sut.getFileContent("eight/example.txt");
+        List<String> lines = getFileContent("eight/example.txt");
         int[][] grid = sut.getGrid(lines);
         int scenicScore = sut.getDownwardsFacingScenicScore(grid, row, col);
         assertEquals(expectedResult, scenicScore);
@@ -114,7 +115,7 @@ class Day8Test extends PuzzleTest<Integer, Integer, Day8> {
     @MethodSource
     public void getScenicScore(int row, int col, int expectedResult) {
         Day8 sut = new Day8();
-        List<String> lines = sut.getFileContent("eight/example.txt");
+        List<String> lines = getFileContent("eight/example.txt");
         int[][] grid = sut.getGrid(lines);
         assertEquals(expectedResult, sut.getScenicScore(grid, row, col));
     }

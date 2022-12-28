@@ -3,6 +3,8 @@ package io.github.maritims.aoc2022;
 import java.util.LinkedList;
 import java.util.List;
 
+import static io.github.maritims.lib.FileHelper.getFileContent;
+
 public class Day6 extends Puzzle<Integer, Integer> {
     private static Integer getMarker(String dataStreamBuffer, int markerSize) {
         List<Character> potentialMarker = new LinkedList<>();

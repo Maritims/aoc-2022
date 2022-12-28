@@ -16,4 +16,9 @@ public class Tuple2<T1, T2> {
     public T2 getItem2() {
         return item2;
     }
+
+    @Override
+    public String toString() {
+        return getItem1().toString() + " -> " + getItem2().toString();
+    }
 }

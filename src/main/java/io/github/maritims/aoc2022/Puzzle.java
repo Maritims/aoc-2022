@@ -9,13 +9,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class Puzzle<TPartOneOutput, TPartTwoOutput> {
-    protected final List<String> getFileContent(String fileName) {
-        InputStream is = getClass().getClassLoader().getResourceAsStream(fileName);
-        return is == null ? Collections.emptyList() : new BufferedReader(new InputStreamReader(is))
-                .lines()
-                .collect(Collectors.toList());
-    }
-
     protected final List<List<String>> splitListToLists(List<String> input) {
         List<List<String>> listOfLists = new ArrayList<>();
         int previous = 0;

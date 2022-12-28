@@ -1,5 +1,7 @@
 package io.github.maritims.aoc2022;
 
+import static io.github.maritims.lib.FileHelper.getFileContent;
+
 public class Day2 extends Puzzle<Integer, Integer> {
 
     static class Rochambeau {

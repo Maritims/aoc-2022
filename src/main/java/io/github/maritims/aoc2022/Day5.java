@@ -5,6 +5,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static io.github.maritims.lib.FileHelper.getFileContent;
+
 public class Day5 extends Puzzle<String, String> {
 
     public static final Pattern CRATE_NUMBER_PATTERN = Pattern.compile("\\s+(\\d+)\\s");

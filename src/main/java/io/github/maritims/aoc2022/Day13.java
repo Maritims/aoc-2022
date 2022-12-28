@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static io.github.maritims.lib.FileHelper.getFileContent;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 

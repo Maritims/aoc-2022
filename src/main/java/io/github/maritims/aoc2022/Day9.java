@@ -4,6 +4,8 @@ import java.awt.*;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 
+import static io.github.maritims.lib.FileHelper.getFileContent;
+
 public class Day9 extends Puzzle<Integer, Integer> {
     static class Move {
         private final char direction;

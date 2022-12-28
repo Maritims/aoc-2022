@@ -4,6 +4,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static io.github.maritims.lib.FileHelper.getFileContent;
+
 public class Day1 extends Puzzle<Integer, Integer> {
     protected List<Integer> getCalories(String filePath) {
         return splitListToLists(getFileContent(filePath)).stream()

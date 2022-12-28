@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static io.github.maritims.aoc2022.Day7.FileStructure;
+import static io.github.maritims.lib.FileHelper.getFileContent;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Day7Test extends PuzzleTest<Integer, Integer, Day7> {
@@ -34,8 +35,7 @@ public class Day7Test extends PuzzleTest<Integer, Integer, Day7> {
 
     @Test
     public void getDirs() {
-        Day7 puzzle = new Day7();
-        List<String> lines = puzzle.getFileContent("seventh/example.txt");
+        List<String> lines = getFileContent("seventh/example.txt");
         FileStructure fileStructure = FileStructure.build(lines);
         LinkedHashSet<FileStructure> hashSet = new LinkedHashSet<>();
         hashSet.add(fileStructure);

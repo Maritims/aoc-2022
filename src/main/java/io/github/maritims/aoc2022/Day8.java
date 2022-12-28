@@ -4,6 +4,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static io.github.maritims.lib.FileHelper.getFileContent;
+
 public class Day8 extends Puzzle<Integer, Integer> {
     public static <T> List<List<T>> getTransposed(List<List<T>> table) {
         List<List<T>> transposedTable = new LinkedList<>();

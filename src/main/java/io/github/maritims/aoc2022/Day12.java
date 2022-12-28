@@ -4,6 +4,8 @@ import io.github.maritims.lib.Point;
 
 import java.util.*;
 
+import static io.github.maritims.lib.FileHelper.getFileContent;
+
 public class Day12 extends Puzzle<Integer, Integer> {
     static class HeightMap {
         private final char[][] grid;

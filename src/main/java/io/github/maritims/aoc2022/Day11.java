@@ -5,6 +5,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static io.github.maritims.lib.FileHelper.getFileContent;
+
 public class Day11 extends Puzzle<Integer, Long> {
     static class Monkey {
         private final LinkedList<Long> items;

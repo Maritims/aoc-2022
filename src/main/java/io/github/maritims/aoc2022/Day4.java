@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static io.github.maritims.lib.FileHelper.getFileContent;
+
 public class Day4 extends Puzzle<Integer, Integer> {
     public int[] getRange(String[] assignments) {
         return new int[] { Integer.parseInt(assignments[0]), Integer.parseInt(assignments[1]) };

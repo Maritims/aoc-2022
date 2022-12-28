@@ -17,14 +17,33 @@ public class Day15Test {
         );
     }
 
+    public static Stream<Arguments> solvePartTwo() {
+        return Stream.of(
+                Arguments.arguments("15/example.txt", 20, 56000011)
+        );
+    }
+
     @ParameterizedTest
     @MethodSource
     public void solvePartOne(String filePath, int lineToTest, int expectedResult) throws IOException {
         // arrange
-        Day15 sut = new Day15(lineToTest);
+        Day15 sut = new Day15();
 
         // act
-        int result = sut.solvePartOne(filePath);
+        int result = sut.solvePartOne(filePath, lineToTest);
+
+        // assert
+        assertEquals(expectedResult, result);
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    public void solvePartTwo(String filePath, int maxY, int expectedResult) throws IOException {
+        // arrange
+        Day15 sut = new Day15();
+
+        // act
+        Integer result = sut.solvePartTwo(filePath, maxY);
 
         // assert
         assertEquals(expectedResult, result);

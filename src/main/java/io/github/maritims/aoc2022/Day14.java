@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static io.github.maritims.lib.FileHelper.getFileContent;
 import static java.util.Arrays.*;
 
 public class Day14 extends Puzzle<Long, Long> {
