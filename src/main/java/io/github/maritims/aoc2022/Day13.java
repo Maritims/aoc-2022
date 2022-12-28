@@ -1,5 +1,7 @@
 package io.github.maritims.aoc2022;
 
+import io.github.maritims.lib.Tuple2;
+
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -11,24 +13,6 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 
 public class Day13 extends Puzzle<Integer, Integer> {
-    static class Tuple2<T1, T2> {
-        private final T1 item1;
-        private final T2 item2;
-
-        Tuple2(T1 item1, T2 item2) {
-            this.item1 = item1;
-            this.item2 = item2;
-        }
-
-        public T1 getItem1() {
-            return item1;
-        }
-
-        public T2 getItem2() {
-            return item2;
-        }
-    }
-
     public Tuple2<List<Object>, Integer> parse(String line, int startIndex) {
         List<Object> node = new LinkedList<>();
         StringBuilder current = new StringBuilder();

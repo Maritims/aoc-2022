@@ -1,5 +1,6 @@
 package io.github.maritims.aoc2022;
 
+import io.github.maritims.lib.Tuple2;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -31,7 +32,7 @@ class Day13Test extends PuzzleTest<Integer, Integer, Day13> {
     @MethodSource
     public void parse(String line, List expectedResult) {
         Day13 sut = new Day13();
-        Day13.Tuple2<List<Object>, Integer> tuple = sut.parse(line, 1);
+        Tuple2<List<Object>, Integer> tuple = sut.parse(line, 1);
         assertEquals(expectedResult, tuple.getItem1());
     }
 

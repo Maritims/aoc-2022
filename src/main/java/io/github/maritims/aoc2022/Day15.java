@@ -1,93 +1,57 @@
 package io.github.maritims.aoc2022;
 
 import io.github.maritims.lib.Point;
+import io.github.maritims.lib.Tuple2;
 
 import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static java.util.Arrays.fill;
 import static java.util.Arrays.stream;
 
 public class Day15 extends Puzzle<Integer, Integer> {
-    static class Sensor {
-        private final Point location;
-        private final Point beacon;
-
-        Sensor(Point location, Point beacon) {
-            this.location = location;
-            this.beacon = beacon;
-        }
-
-        public Point getLocation() {
-            return location;
-        }
-
-        public Point getBeacon() {
-            return beacon;
-        }
-
-        public int getManhattanDistance(int x, int y) {
-            return Math.abs(location.getX() - x) + Math.abs(location.getY() - y);
-        }
-
-        public int getManhattanDistance() {
-            return getManhattanDistance(beacon.getX(), beacon.getY());
-        }
-    }
-
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    private static Sensor getSensor(String line) {
-        Matcher matcher = Pattern.compile("x=([0-9\\-]+),\\sy=([0-9\\-]+)").matcher(line);
-        matcher.find();
-        Point location = new Point(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2)));
-        matcher.find();
-        Point beacon = new Point(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2)));
-        return new Sensor(location, beacon);
+    public int getManhattanDistance(Point p1, Point p2) {
+        return Math.abs(p1.getX() - p2.getX()) + Math.abs(p1.getY() - p2.getY());
     }
 
     @Override
     public Integer solvePartOne(String filePath) throws IOException {
-        List<Sensor> sensors = getFileContent(filePath).stream()
-                .map(Day15::getSensor)
+        List<Tuple2<Point, Point>> tuples = getFileContent(filePath).stream()
+                .map(line -> {
+                    Matcher matcher = Pattern.compile("x=([0-9\\-]+),\\sy=([0-9\\-]+)").matcher(line);
+                    matcher.find();
+                    Point location = new Point(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2)));
+                    matcher.find();
+                    Point beacon = new Point(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2)));
+                    return new Tuple2<>(location, beacon);
+                })
                 .collect(Collectors.toList());
 
-        int minX = sensors.stream().map(sensor -> Math.min(sensor.getLocation().getX(), sensor.getBeacon().getX())).min(Integer::compareTo).orElse(0);
-        int maxX = sensors.stream().map(sensor -> Math.max(sensor.getLocation().getX(), sensor.getBeacon().getX())).max(Integer::compareTo).orElse(0);
-        int minY = sensors.stream().map(sensor -> Math.min(sensor.getLocation().getY(), sensor.getBeacon().getY())).min(Integer::compareTo).orElse(0);
-        int maxY = sensors.stream().map(sensor -> Math.max(sensor.getLocation().getY(), sensor.getBeacon().getY())).max(Integer::compareTo).orElse(0);
-
-        Character[][] grid = new Character[(maxY - minY) + 1][(maxX - minX) + 1];
-        stream(grid).forEach(row -> fill(row, '.'));
-        sensors.forEach(sensor -> {
-            grid[sensor.getLocation().getY() - minY][sensor.getLocation().getX() - minX] = 'S';
-            grid[sensor.getBeacon().getY() - minY][sensor.getBeacon().getX() - minX] = 'B';
-        });
-
-        for(Sensor sensor : sensors) {
-            for (int row = 0; row < grid.length; row++) {
-                for (int col = 0; col < grid[row].length; col++) {
-                    int x = col + minX;
-                    int d = sensor.getManhattanDistance(x, row);
-                    if (grid[row][col] == '.' && sensor.getManhattanDistance() >= d) {
-                        grid[row][col] = '#';
-                    }
-                }
+        // On a specific line how many tiles cannot possibly contain a beacon?
+        LinkedHashSet<String> impossibleTiles = new LinkedHashSet<>();
+        for(Tuple2<Point, Point> tuple : tuples) {
+            // Is this sensor on the line we're testing?
+            if(tuple.getItem1().getY() == 10) {
+                impossibleTiles.add(tuple.getItem1().toString());
             }
+
+            // Is this beacon on the line we're testing?
+            if(tuple.getItem2().getY() == 10) {
+                impossibleTiles.add(tuple.getItem2().toString());
+            }
+
+            // A tile is too close if distanceToTile is less than or equal to distanceToBeacon
+            int distanceToBeacon = getManhattanDistance(tuple.getItem1(), tuple.getItem2());
+
+            // How do we find all the tiles to test?
         }
 
-        render(grid);
-
-        int sum = 0;
-        for(int col = 0; col < grid[10 + minY].length; col++) {
-            if(grid[10 + minY][col] == '#') {
-                sum++;
-            }
-        }
-
-        return sum;
+        System.out.println(impossibleTiles);
+        return impossibleTiles.size();
     }
 
     @Override

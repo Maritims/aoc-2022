@@ -1,6 +1,7 @@
 package io.github.maritims.aoc2022;
 
 import io.github.maritims.lib.Point;
+import io.github.maritims.lib.Tuple2;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -40,10 +41,11 @@ public class Day15Test extends PuzzleTest<Integer, Integer, Day15> {
     @MethodSource
     public void getManhattanDistance(int x1, int y1, int x2, int y2, int expectedResult) {
         // arrange
-        Sensor sensor = new Sensor(new Point(x1, y1), new Point(x2, y2));
+        Day15 sut = new Day15();
+        Tuple2<Point, Point> coordinates = new Tuple2<>(new Point(x1, y1), new Point(x2, y2));
 
         // act
-        int result = sensor.getManhattanDistance();
+        int result = sut.getManhattanDistance(coordinates.getItem1(), coordinates.getItem2());
 
         // assert
         assertEquals(expectedResult, result);
