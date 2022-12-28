@@ -1,51 +1,30 @@
 package io.github.maritims.aoc2022;
 
-import io.github.maritims.lib.Point;
-import io.github.maritims.lib.Tuple2;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.io.IOException;
 import java.util.stream.Stream;
 
-import static io.github.maritims.aoc2022.Day15.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class Day15Test extends PuzzleTest<Integer, Integer, Day15> {
-    public Day15Test() {
-        super(Day15.class);
-    }
-
-    @Override
-    public Stream<Arguments> solvePartOne() {
+public class Day15Test {
+    public static Stream<Arguments> solvePartOne() {
         return Stream.of(
-                Arguments.arguments("15/example.txt", 26),
-                Arguments.arguments("15/input.txt", 26)
-        );
-    }
-
-    @Override
-    public Stream<Arguments> solvePartTwo() {
-        return null;
-    }
-
-    public Stream<Arguments> getManhattanDistance() {
-        return Stream.of(
-                Arguments.arguments(8, 7, 2, 10, 9),
-                Arguments.arguments(8, 7, 8, -2, 9),
-                Arguments.arguments(8, 7, -1, 7, 9)
+                Arguments.arguments("15/example.txt", 10, 26),
+                Arguments.arguments("15/input.txt", 2000000, 4961647)
         );
     }
 
     @ParameterizedTest
     @MethodSource
-    public void getManhattanDistance(int x1, int y1, int x2, int y2, int expectedResult) {
+    public void solvePartOne(String filePath, int lineToTest, int expectedResult) throws IOException {
         // arrange
-        Day15 sut = new Day15();
-        Tuple2<Point, Point> coordinates = new Tuple2<>(new Point(x1, y1), new Point(x2, y2));
+        Day15 sut = new Day15(lineToTest);
 
         // act
-        int result = sut.getManhattanDistance(coordinates.getItem1(), coordinates.getItem2());
+        int result = sut.solvePartOne(filePath);
 
         // assert
         assertEquals(expectedResult, result);

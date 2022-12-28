@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public abstract class PuzzleTest<TPartOneOutput, TPartTwoOutput, T extends Puzzle<TPartOneOutput, TPartTwoOutput>> {
     private final Class<T> clazz;
-    private T puzzle;
+    protected T puzzle;
 
     public PuzzleTest(Class<T> clazz) {
         this.clazz = clazz;
