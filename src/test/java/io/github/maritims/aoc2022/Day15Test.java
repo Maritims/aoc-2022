@@ -19,13 +19,14 @@ public class Day15Test {
 
     public static Stream<Arguments> solvePartTwo() {
         return Stream.of(
-                Arguments.arguments("15/example.txt", 20, 56000011)
+                Arguments.arguments("15/example.txt", 20, 56000011L),
+                Arguments.arguments("15/input.txt", 4000000, 12274327017867L)
         );
     }
 
     @ParameterizedTest
     @MethodSource
-    public void solvePartOne(String filePath, int lineToTest, int expectedResult) throws IOException {
+    public void solvePartOne(String filePath, int lineToTest, long expectedResult) throws IOException {
         // arrange
         Day15 sut = new Day15();
 
@@ -43,7 +44,7 @@ public class Day15Test {
         Day15 sut = new Day15();
 
         // act
-        Integer result = sut.solvePartTwo(filePath, maxY);
+        Long result = sut.solvePartTwo(filePath, maxY);
 
         // assert
         assertEquals(expectedResult, result);

@@ -60,18 +60,19 @@ public class Day15 {
         return impossibleXes.size() - beaconXes.size();
     }
 
-    public Integer solvePartTwo(String filePath, int maxY) throws IOException {
+    public Long solvePartTwo(String filePath, int maxY) throws IOException {
         List<Tuple2<Point, Point>> sensorBeaconPairs = getTuples(filePath);
         // Find the only possible position for the distress beacon.
         // A position is possible if it's not covered by a sensor.
         // A position is covered by a sensor if it's Manhattan distance is less than or equal to the current sensor's distance to its beacon.
         // We cannot go below 0 or above max Y.
 
-        List<List<Tuple2<Integer, Integer>>> rows = new LinkedList<>();
+        List<List<Tuple2<Integer, Integer>>> rows = new ArrayList<>();
         for(int y = 0; y <= maxY; y++) {
-            rows.add(new LinkedList<>());
+            rows.add(new ArrayList<>());
         }
 
+        long t0 = System.nanoTime();
         for(Tuple2<Point, Point> sensorBeaconPair : sensorBeaconPairs) {
             // The sensor range, i.e. its Manhattan distance to its beacon.
             int distance = Math.abs(sensorBeaconPair.getItem2().getX() - sensorBeaconPair.getItem1().getX()) + Math.abs(sensorBeaconPair.getItem2().getY() - sensorBeaconPair.getItem1().getY());
@@ -85,30 +86,45 @@ public class Day15 {
                 int tileDistanceY = Math.abs(y - sensorBeaconPair.getItem1().getY());
 
                 // Every tile to the left or right of the sensor with a gap of up to tileDistanceX is covered by the sensor.
+                // Any tile that is tileDistanceX+1 to the left or right of the sensor is a possible tile.
                 int tileDistanceX = Math.abs(distance - tileDistanceY);
                 int minX = Math.max(0, sensorBeaconPair.getItem1().getX() - tileDistanceX);
-                int maxX = Math.min(20, sensorBeaconPair.getItem1().getX() + tileDistanceX);
+                int maxX = Math.min(maxY, sensorBeaconPair.getItem1().getX() + tileDistanceX);
 
                 // Store the range from the left-most covered x to the right-most covered x.
                 rows.get(y).add(new Tuple2<>(minX, maxX));
             }
         }
+        long seconds = (System.nanoTime() - t0) / 1000000000;
+        System.out.println("Processed " + sensorBeaconPairs.size() + " sensors in " + seconds + " seconds");
 
-        // Compare by the lower x.
         Comparator<Tuple2<Integer, Integer>> comparator = Comparator.comparing(Tuple2::getItem1);
-        // ..and then by the upper x.
         comparator = comparator.thenComparing(Tuple2::getItem2);
-
-        // Sort the ranges representing the covered tilesN.
         for(int y = 0; y < rows.size(); y++) {
-            rows.set(y, rows.get(y)
+            // Find the X which is not covered by any range.
+            List<Tuple2<Integer, Integer>> ranges = rows.get(y)
                     .stream()
                     .sorted(comparator)
-                    .collect(Collectors.toList()));
-            System.out.println(y + ": " + rows.get(y));
-        }
+                    .collect(Collectors.toList());
 
-        // The point we want is the one that's not covered by any sensor.
+            Iterator<Tuple2<Integer, Integer>> iterator = ranges.iterator();
+            Tuple2<Integer, Integer> previous = iterator.next();
+            while(iterator.hasNext()) {
+                Tuple2<Integer, Integer> current = iterator.next();
+                // If the current range is contained in the previous range we must skip the current range.
+                if(current.getItem1() > previous.getItem1() && current.getItem2() < previous.getItem2()) {
+                    continue;
+                }
+
+                // If the current x1 is greater than the previous x2 + 1 we've found the needle in our haystack.
+                if(current.getItem1() > previous.getItem2() + 1) {
+                    long frequency = (previous.getItem2() + 1) * 4000000L + y;
+                    System.out.println("Located frequency between (" + previous + ") and (" + current + "): " + frequency);
+                    return frequency;
+                }
+                previous = current;
+            }
+        }
 
         return null;
     }
