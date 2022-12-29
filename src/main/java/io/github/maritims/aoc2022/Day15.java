@@ -86,7 +86,6 @@ public class Day15 {
                 int tileDistanceY = Math.abs(y - sensorBeaconPair.getItem1().getY());
 
                 // Every tile to the left or right of the sensor with a gap of up to tileDistanceX is covered by the sensor.
-                // Any tile that is tileDistanceX+1 to the left or right of the sensor is a possible tile.
                 int tileDistanceX = Math.abs(distance - tileDistanceY);
                 int minX = Math.max(0, sensorBeaconPair.getItem1().getX() - tileDistanceX);
                 int maxX = Math.min(maxY, sensorBeaconPair.getItem1().getX() + tileDistanceX);
