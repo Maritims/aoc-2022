@@ -30,4 +30,13 @@ public class Day16Test extends PuzzleTest<Integer, Integer, Day16> {
         List<Valve> valves = Day16.getValves("16/example.txt");
         System.out.println(valves);
     }
+
+    @Test
+    public void getBestValve() {
+        List<Valve> valves = Day16.getValves("16/example.txt");
+        valves.stream()
+                .filter(valve -> "AA".equalsIgnoreCase(valve.getName()))
+                .findFirst()
+                .ifPresent(valve -> Day16.getBestValve(valve));
+    }
 }
