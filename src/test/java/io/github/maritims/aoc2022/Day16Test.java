@@ -1,16 +1,16 @@
 package io.github.maritims.aoc2022;
 
+import io.github.maritims.aoc2022.day16.Solver;
+import io.github.maritims.aoc2022.day16.Valve;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.List;
 import java.util.stream.Stream;
 
-import static io.github.maritims.aoc2022.Day16.Valve;
-
-public class Day16Test extends PuzzleTest<Integer, Integer, Day16> {
+public class Day16Test extends PuzzleTest<Integer, Integer, Solver> {
     public Day16Test() {
-        super(Day16.class);
+        super(Solver.class);
     }
 
     @Override
@@ -27,16 +27,12 @@ public class Day16Test extends PuzzleTest<Integer, Integer, Day16> {
 
     @Test
     public void getValves() {
-        List<Valve> valves = Day16.getValves("16/example.txt");
+        List<Valve> valves = Valve.fromFile("16/example.txt");
         System.out.println(valves);
     }
 
     @Test
     public void getBestValve() {
-        List<Valve> valves = Day16.getValves("16/example.txt");
-        valves.stream()
-                .filter(valve -> "AA".equalsIgnoreCase(valve.getName()))
-                .findFirst()
-                .ifPresent(valve -> Day16.getBestValve(valve));
+        List<Valve> valves = Valve.fromFile("16/example.txt");
     }
 }
