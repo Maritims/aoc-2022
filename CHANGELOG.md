@@ -1,5 +1,11 @@
 # Changelog
 
+## [Day 16] - 2022-12-30
+Started on the sixteenth puzzle of AOC 2022.
+
+## [Day 15] - 2022-12-29
+Solved the fifteenth puzzle of AOC 2022.
+
 ## [Day 14] - 2022-12-27
 Solved the fourteenth puzzle of AOC 2022.
 
@@ -42,6 +48,8 @@ Solved the second puzzle of AOC 2022.
 ## [Day 1] - 2022-12-01
 Solved the first puzzle of AOC 2022.
 
+[Day 16]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/Day16.java
+[Day 15]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/Day15.java
 [Day 14]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/Day14.java
 [Day 13]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/Day13.java
 [Day 12]: https://github.com/Maritims/aoc-2022/blob/main/src/main/java/io/github/maritims/aoc2022/Day12.java
