@@ -1,47 +1,47 @@
 package io.github.maritims.aoc2023.day5;
 
 public class Range {
-    private final long destinationStart;
-    private final long destinationEnd;
-    private final long sourceStart;
-    private final long sourceEnd;
-    private final long length;
-    private final long offset;
+    private final Double destinationStart;
+    private final Double destinationEnd;
+    private final Double sourceStart;
+    private final Double sourceEnd;
+    private final Double length;
+    private final Double offset;
 
-    public Range(long destinationStart, long sourceStart, long length) {
+    public Range(Double destinationStart, Double sourceStart, Double length) {
         this.destinationStart = destinationStart;
-        this.destinationEnd = destinationStart + length - 1;
-        this.sourceStart    = sourceStart;
-        this.sourceEnd      = sourceStart + length - 1;
-        this.length = length;
-        this.offset         = destinationStart - sourceStart;
+        this.destinationEnd   = destinationStart == null ? null : destinationStart + length - 1;
+        this.sourceStart      = sourceStart;
+        this.sourceEnd        = sourceStart + length - 1;
+        this.length           = length;
+        this.offset           = destinationStart == null ? null : destinationStart - sourceStart;
     }
 
-    public long getDestinationStart() {
+    public Double getDestinationStart() {
         return destinationStart;
     }
 
-    public long getDestinationEnd() {
+    public Double getDestinationEnd() {
         return destinationEnd;
     }
 
-    public long getSourceStart() {
+    public Double getSourceStart() {
         return sourceStart;
     }
 
-    public long getSourceEnd() {
+    public Double getSourceEnd() {
         return sourceEnd;
     }
 
-    public long getLength() {
+    public Double getLength() {
         return length;
     }
 
-    public long getOffset() {
+    public Double getOffset() {
         return offset;
     }
 
-    public boolean isInRange(long value) {
+    public boolean isInRange(Double value) {
         return value >= sourceStart && value <= sourceEnd;
     }
 
