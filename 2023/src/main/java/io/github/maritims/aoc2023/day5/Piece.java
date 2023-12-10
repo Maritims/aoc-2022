@@ -11,8 +11,12 @@ public class Piece {
         this.shift         = shift;
     }
 
+    public boolean isApplicable(double x) {
+        return lowerBoundary <= x && x <= upperBoundary;
+    }
+
     public Double evaluate(double x) {
-        return lowerBoundary <= x && x <= upperBoundary ? x + shift : null;
+        return x + shift;
     }
 
     @Override

@@ -22,7 +22,7 @@ class Day5Test {
     public static Stream<Arguments> solvePartTwo() {
         return Stream.of(
             arguments("day5_sample.txt", 46),
-            arguments("day5_actual.txt", 0)
+            arguments("day5_actual.txt", 15880236)
         );
     }
 

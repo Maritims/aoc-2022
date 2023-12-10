@@ -11,14 +11,11 @@ public class PiecewiseFunction {
     }
 
     public Double evaluate(double x) {
-        for(var piece : pieces) {
-            var result = piece.evaluate(x);
-            if(result != null) {
-                return result;
-            }
-        }
-
-        return null;
+        return pieces.stream()
+            .filter(piece -> piece.isApplicable(x))
+            .map(piece -> piece.evaluate(x))
+            .findFirst()
+            .orElse(x);
     }
 
     @Override
