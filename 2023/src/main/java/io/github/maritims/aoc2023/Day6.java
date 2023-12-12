@@ -3,17 +3,26 @@ package io.github.maritims.aoc2023;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
 public class Day6 {
     private static final Pattern pattern = Pattern.compile("(\\d+)");
-    protected List<Integer> getValues(String line) {
+
+    private final boolean trimWhitespace;
+
+    public Day6(boolean trimWhitespace) {
+        this.trimWhitespace = trimWhitespace;
+    }
+
+    protected List<Long> getValues(String line) {
+        if(trimWhitespace) {
+            line = line.replaceAll("\\s", "");
+        }
         return pattern.matcher(line)
             .results()
-            .map(result -> Integer.parseInt(result.group(1)))
+            .map(result -> Long.parseLong(result.group(1)))
             .toList();
     }
 

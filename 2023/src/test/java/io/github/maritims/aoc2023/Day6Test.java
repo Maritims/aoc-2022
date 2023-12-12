@@ -14,14 +14,16 @@ class Day6Test {
 
     public static Stream<Arguments> solvePartOne() {
         return Stream.of(
-            arguments("day6_sample.txt", 288),
-            arguments("day6_actual.txt", 0)
+            arguments("day6_sample.txt", false, 288),
+            arguments("day6_actual.txt", false, 861300),
+            arguments("day6_sample.txt", true, 71503),
+            arguments("day6_actual.txt", true, 28101347)
         );
     }
 
     @ParameterizedTest
     @MethodSource
-    void solvePartOne(String fileName, int expectedResult) throws IOException {
-        assertEquals(expectedResult, new Day6().solvePartOne(fileName));
+    void solvePartOne(String fileName, boolean trimWhitespace, int expectedResult) throws IOException {
+        assertEquals(expectedResult, new Day6(trimWhitespace).solvePartOne(fileName));
     }
 }
