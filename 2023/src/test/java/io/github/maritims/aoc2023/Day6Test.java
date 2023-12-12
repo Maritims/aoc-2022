@@ -12,7 +12,7 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 class Day6Test {
 
-    public static Stream<Arguments> solvePartOne() {
+    public static Stream<Arguments> solve() {
         return Stream.of(
             arguments("day6_sample.txt", false, 288),
             arguments("day6_actual.txt", false, 861300),
@@ -23,7 +23,7 @@ class Day6Test {
 
     @ParameterizedTest
     @MethodSource
-    void solvePartOne(String fileName, boolean trimWhitespace, int expectedResult) throws IOException {
-        assertEquals(expectedResult, new Day6(trimWhitespace).solvePartOne(fileName));
+    void solve(String fileName, boolean trimWhitespace, int expectedResult) throws IOException {
+        assertEquals(expectedResult, new Day6(trimWhitespace).solve(fileName));
     }
 }

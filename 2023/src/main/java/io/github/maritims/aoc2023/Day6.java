@@ -26,7 +26,7 @@ public class Day6 {
             .toList();
     }
 
-    public int solvePartOne(String fileName) throws IOException {
+    public int solve(String fileName) throws IOException {
         var lines = Files.readAllLines(Paths.get("src", "main", "resources", fileName));
         var raceTimes = getValues(lines.get(0));
         var distancesToBeat = getValues(lines.get(1));
