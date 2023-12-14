@@ -11,12 +11,6 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 class HandTest {
 
-    public static Stream<Arguments> testToString() {
-        return Stream.of(
-            arguments("32T3K", "233KT")
-        );
-    }
-
     public static Stream<Arguments> getHandType() {
         return Stream.of(
             arguments("AAAAA", HandType.FiveOfAKind),
@@ -31,13 +25,7 @@ class HandTest {
 
     @ParameterizedTest
     @MethodSource
-    void testToString(String hand, String expectedResult) {
-        assertEquals(expectedResult, new Hand(hand).toString());
-    }
-
-    @ParameterizedTest
-    @MethodSource
     void getHandType(String hand, HandType expectedResult) {
-        assertEquals(expectedResult, new Hand(hand).getHandType());
+        assertEquals(expectedResult, new Hand(hand, null).getType());
     }
 }
