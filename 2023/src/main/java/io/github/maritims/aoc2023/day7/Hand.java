@@ -168,6 +168,12 @@ public class Hand implements Comparable<Hand> {
         return result;
     }
 
+    /**
+     * Hand strength is determined by {@link Hand#getType()}.
+     * If both hands are of the same type, compare the hands card by card to see if any card in a position is of greater value than the card in the corresponding position in the other hand.
+     * @param o the object to be compared.
+     * @return An int value indicating whether this hand is stronger than the other hand.
+     */
     @Override
     public int compareTo(Hand o) {
         if(getType().ordinal() > o.getType().ordinal()) return 1;
