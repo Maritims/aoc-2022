@@ -1,7 +1,5 @@
 package io.github.maritims.aoc2023.day7;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Objects;
 
 import static java.util.function.Function.identity;
@@ -9,26 +7,18 @@ import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.groupingBy;
 
 public class Hand implements Comparable<Hand> {
-    public static final LinkedList<Character> CARD_VALUES_WITH_JOKER    = new LinkedList<>(List.of('2', '3', '4', '5', '6', '7', '8', '9', 'T', 'Q', 'K', 'A', 'J'));
-    public static final LinkedList<Character> CARD_VALUES_WITHOUT_JOKER = new LinkedList<>(List.of('2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A'));
 
     private final String                cards;
-    private final LinkedList<Character> cardValues;
     private final boolean               isJokerEnabled;
     private       HandType              type;
 
     public Hand(String cards, boolean isJokerEnabled) {
         this.cards          = cards;
-        this.cardValues     = isJokerEnabled ? CARD_VALUES_WITH_JOKER : CARD_VALUES_WITHOUT_JOKER;
         this.isJokerEnabled = isJokerEnabled;
     }
 
     public String getCards() {
         return cards;
-    }
-
-    public LinkedList<Character> getCardValues() {
-        return cardValues;
     }
 
     public HandType getType() {
@@ -88,7 +78,7 @@ public class Hand implements Comparable<Hand> {
 
             // There's four of a kind...
             // ...but if the single is a joker it's five of a kind. E.g. AAAAJ == AAAAA.
-            // ...and a quartet of J would also make for five of a kidn. E.g. AJJJJ == AAAAA.
+            // ...and a quartet of J would also make for five of a kind. E.g. AJJJJ == AAAAA.
             else if (quartets == 1) {
                 type = jokers == 1 || jokers == 4 ? HandType.FiveOfAKind : HandType.FourOfAKind;
             }
