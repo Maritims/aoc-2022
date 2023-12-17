@@ -19,9 +19,22 @@ class Day7Test {
         );
     }
 
+    public static Stream<Arguments> solvePartTwo() {
+        return Stream.of(
+            arguments("day7_sample.txt", 5905),
+            arguments("day7_actual.txt", 0)
+        );
+    }
+
     @ParameterizedTest
     @MethodSource
     void solvePartOne(String fileName, int expectedResult) throws IOException {
         assertEquals(expectedResult, new Day7().solvePartOne(fileName));
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void solvePartTwo(String fileName, int expectedResult) throws IOException {
+        assertEquals(expectedResult, new Day7().solvePartTwo(fileName));
     }
 }
