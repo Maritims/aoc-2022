@@ -11,8 +11,8 @@ public class Day8 extends Day {
     }
 
     protected Node toNode(String line) {
-        var name = line.substring(0, 3);
-        var left = line.substring(7, 10);
+        var name  = line.substring(0, 3);
+        var left  = line.substring(7, 10);
         var right = line.substring(12, 15);
         return new Node(name, left, right);
     }
