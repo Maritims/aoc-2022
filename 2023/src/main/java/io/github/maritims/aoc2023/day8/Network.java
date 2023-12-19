@@ -13,7 +13,7 @@ public record Network(Map<String, Node> nodes) {
         var steps = 0;
         while (!winCondition.test(currentNode)) {
             var instruction    = instructions.charAt(steps % instructions.length());
-            var nameOfNextNode = instruction == 'L' ? currentNode.getLeft() : currentNode.getRight();
+            var nameOfNextNode = instruction == 'L' ? currentNode.left() : currentNode.right();
             currentNode = nodes().get(nameOfNextNode);
             steps++;
         }
