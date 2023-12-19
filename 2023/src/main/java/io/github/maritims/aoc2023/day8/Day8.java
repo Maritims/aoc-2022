@@ -44,19 +44,18 @@ public class Day8 extends Day {
                 .collect(Collectors.toMap(Node::name, node -> node))
         );
 
-        var ghosts = network.nodes()
+        var startingPositions = network.nodes()
             .keySet()
             .stream()
             .filter(key -> key.endsWith("A"))
-            .map(Ghost::new)
             .toList();
 
         // Given an infinite amount of time all ghosts will run in a never-ending loop along their own path.
         // The path of a ghost always takes exactly the same number of steps.
         // If we first determine how many steps the path of each ghost takes, we can use Euclid's algorithm for finding the greatest common divisor to then find the least common multiple of all these cycles.
         // The least common multiple of all these cycles is how many steps it takes before each ghost is at an end position simultaneously.
-        var cycles = ghosts.stream()
-            .map(ghost -> network.traverse(instructions, ghost.getStartingPosition(), node -> node.name().endsWith("Z")))
+        var cycles = startingPositions.stream()
+            .map(startingPosition -> network.traverse(instructions, startingPosition, node -> node.name().endsWith("Z")))
             .toArray(Long[]::new);
 
         return MathUtil.lcm(cycles);
