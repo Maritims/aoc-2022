@@ -30,10 +30,8 @@ public class Day9 extends Day {
         return isAllZero ? sequences : getSequencedStories(sequences);
     }
 
-    @Override
-    public long solvePartOne() {
-        var lines = readAllLines();
-        var sum   = 0;
+    protected int getSum(List<String> lines, boolean extrapolateForward) {
+        var sum = 0;
         for (var line : lines) {
             var stories          = Arrays.stream(line.split(" ")).map(Integer::parseInt).toList();
             var sequencedStories = new ArrayList<List<Integer>>();
@@ -48,49 +46,34 @@ public class Day9 extends Day {
                 }
 
                 var sequenceBelowCurrent = sequencedStories.get(i);
-                var increment            = sequenceBelowCurrent.get(sequenceBelowCurrent.size() - 1);
+                var increment            = sequenceBelowCurrent.get(extrapolateForward ? sequenceBelowCurrent.size() - 1 : 0);
                 var currentSequence      = sequencedStories.get(i - 1);
-                var extrapolation        = currentSequence.get(currentSequence.size() - 1) + increment;
-                currentSequence.add(extrapolation);
+                var sequencingValue      = currentSequence.get(extrapolateForward ? currentSequence.size() - 1 : 0);
+                var extrapolation        = extrapolateForward ? sequencingValue + increment : sequencingValue - increment;
+
+                if (extrapolateForward) {
+                    currentSequence.add(extrapolation);
+                } else {
+                    currentSequence.add(0, extrapolation);
+                }
             }
 
             var sequence      = sequencedStories.get(0);
-            var extrapolation = sequence.get(sequence.size() - 1);
+            var extrapolation = sequence.get(extrapolateForward ? sequence.size() - 1 : 0);
             sum += extrapolation;
         }
-
         return sum;
+    }
+
+    @Override
+    public long solvePartOne() {
+        var lines = readAllLines();
+        return getSum(lines, true);
     }
 
     @Override
     public long solvePartTwo() {
         var lines = readAllLines();
-        var sum   = 0;
-        for (var line : lines) {
-            var stories          = Arrays.stream(line.split(" ")).map(Integer::parseInt).toList();
-            var sequencedStories = new ArrayList<List<Integer>>();
-            sequencedStories.add(new ArrayList<>(stories));
-            sequencedStories = getSequencedStories(sequencedStories);
-
-            for (var i = sequencedStories.size(); i > 0; i--) {
-                // Take care of the all-zero row first.
-                if (i == sequencedStories.size()) {
-                    sequencedStories.get(i - 1).add(0, 0);
-                    continue;
-                }
-
-                var sequenceBelowCurrent = sequencedStories.get(i);
-                var increment            = sequenceBelowCurrent.get(0);
-                var currentSequence      = sequencedStories.get(i - 1);
-                var extrapolation        = currentSequence.get(0) - increment;
-                currentSequence.add(0, extrapolation);
-            }
-
-            var sequence      = sequencedStories.get(0);
-            var extrapolation = sequence.get(0);
-            sum += extrapolation;
-        }
-
-        return sum;
+        return getSum(lines, false);
     }
 }
