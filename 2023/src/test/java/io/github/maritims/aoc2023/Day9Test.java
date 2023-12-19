@@ -21,7 +21,7 @@ class Day9Test {
     public static Stream<Arguments> solvePartTwo() {
         return Stream.of(
             arguments(true, 2),
-            arguments(false, 0)
+            arguments(false, 1019)
         );
     }
 
