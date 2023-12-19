@@ -1,4 +1,4 @@
-package io.github.maritims.aoc2023.day9;
+package io.github.maritims.aoc2023;
 
 import io.github.maritims.toolbox.Day;
 

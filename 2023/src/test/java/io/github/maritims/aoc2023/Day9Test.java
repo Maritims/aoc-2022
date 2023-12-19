@@ -1,4 +1,4 @@
-package io.github.maritims.aoc2023.day9;
+package io.github.maritims.aoc2023;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
