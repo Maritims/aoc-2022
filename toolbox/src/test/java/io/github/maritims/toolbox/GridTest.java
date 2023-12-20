@@ -9,6 +9,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -42,7 +43,7 @@ class GridTest {
                     new Character[] {'I', 'J', 'K', 'L'}
                 },
                 Point.of(1, 1),
-                List.of(
+                Set.of(
                     Point.of(0, 1), // Directly above.
                     Point.of(1, 0), // Directly to the left.
                     Point.of(1, 2), // Directly to the right.
@@ -65,7 +66,7 @@ class GridTest {
 
     @ParameterizedTest
     @MethodSource
-    void getNeighbours(Character[][] array, Point source, List<Point> expectedResult) {
+    void getNeighbours(Character[][] array, Point source, Set<Point> expectedResult) {
         var list = Arrays.stream(array)
             .map(row -> Arrays.stream(row).toList())
             .collect(Collectors.toCollection(ArrayList::new));

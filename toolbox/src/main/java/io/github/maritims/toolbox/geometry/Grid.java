@@ -2,9 +2,11 @@ package io.github.maritims.toolbox.geometry;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -83,12 +85,12 @@ public class Grid<T> {
     /**
      * Find the four points which are directly above, to the left, to the right and below the given source point.
      */
-    public List<Point> getNeighbours(Point source) {
+    public LinkedHashSet<Point> getNeighbours(Point source) {
         if (source.row() > getNumberOfRows() || source.column() > getNumberOfColumns()) {
             throw new IndexOutOfBoundsException("The point " + source + " is not within the grid");
         }
 
-        var neighbours = new ArrayList<Point>();
+        var neighbours = new LinkedHashSet<Point>();
 
         if (source.row() > 0) {
             // There's a point directly above this one.
@@ -127,15 +129,27 @@ public class Grid<T> {
             .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public List<Integer> findEmptyRows() {
+    public LinkedHashSet<Point> findPoints(Predicate<T> condition) {
+        var points = new LinkedHashSet<Point>();
+        for(var rowNum = 0; rowNum < getNumberOfRows(); rowNum++) {
+            for(var colNum = 0; colNum < getNumberOfColumns(); colNum++) {
+                if(condition.test(list.get(rowNum).get(colNum))) {
+                    points.add(Point.of(rowNum, colNum));
+                }
+            }
+        }
+        return points;
+    }
+
+    public LinkedHashSet<Integer> findEmptyRows() {
         return IntStream.range(0, getNumberOfRows())
             .filter(rowNum -> list.get(rowNum).stream().allMatch(c -> c.equals('.')))
             .boxed()
-            .toList();
+            .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
-    public List<Integer> findEmptyColumns() {
-        var emptyColumns = new ArrayList<Integer>();
+    public LinkedHashSet<Integer> findEmptyColumns() {
+        var emptyColumns = new LinkedHashSet<Integer>();
         for(var colNum = 0; colNum < getNumberOfColumns(); colNum++) {
             var isEmptyColumn = true;
             for(var rowNum = 0; rowNum < getNumberOfRows(); rowNum++) {
