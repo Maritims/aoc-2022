@@ -51,14 +51,14 @@ public class Day11 extends Day {
             var source = galaxies.get(i);
 
             for(var j = 0; j < galaxies.size(); j++) {
-                if(i == j) {
+                if (i == j) {
                     // We obviously don't need to know the number of steps from a galaxy to itself.
                     continue;
                 }
                 var destination = galaxies.get(j);
 
-                var n = Math.abs(destination.column() - source.column());
-                var m = Math.abs(destination.row() - source.row());
+                var n                       = Math.abs(destination.column() - source.column());
+                var m                       = Math.abs(destination.row() - source.row());
                 var fromSourceToDestination = n + m;
                 steps.add(fromSourceToDestination);
             }
