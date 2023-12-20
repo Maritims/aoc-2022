@@ -6,7 +6,10 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -54,7 +57,6 @@ class GridTest {
         var array = new Character[lines.size()][lines.get(0).length()];
         Grid.parse(
             lines,
-            (rows, cols) -> new Character[rows][cols],
             (character) -> character,
             (character, points) -> array[points.row()][points.column()] = character
         );
@@ -64,7 +66,10 @@ class GridTest {
     @ParameterizedTest
     @MethodSource
     void getNeighbours(Character[][] array, Point source, List<Point> expectedResult) {
-        var grid   = new Grid<>(array);
+        var list = Arrays.stream(array)
+            .map(row -> Arrays.stream(row).toList())
+            .collect(Collectors.toCollection(ArrayList::new));
+        var grid   = new Grid<>(list);
         var result = grid.getNeighbours(source);
         assertEquals(expectedResult, result);
     }

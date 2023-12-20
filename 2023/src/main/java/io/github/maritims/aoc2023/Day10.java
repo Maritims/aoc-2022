@@ -48,7 +48,7 @@ public class Day10 extends Day {
      * This method can never return more than two points as no pipe symbol is mapped to more than two offsets.
      */
     protected List<Point> getPossibleMoves(Grid<Character> grid, Point point) {
-        var pipe = grid.get(point);
+        var pipe = grid.getTile(point);
         return OFFSETS.get(pipe)
             .stream()
             .map(offset -> Grid.add(point, offset))
@@ -60,7 +60,7 @@ public class Day10 extends Day {
 
         var connectedNeighbours = new ArrayList<Point>();
         for (var neighbour : neighbours) {
-            var pipe = grid.get(neighbour);
+            var pipe = grid.getTile(neighbour);
             if (pipe == '.') {
                 // We're not interested in ground.
                 continue;
@@ -79,7 +79,6 @@ public class Day10 extends Day {
         var startingPoint = new AtomicReference<Point>();
         var grid = Grid.parse(
             lines,
-            (rows, cols) -> new Character[rows][cols],
             (character) -> character,
             (character, point) -> {
                 if (character == 'S') {
