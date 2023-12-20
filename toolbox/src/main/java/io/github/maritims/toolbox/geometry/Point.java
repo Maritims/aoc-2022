@@ -1,4 +1,4 @@
-package io.github.maritims.toolbox.grid;
+package io.github.maritims.toolbox.geometry;
 
 public record Point(int row, int column) {
     public static Point of(int row, int col) {

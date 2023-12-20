@@ -1,8 +1,10 @@
 package io.github.maritims.aoc2023;
 
 import io.github.maritims.toolbox.Day;
-import io.github.maritims.toolbox.grid.Grid;
-import io.github.maritims.toolbox.grid.Point;
+import io.github.maritims.toolbox.MathUtil;
+import io.github.maritims.toolbox.geometry.Grid;
+import io.github.maritims.toolbox.geometry.PicksTheorem;
+import io.github.maritims.toolbox.geometry.Point;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,9 +75,7 @@ public class Day10 extends Day {
         return connectedNeighbours;
     }
 
-    @Override
-    public long solvePartOne() {
-        var lines         = readAllLines();
+    protected List<Point> getPathThroughLoop(List<String> lines) {
         var startingPoint = new AtomicReference<Point>();
         var grid = Grid.parse(
             lines,
@@ -94,8 +94,7 @@ public class Day10 extends Day {
 
         // Walk through the first connected compatible pipe and find the connected compatible pipes of that pipe.
         // If either of the next pipes is the starting pipe, break the loop.
-        var points  = new ArrayList<>(List.of(startingPoint.get()));
-        var steps = 0;
+        var points = new ArrayList<>(List.of(startingPoint.get()));
         while (true) {
             // This is where we just came from.
             var last = points.get(points.size() - 1);
@@ -106,9 +105,8 @@ public class Day10 extends Day {
             var possibleMoves = getPossibleMoves(grid, current);
 
             // We've completed the loop if either of the next possible moves is the starting point and we didn't just come from there.
-            if(possibleMoves.contains(startingPoint.get()) && !last.equals(startingPoint.get())) {
+            if (possibleMoves.contains(startingPoint.get()) && !last.equals(startingPoint.get())) {
                 // The furthest point from the starting point is the center of the loop.
-                steps = (int) Math.ceil((double) points.size() / 2);
                 break;
             }
 
@@ -116,12 +114,22 @@ public class Day10 extends Day {
             current = possibleMoves.get(1).equals(last) ? possibleMoves.get(0) : possibleMoves.get(1);
         }
 
-        // ...and this is how far we had to go to get to the middle of the loop.
-        return steps;
+        return points;
+    }
+
+    @Override
+    public long solvePartOne() {
+        var lines  = readAllLines();
+        var points = getPathThroughLoop(lines);
+        // This is how far we had to go to get to the middle of the loop.
+        return (int) Math.ceil((double) points.size() / 2);
     }
 
     @Override
     public long solvePartTwo() {
-        return 0;
+        var lines      = useSampleData ? readAllLines("day10_part2_sample.txt") : readAllLines();
+        var points     = getPathThroughLoop(lines);
+        var areaOfLoop = MathUtil.shoelace(points);
+        return PicksTheorem.getInteriorPoints(areaOfLoop, points.size());
     }
 }

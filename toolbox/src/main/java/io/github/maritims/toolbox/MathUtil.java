@@ -1,6 +1,10 @@
 package io.github.maritims.toolbox;
 
+import io.github.maritims.toolbox.geometry.Point;
+import io.github.maritims.toolbox.geometry.ShoelaceFormula;
+
 import java.util.Arrays;
+import java.util.List;
 
 public class MathUtil {
     /**
@@ -28,5 +32,12 @@ public class MathUtil {
      */
     public static long lcm(Long... a) {
         return Arrays.stream(a).reduce(1L, MathUtil::lcm);
+    }
+
+    /**
+     * Calculate the interior area of an irregular polygon by using the shoelace formula.
+     */
+    public static Double shoelace(List<Point> points) {
+        return new ShoelaceFormula().calculate(points);
     }
 }

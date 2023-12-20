@@ -1,7 +1,7 @@
 package io.github.maritims.toolbox;
 
-import io.github.maritims.toolbox.grid.Grid;
-import io.github.maritims.toolbox.grid.Point;
+import io.github.maritims.toolbox.geometry.Grid;
+import io.github.maritims.toolbox.geometry.Point;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;

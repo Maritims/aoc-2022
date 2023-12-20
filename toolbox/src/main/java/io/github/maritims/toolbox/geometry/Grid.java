@@ -1,4 +1,4 @@
-package io.github.maritims.toolbox.grid;
+package io.github.maritims.toolbox.geometry;
 
 import java.util.ArrayList;
 import java.util.List;
