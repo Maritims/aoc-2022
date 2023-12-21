@@ -55,6 +55,9 @@ public class Day11 extends Day {
                 }
 
                 var destination       = galaxies.get(j);
+
+                // Expansion of the grid is only necessary between the source and destination and nowhere else.
+                // Expansion can be simulated by finding the number of empty lines between the source and destination and multiplying the result with an expansion multiplier minus 1.
                 var emptyRowsBetween  = getLinesBetween(emptyRows, source, destination, true) * (multiplier - 1);
                 var emptyColsBetween  = getLinesBetween(emptyColumns, source, destination, false) * (multiplier - 1);
                 var manhattanDistance = MathUtil.getManhattanDistance(source, destination) + emptyRowsBetween + emptyColsBetween;
