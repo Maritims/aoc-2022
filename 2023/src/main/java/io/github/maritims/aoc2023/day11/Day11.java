@@ -53,10 +53,8 @@ public class Day11 extends Day {
                     // We obviously don't need to know the number of steps from a galaxy to itself.
                     continue;
                 }
-                var destination = galaxies.get(j);
 
-                // But what if we cross an empty column?
-
+                var destination       = galaxies.get(j);
                 var emptyRowsBetween  = getLinesBetween(emptyRows, source, destination, true) * (multiplier - 1);
                 var emptyColsBetween  = getLinesBetween(emptyColumns, source, destination, false) * (multiplier - 1);
                 var manhattanDistance = MathUtil.getManhattanDistance(source, destination) + emptyRowsBetween + emptyColsBetween;
