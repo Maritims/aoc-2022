@@ -12,7 +12,7 @@ public class MathUtil {
      */
     public static long gcd(long a, long b) {
         // We've found the gcd once the remainder is 0.
-        if(b == 0) {
+        if (b == 0) {
             return a;
         }
 
@@ -39,5 +39,11 @@ public class MathUtil {
      */
     public static Double shoelace(List<Point> points) {
         return new ShoelaceFormula().calculate(points);
+    }
+
+    public static int getManhattanDistance(Point source, Point destination) {
+        var n = Math.abs(destination.column() - source.column());
+        var m = Math.abs(destination.row() - source.row());
+        return n + m;
     }
 }
