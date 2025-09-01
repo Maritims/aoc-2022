@@ -1,38 +1,20 @@
 package io.github.maritims.advent_of_code.year_one;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.regex.Pattern;
+import io.github.maritims.advent_of_code.common.PuzzleSolver;
+import io.github.maritims.advent_of_code.common.StringUtils;
 
-public class Day5 {
-    protected boolean isNiceInPartOne(String line) {
-        Pattern vowelPattern = Pattern.compile("([aeiou])");
-        Pattern doubleLetterPattern = Pattern.compile("(.)\\1");
-        Pattern forbiddenPattern = Pattern.compile("(ab|cd|pq|xy)");
-
-        return vowelPattern.matcher(line).results().count() >= 3 && doubleLetterPattern.matcher(line).find() && !forbiddenPattern.matcher(line).find();
+public class Day5 extends PuzzleSolver<Integer, Integer> {
+    public Integer solveFirstPart() {
+        return (int) loadInput()
+                .stream()
+                .filter(line -> StringUtils.numberOfVowels(line) >= 3 && StringUtils.hasLettersFollowingEachOther(line) && StringUtils.hasNeitherOfThesePatterns(line, "ab", "cd", "pq", "xy"))
+                .count();
     }
 
-    protected boolean isNiceInPartTwo(String line) {
-        Pattern repeatingPairPattern = Pattern.compile("(\\w{2}).*?(\\1)");
-        Pattern repeatingLetterPattern = Pattern.compile("(\\w).(\\1)");
-
-        return repeatingPairPattern.matcher(line).find() && repeatingLetterPattern.matcher(line).find();
-    }
-
-    public int solvePartOne(String fileName) throws IOException {
-        List<String> lines = Files.readAllLines(Paths.get("src", "main", "resources", fileName));
-        return (int) lines.stream()
-            .filter(this::isNiceInPartOne)
-            .count();
-    }
-
-    public int solvePartTwo(String fileName) throws IOException {
-        List<String> lines = Files.readAllLines(Paths.get("src", "main", "resources", fileName));
-        return (int) lines.stream()
-            .filter(this::isNiceInPartTwo)
-            .count();
+    public Integer solveSecondPart() {
+        return (int) loadInput()
+                .stream()
+                .filter(line -> StringUtils.hasRepeatedPairWithAnythingInBetween(line) && StringUtils.hasRepeatingLetterWithSingleDelimiter(line))
+                .count();
     }
 }
