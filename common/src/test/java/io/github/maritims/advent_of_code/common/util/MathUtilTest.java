@@ -1,5 +1,6 @@
-package io.github.maritims.advent_of_code.common;
+package io.github.maritims.advent_of_code.common.util;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -33,7 +34,7 @@ class MathUtilTest {
     @ParameterizedTest
     @MethodSource
     void gcd(long a, long b, long expectedResult) {
-        assertEquals(expectedResult, MathUtil.gcd(a, b));
+        Assertions.assertEquals(expectedResult, MathUtil.gcd(a, b));
     }
 
     @ParameterizedTest

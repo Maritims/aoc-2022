@@ -1,7 +1,5 @@
-package io.github.maritims.advent_of_code.common;
+package io.github.maritims.advent_of_code.common.geometry;
 
-import io.github.maritims.advent_of_code.common.geometry.Grid;
-import io.github.maritims.advent_of_code.common.geometry.Point;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;

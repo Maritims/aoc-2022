@@ -1,4 +1,4 @@
-package io.github.maritims.advent_of_code.common;
+package io.github.maritims.advent_of_code.common.util;
 
 import java.util.Arrays;
 import java.util.regex.Pattern;

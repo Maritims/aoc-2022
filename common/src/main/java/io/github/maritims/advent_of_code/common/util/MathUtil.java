@@ -1,4 +1,4 @@
-package io.github.maritims.advent_of_code.common;
+package io.github.maritims.advent_of_code.common.util;
 
 import io.github.maritims.advent_of_code.common.geometry.Point;
 import io.github.maritims.advent_of_code.common.geometry.ShoelaceFormula;

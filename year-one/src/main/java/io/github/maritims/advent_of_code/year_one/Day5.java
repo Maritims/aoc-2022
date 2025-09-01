@@ -1,7 +1,7 @@
 package io.github.maritims.advent_of_code.year_one;
 
 import io.github.maritims.advent_of_code.common.PuzzleSolver;
-import io.github.maritims.advent_of_code.common.StringUtils;
+import io.github.maritims.advent_of_code.common.util.StringUtils;
 
 public class Day5 extends PuzzleSolver<Integer, Integer> {
     public Integer solveFirstPart() {

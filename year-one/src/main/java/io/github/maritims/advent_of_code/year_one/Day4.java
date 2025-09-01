@@ -1,6 +1,6 @@
 package io.github.maritims.advent_of_code.year_one;
 
-import io.github.maritims.advent_of_code.common.HexUtil;
+import io.github.maritims.advent_of_code.common.util.HexUtil;
 import io.github.maritims.advent_of_code.common.PuzzleSolver;
 
 import java.security.MessageDigest;

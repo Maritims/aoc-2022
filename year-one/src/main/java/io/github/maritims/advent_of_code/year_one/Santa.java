@@ -6,50 +6,35 @@ import io.github.maritims.advent_of_code.common.geometry.Point2D;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A Santa which can both walk up and down in buildings and deliver presents up, down, left and right.
+ * This Santa can clone itself to deliver presents faster.
+ */
 public class Santa {
-    private int     currentFloor = 0;
-    private Integer positionOfInstructionLeadingToTheBasement;
-
-    public int currentFloor() {
-        return currentFloor;
-    }
-
-    public int positionOfInstructionLeadingToTheBasement() {
-        if (positionOfInstructionLeadingToTheBasement == null) {
-            throw new IllegalStateException("Santa has not reached the basement yet.");
-        }
-
-        return positionOfInstructionLeadingToTheBasement;
-    }
-
-    private void goUpstairs() {
-        currentFloor++;
-    }
-
-    private void goDownstairs() {
-        currentFloor--;
-    }
-
-    private void followDirection(Direction direction) {
-        if (direction == Direction.UP) {
-            goUpstairs();
-        } else {
-            goDownstairs();
-        }
+    public record WalkResult(int currentFloor, Integer positionOfInstructionLeadingToTheBasement) {
     }
 
     /**
      * Make Santa walk until he runs out of instructions.
      */
-    public Santa walk(char[] instructions) {
+    public WalkResult walk(char[] instructions) {
+        var     floor                                     = 0;
+        Integer positionOfInstructionLeadingToTheBasement = null;
+
         for (var i = 0; i < instructions.length; i++) {
             char instruction = instructions[i];
-            if (currentFloor == -1 && positionOfInstructionLeadingToTheBasement == null) {
+            if (floor == -1 && positionOfInstructionLeadingToTheBasement == null) {
                 positionOfInstructionLeadingToTheBasement = i;
             }
-            followDirection(Direction.fromInstruction(instruction));
+
+            floor = switch (Direction.fromInstruction(instruction)) {
+                case UP -> floor + 1;
+                case DOWN -> floor - 1;
+                default -> throw new IllegalArgumentException("Invalid instruction: " + instruction);
+            };
         }
-        return this;
+
+        return new WalkResult(floor, positionOfInstructionLeadingToTheBasement);
     }
 
     /**

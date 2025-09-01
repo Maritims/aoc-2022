@@ -1,5 +1,6 @@
-package io.github.maritims.advent_of_code.common;
+package io.github.maritims.advent_of_code.common.util;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -7,7 +8,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 class SetUtilTest {
@@ -33,6 +33,6 @@ class SetUtilTest {
     @ParameterizedTest
     @MethodSource
     void getPowerSet(Set<String> set, Set<Set<String>> expectedResult) {
-        assertEquals(expectedResult, SetUtil.getPowerSet(set));
+        Assertions.assertEquals(expectedResult, SetUtil.getPowerSet(set));
     }
 }
