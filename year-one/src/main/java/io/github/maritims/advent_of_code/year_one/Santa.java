@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * A Santa which can both walk up and down in buildings and deliver presents up, down, left and right.
+ * A Santa which can both walk up and down in buildings and deliver presents to houses up high, down low, to the left and to the right of wherever Santa is currently.
  * This Santa can clone itself to deliver presents faster.
  */
 public class Santa {
