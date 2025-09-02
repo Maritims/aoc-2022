@@ -7,7 +7,7 @@ import java.util.List;
 
 public class ShoelaceFormula {
     /**
-     * Multiply the x,y coordinates of all the points diagonally.
+     * Multiply the col,row coordinates of all the points diagonally.
      */
     protected Tuple2<List<Integer>, List<Integer>> getLeftAndRightProducts(List<Point> points) {
         var left  = new ArrayList<Integer>();

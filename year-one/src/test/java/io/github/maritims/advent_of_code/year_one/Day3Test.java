@@ -1,6 +1,5 @@
-package io.github.maritims.advent_of_code.year_one.day_three;
+package io.github.maritims.advent_of_code.year_one;
 
-import io.github.maritims.advent_of_code.year_one.Day3;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
