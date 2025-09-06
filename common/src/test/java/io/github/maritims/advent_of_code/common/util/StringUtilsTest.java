@@ -29,6 +29,33 @@ class StringUtilsTest {
         );
     }
 
+    public static Stream<Arguments> unescapeString() {
+        //noinspection UnnecessaryStringEscape
+        return Stream.of(
+                Arguments.of("""
+                                     ""
+                                     """.trim(), ""),
+                Arguments.of("""
+                                     "abc"
+                                     """.trim(), "abc"),
+                Arguments.of("""
+                                     "aaa\\\"aaa"
+                                     """.trim(), "aaa\"aaa"),
+                Arguments.of("""
+                                     \\x27
+                                     """.trim(), "'")
+        );
+    }
+
+    public static Stream<Arguments> escapeString() {
+        return Stream.of(
+                Arguments.of("\"\"", "\"\\\"\\\"\""),
+                Arguments.of("\"abc\"", "\"\\\"abc\\\"\""),
+                Arguments.of("\"aaa\\\"aaa", "\"\\\"aaa\\\\\\\"aaa\""),
+                Arguments.of("\"\\x27\"", "\"\\\"\\\\x27\\\"\"")
+        );
+    }
+
     @ParameterizedTest
     @MethodSource
     void hasRepeatingLetterWithSingleDelimiter(String str, boolean expectedResult) {
@@ -39,5 +66,17 @@ class StringUtilsTest {
     @MethodSource
     void hasRepeatedPairWithAnythingInBetween(String str, boolean expectedResult) {
         assertEquals(expectedResult, StringUtils.hasRepeatedPairWithAnythingInBetween(str));
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void unescapeString(String stringLiteral, String expectedResult) {
+        assertEquals(expectedResult, StringUtils.unescapeString(stringLiteral));
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void escapeString(String str, String expectedResult) {
+        assertEquals(expectedResult, StringUtils.escapeString(str));
     }
 }
