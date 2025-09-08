@@ -56,6 +56,17 @@ class StringUtilsTest {
         );
     }
 
+    public static Stream<Arguments> lookAndSay() {
+        return Stream.of(
+                Arguments.of("1", "11"),
+                Arguments.of("11", "21"),
+                Arguments.of("21", "1211"),
+                Arguments.of("1211", "111221"),
+                Arguments.of("111221", "312211"),
+                Arguments.of("4444333221", "44332211")
+        );
+    }
+
     @ParameterizedTest
     @MethodSource
     void hasRepeatingLetterWithSingleDelimiter(String str, boolean expectedResult) {
@@ -78,5 +89,11 @@ class StringUtilsTest {
     @MethodSource
     void escapeString(String str, String expectedResult) {
         assertEquals(expectedResult, StringUtils.escapeString(str));
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void lookAndSay(String input, String expectedResult) {
+        assertEquals(expectedResult, StringUtils.lookAndSay(input));
     }
 }

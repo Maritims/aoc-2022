@@ -99,4 +99,22 @@ public class StringUtils {
         sb.append('"');
         return sb.toString();
     }
+
+    public static String lookAndSay(String input) {
+        var sb = new StringBuilder();
+
+        for (var i = 0; i < input.length(); i++) {
+            var occurrences       = 1;
+
+            // Count while we're looking at occurrences of the same character.
+            while (i < input.length() - 1 && input.charAt(i) == input.charAt(i + 1)) {
+                i++;
+                occurrences++;
+            }
+
+            sb.append(occurrences).append(input.charAt(i));
+        }
+
+        return sb.toString();
+    }
 }
