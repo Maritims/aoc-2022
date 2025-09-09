@@ -4,10 +4,11 @@ import java.util.Arrays;
 import java.util.regex.Pattern;
 
 import static io.github.maritims.advent_of_code.common.util.ArgumentExceptionUtil.throwIfNull;
+import static io.github.maritims.advent_of_code.common.util.ArgumentExceptionUtil.throwIfNullOrEmpty;
 
 public class StringUtils {
     private static final Pattern REPEATING_PAIR_WITH_ANYTHING_IN_BETWEEN_PATTERN = Pattern.compile("(\\w{2}).*(\\1)");
-    private static final Pattern REPEATING_LETTER_WITH_SINGLE_DELIMITER_PATTERN  = Pattern.compile("(\\w).(\\1)");
+    private static final Pattern REPEATING_LETTER_WITH_SINGLE_DELIMITER_PATTERN = Pattern.compile("(\\w).(\\1)");
 
     public static int numberOfVowels(String str) {
         return (int) str.chars().filter(c -> "aeiou".contains("" + (char) c)).count();
@@ -33,6 +34,19 @@ public class StringUtils {
 
     public static boolean hasRepeatedPairWithAnythingInBetween(String str) {
         return REPEATING_PAIR_WITH_ANYTHING_IN_BETWEEN_PATTERN.matcher(str).find();
+    }
+
+    public static boolean hasNonOverlappingPairs(String str) {
+        for(var i = 0; i < str.length() - 1; i++) {
+            if(str.charAt(i) == str.charAt(i + 1)) {
+                for(var j = i + 2; j < str.length() - 1; j++) {
+                    if(str.charAt(i) != str.charAt(j) && str.charAt(j) == str.charAt(j + 1)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     public static int convertHexToDecimal(char mostSignificantCharacter, char leastSignificantCharacter) {
@@ -116,5 +130,42 @@ public class StringUtils {
         }
 
         return sb.toString();
+    }
+
+    public static boolean hasIncreasingStraightSequence(String str) {
+        for (int i = 0; i < Math.max(2, str.length() - 3); i++) {
+            if (str.charAt(i) + 1 == str.charAt(i + 1) && str.charAt(i + 1) + 1 == str.charAt(i + 2)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean hasNoneOfTheseLetters(String str, char... letters) {
+        for (var letter : letters) {
+            if (str.contains("" + letter)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Increments the last character of the given string. If the last character is 'z', it wraps around
+     * to 'a' and continues incrementing the preceding portion of the string recursively.
+     *
+     * @param str the input string to increment; must not be null or empty
+     * @return the incremented string with the character sequence updated
+     * @throws IllegalArgumentException if the input string is null or empty
+     */
+    public static String incrementString(String str) {
+        throwIfNullOrEmpty(str, "str");
+
+        var c = str.charAt(str.length() - 1);
+        if(c == 'z') {
+            return incrementString(str.substring(0, str.length() - 1)) + 'a';
+        } else {
+            return str.substring(0, str.length() - 1) + (char)(c + 1);
+        }
     }
 }

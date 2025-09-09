@@ -67,6 +67,40 @@ class StringUtilsTest {
         );
     }
 
+    public static Stream<Arguments> hasIncreasingStraightSequence() {
+        return Stream.of(
+                Arguments.of("hijklmmn", true),
+                Arguments.of("abbceffg", false),
+                Arguments.of("abc", true),
+                Arguments.of("bcd", true),
+                Arguments.of("cde", true),
+                Arguments.of("xyz", true),
+                Arguments.of("abd", false)
+        );
+    }
+
+    public static Stream<Arguments> hasNoneOfTheseLetters() {
+        return Stream.of(
+                Arguments.of("hijklmn", false)
+        );
+    }
+
+    public static Stream<Arguments> hasNonOverlappingPairs() {
+        return Stream.of(
+                Arguments.of("aaaa", false),
+                Arguments.of("aabb", true)
+        );
+    }
+
+    public static Stream<Arguments> incrementString() {
+        return Stream.of(
+                Arguments.of("xx", "xy"),
+                Arguments.of("xy", "xz"),
+                Arguments.of("xz", "ya"),
+                Arguments.of("ya", "yb")
+        );
+    }
+
     @ParameterizedTest
     @MethodSource
     void hasRepeatingLetterWithSingleDelimiter(String str, boolean expectedResult) {
@@ -95,5 +129,29 @@ class StringUtilsTest {
     @MethodSource
     void lookAndSay(String input, String expectedResult) {
         assertEquals(expectedResult, StringUtils.lookAndSay(input));
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void hasIncreasingStraightSequence(String input, boolean expectedResult) {
+        assertEquals(expectedResult, StringUtils.hasIncreasingStraightSequence(input));
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void hasNoneOfTheseLetters(String input, boolean expectedResult) {
+        assertEquals(expectedResult, StringUtils.hasNoneOfTheseLetters(input, 'i', 'o', 'l'));
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void hasNonOverlappingPairs(String input, boolean expectedResult) {
+        assertEquals(expectedResult, StringUtils.hasNonOverlappingPairs(input));
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void incrementString(String str, String expectedResult) {
+        assertEquals(expectedResult, StringUtils.incrementString(str));
     }
 }
