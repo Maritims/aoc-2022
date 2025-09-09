@@ -1,9 +1,6 @@
 package io.github.maritims.advent_of_code.common;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -39,6 +36,14 @@ public abstract class PuzzleSolver<T1, T2> {
         }
 
         return input;
+    }
+
+    protected InputStream loadInputStream() throws FileNotFoundException {
+        var inputStream = getClass().getClassLoader().getResourceAsStream(day + ".txt");
+        if (inputStream == null) {
+            throw new FileNotFoundException("You've forgotten to add puzzle input for day " + day);
+        }
+        return inputStream;
     }
 
     public abstract T1 solveFirstPart();
