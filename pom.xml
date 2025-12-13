@@ -13,6 +13,7 @@
     <modules>
         <module>common</module>
         <module>year-one</module>
+        <module>year-eleven</module>
     </modules>
 
     <properties>
