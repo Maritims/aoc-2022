@@ -1,10 +1,8 @@
 package io.github.maritims.advent_of_code.year_eleven;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.regex.Pattern;
 
-public record Dial(int position, int zeroHits) {
+public record Dial(int position, int zeroHits, int zeroPositions) {
     private static final int     MIN                 = 0;
     private static final int     MAX                 = 99;
     private static final int     SIZE                = MAX + 1;
@@ -17,7 +15,7 @@ public record Dial(int position, int zeroHits) {
     }
 
     public Dial(int position) {
-        this(position, 0);
+        this(position, 0, 0);
     }
 
     public static int countZeroHits(int position, int steps, char direction) {
@@ -57,12 +55,12 @@ public record Dial(int position, int zeroHits) {
         if (newPosition > MAX) {
             newPosition = MIN;
         }
-        return new Dial(newPosition, 0);
+        return new Dial(newPosition, 0, 0);
     }
 
     public Dial turnClockwise(int steps) {
         var newPosition = (position + steps) % SIZE;
-        return new Dial(newPosition, zeroHits + countZeroHits(position, steps, 'R'));
+        return new Dial(newPosition, zeroHits + countZeroHits(position, steps, 'R'), zeroPositions + (newPosition == 0 ? 1 : 0));
     }
 
     public Dial turnCounterClockwiseOnce() {
@@ -70,14 +68,14 @@ public record Dial(int position, int zeroHits) {
         if (newPosition < MIN) {
             newPosition = MAX;
         }
-        return new Dial(newPosition, 0);
+        return new Dial(newPosition, 0, zeroPositions + (newPosition == 0 ? 1 : 0));
     }
 
     public Dial turnCounterClockwise(int steps) {
         var rawPosition               = position - steps;
         var potentialNegativePosition = rawPosition % SIZE;
         var correctedPositivePosition = (potentialNegativePosition + SIZE) % SIZE;
-        return new Dial(correctedPositivePosition, zeroHits + countZeroHits(position, steps, 'L'));
+        return new Dial(correctedPositivePosition, zeroHits + countZeroHits(position, steps, 'L'), zeroPositions + (correctedPositivePosition == 0 ? 1 : 0));
     }
 
     public Dial turnByInstruction(String instruction) {
@@ -98,10 +96,5 @@ public record Dial(int position, int zeroHits) {
             case "R" -> turnClockwise(steps);
             default -> throw new IllegalArgumentException("Invalid instruction: " + instruction);
         };
-    }
-
-    public Dial print() {
-        System.out.println(this);
-        return this;
     }
 }
