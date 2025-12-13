@@ -42,6 +42,6 @@ class Day2Test {
 
     @Test
     void solveSecondPart() {
-        assertEquals(0L, sut.solveSecondPart());
+        assertEquals(19058204438L, sut.solveSecondPart());
     }
 }

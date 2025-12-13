@@ -12,6 +12,13 @@ public class StringUtils {
     private static final Pattern GREEDY_REPEATING_DIGITS_PATTERN                 = Pattern.compile("(\\d+)(\\1)");
     private static final Pattern NON_GREEDY_REPEATING_DIGITS_PATTERN             = Pattern.compile("(\\d+?)\\1+");
 
+    public static int[] toIntArray(String str) {
+        return throwIfNullOrEmpty(str, "str")
+                .chars()
+                .map(c -> c - '0')
+                .toArray();
+    }
+
     public static int numberOfVowels(String str) {
         return (int) str.chars().filter(c -> "aeiou".contains("" + (char) c)).count();
     }
