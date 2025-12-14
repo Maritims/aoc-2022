@@ -52,6 +52,6 @@ class Day5Test {
 
     @Test
     void solveSecondPart() {
-        assertEquals(1968, sut.solveSecondPart());
+        assertEquals(350780324308385L, sut.solveSecondPart());
     }
 }
