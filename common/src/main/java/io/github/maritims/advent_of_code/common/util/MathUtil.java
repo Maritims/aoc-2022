@@ -5,7 +5,6 @@ import io.github.maritims.advent_of_code.common.geometry.ShoelaceFormula;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.BiFunction;
 
 public class MathUtil {
     /**
@@ -46,15 +45,5 @@ public class MathUtil {
         var n = Math.abs(destination.column() - source.column());
         var m = Math.abs(destination.row() - source.row());
         return n + m;
-    }
-
-    public static BiFunction<Number, Number, Number> resolveFunctionFromOperator(char operator) {
-        return switch (operator) {
-            case '+' -> (a, b) -> a.doubleValue() + b.doubleValue();
-            case '-' -> (a, b) -> a.doubleValue() - b.doubleValue();
-            case '*' -> (a, b) -> a.doubleValue() * b.doubleValue();
-            case '/' -> (a, b) -> a.doubleValue() / b.doubleValue();
-            default -> throw new IllegalStateException("Unexpected value: " + operator);
-        };
     }
 }

@@ -1,14 +1,14 @@
 package io.github.maritims.advent_of_code.common;
 
 import java.io.*;
-import java.util.List;
+import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 public abstract class PuzzleSolver<T1, T2> {
     private static final Pattern CLASS_NAME_PATTERN = Pattern.compile("^Day(\\d+)$");
 
-    private final int          day;
-    protected     List<String> input;
+    private final int day;
+    protected ArrayList<String> input;
 
     public PuzzleSolver() {
         var matcher = CLASS_NAME_PATTERN.matcher(getClass().getSimpleName());
@@ -19,7 +19,7 @@ public abstract class PuzzleSolver<T1, T2> {
         this.day = Integer.parseInt(matcher.group(1));
     }
 
-    public List<String> loadInput() {
+    public ArrayList<String> loadInput() {
         if (input == null) {
             try (var file = getClass().getClassLoader().getResourceAsStream(day + ".txt")) {
                 if (file == null) {
@@ -27,7 +27,7 @@ public abstract class PuzzleSolver<T1, T2> {
                 }
 
                 try (var bufferedReader = new BufferedReader(new InputStreamReader(file))) {
-                    input = bufferedReader.lines().toList();
+                    input = new ArrayList<>(bufferedReader.lines().toList());
                 }
 
             } catch (IOException e) {

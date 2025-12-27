@@ -3,7 +3,9 @@ package io.github.maritims.advent_of_code.year_eleven;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doReturn;
@@ -24,7 +26,7 @@ class Day6Test {
                  45 64  387 23\s
                   6 98  215 314
                 *   +   *   +
-                """.split("\n")).toList()).when(sut).loadInput();
+                """.split("\n")).collect(Collectors.toCollection(ArrayList::new))).when(sut).loadInput();
         assertEquals(4277556, sut.solveFirstPart());
     }
 
@@ -40,7 +42,12 @@ class Day6Test {
                  45 64  387 23\s
                   6 98  215 314
                 *   +   *   +
-                """.split("\n")).toList()).when(sut).loadInput();
-        assertEquals(0, sut.solveSecondPart());
+                """.split("\n")).collect(Collectors.toCollection(ArrayList::new))).when(sut).loadInput();
+        assertEquals(3263827, sut.solveSecondPart());
+    }
+
+    @Test
+    void solveSecondPart() {
+        assertEquals(10142723156431L, sut.solveSecondPart());
     }
 }
