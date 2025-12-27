@@ -35,6 +35,10 @@ public class Day6 extends PuzzleSolver<Long, Long> {
         return grandTotal;
     }
 
+    /**
+     * Solve day 6, part 2 by treating vertical slices of the input data as the digits of a number. The most significant digit is at the top.
+     * The input is processed right-to-left.
+     */
     @Override
     public Long solveSecondPart() {
         var lines = loadInput();
