@@ -3,7 +3,7 @@ package io.github.maritims.advent_of_code.common.geometry;
 import java.util.List;
 import java.util.Objects;
 
-public record Point3D(int x, int y, int z) {
+public record Point3D(double x, double y, double z) {
     public static Point3D fromString(String input) {
         var parts = input.split(",");
         return new Point3D(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
@@ -15,7 +15,7 @@ public record Point3D(int x, int y, int z) {
                 .toList();
     }
 
-    public int getCoordinate(Axis axis) {
+    public double getCoordinate(Axis axis) {
         Objects.requireNonNull(axis, "axis cannot be null");
 
         return switch (axis) {

@@ -5,41 +5,47 @@ import io.github.maritims.advent_of_code.common.geometry.Point3D;
 import io.github.maritims.advent_of_code.common.graph.DisjointSetUnion;
 import io.github.maritims.advent_of_code.common.graph.Edge2;
 import io.github.maritims.advent_of_code.common.graph.KDTree;
+import io.github.maritims.advent_of_code.common.graph.MinimumSpanningForest;
 
-import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.*;
 
-public class Day8 extends PuzzleSolver<Integer, Integer> {
-    private final int connectionsToEstablish;
+public class Day8 extends PuzzleSolver<Integer, Double> {
+    private final long connectionsToEstablish;
 
-    public Day8(int connectionsToEstablish) {
-        if(connectionsToEstablish < 1) {
+    public Day8(long connectionsToEstablish) {
+        if (connectionsToEstablish < 1) {
             throw new IllegalArgumentException("connectionsToEstablish must be at least 1.");
         }
         this.connectionsToEstablish = connectionsToEstablish;
+    }
+
+    private static void establishShortestConnections(
+            List<Point3D> points,
+            KDTree<Point3D> tree,
+            DisjointSetUnion<Point3D> dsu,
+            long limit
+    ) {
+        var visited = new HashSet<Point3D>();
+        points.stream()
+                .flatMap(point -> tree.findNearestUnvisited(point, 500, visited).stream()
+                        .map(neighbour -> new Edge2<>(point, neighbour.element(), neighbour.squaredDistance()))
+                )
+                .filter(edge -> edge.from().hashCode() < edge.to().hashCode())
+                .distinct()
+                .sorted(Comparator.comparingDouble(Edge2::weight))
+                .limit(limit)
+                .forEach(edge -> dsu.union(edge.from(), edge.to()));
     }
 
     @Override
     public Integer solveFirstPart() {
         var points = new ArrayList<>(Point3D.fromStrings(loadInput()));
         var tree = new KDTree<>(points, Point3D::getCoordinate, Point3D::getSquaredDistance);
+        var dsu = new DisjointSetUnion<>(points);
 
-        var shortestConnections = points.stream()
-                .flatMap(point -> tree.findNearest(point, 10) // We'll most likely find the nearest neighbours very nearby in the tree. If we look at less than 10 we might end up missing some of the shortest connections.
-                        .stream()
-                        .map(neighbour -> new Edge2<>(point, neighbour.element(), neighbour.squaredDistance()))
-                )
-                .filter(element -> element.from().hashCode() < element.to().hashCode())
-                .distinct()
-                .sorted(Comparator.comparingDouble(Edge2::weight))
-                .limit(connectionsToEstablish)
-                .toList();
+        establishShortestConnections(points, tree, dsu, connectionsToEstablish);
 
-        // Establish circuits for the shortest connections.
-        var circuits = new DisjointSetUnion<>(points);
-        shortestConnections.forEach(circuit -> circuits.union(circuit.from(), circuit.to()));
-
-        return circuits.getSizes()
+        return dsu.getSizes()
                 .stream()
                 .sorted(Comparator.comparingInt(Integer::intValue).reversed())
                 .limit(3) // Multiply the sizes of the three largest circuits.
@@ -48,7 +54,11 @@ public class Day8 extends PuzzleSolver<Integer, Integer> {
     }
 
     @Override
-    public Integer solveSecondPart() {
-        return 0;
+    public Double solveSecondPart() {
+        var points = new ArrayList<>(Point3D.fromStrings(loadInput()));
+        return Optional.of(MinimumSpanningForest.of(points, Point3D::getCoordinate, Point3D::getSquaredDistance))
+                .map(List::getLast)
+                .map(lastEdge -> lastEdge.from().x() * lastEdge.to().x())
+                .orElseThrow();
     }
 }

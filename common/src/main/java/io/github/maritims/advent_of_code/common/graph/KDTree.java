@@ -2,11 +2,7 @@ package io.github.maritims.advent_of_code.common.graph;
 
 import io.github.maritims.advent_of_code.common.geometry.Axis;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Stream;
+import java.util.*;
 
 public class KDTree<T> {
     @FunctionalInterface
@@ -69,47 +65,43 @@ public class KDTree<T> {
         );
     }
 
-    public List<Neighbour<T>> findNearest(T target, int k) {
-        return search(root, target, k)
-                .sorted(Comparator.comparingDouble(Neighbour::squaredDistance))
-                .limit(k)
-                .toList();
+    public List<Neighbour<T>> findNearestUnvisited(T target, int k, Set<T> visited) {
+        var priorityQueue = new PriorityQueue<>(Comparator.comparingDouble((Neighbour<T> o) -> o.squaredDistance).reversed());
+
+        search(root, target, k, visited, priorityQueue);
+
+        var result = new ArrayList<>(priorityQueue);
+        result.sort(Comparator.comparingDouble(Neighbour::squaredDistance));
+
+        return result;
     }
 
-    private Stream<Neighbour<T>> search(Node<T> node, T target, int k) {
+    private void search(Node<T> node, T target, int k, Set<T> visited, PriorityQueue<Neighbour<T>> priorityQueue) {
         if(node == null) {
-            return Stream.empty();
+            return;
         }
 
-        var distance = distanceCalculator.calculateSquared(target, node.element);
-        var currentNeighbour = node.element.equals(target) ? Stream.<Neighbour<T>>empty() : Stream.of(new Neighbour<>(node.element, distance));
+        var distanceSquared = distanceCalculator.calculateSquared(target, node.element);
 
-        // Determine which way to branch by comparing the target and source coordinate on the current axis.
-        var axis = node.axis;
-        var targetCoordinate = coordinateProvider.get(target, axis);
-        var sourceCoordinate = coordinateProvider.get(node.element, axis);
-        var coordinateDifference = targetCoordinate - sourceCoordinate;
-
-        var near = coordinateDifference < 0 ? node.left : node.right;
-        var far = coordinateDifference < 0 ? node.right : node.left;
-
-        var nearResults = Stream.concat(currentNeighbour, search(near, target, k)).toList();
-
-        return shouldSearchFarSide(nearResults, coordinateDifference, k) ?
-                Stream.concat(nearResults.stream(), search(far, target, k)) :
-                nearResults.stream();
-    }
-
-    private boolean shouldSearchFarSide(List<Neighbour<T>> currentBestList, double diff, int k) {
-        if (currentBestList.size() < k) {
-            return true;
+        // Is this node a candidate?
+        if(!node.element.equals(target) && !visited.contains(node.element)) {
+            if (priorityQueue.size() < k) {
+                priorityQueue.add(new Neighbour<>(node.element, distanceSquared));
+            } else if (distanceSquared < priorityQueue.peek().squaredDistance) {
+                priorityQueue.poll(); // Remove the furthest neighbour.
+                priorityQueue.add(new Neighbour<>(node.element, distanceSquared)); // Add this one instead, which is closer.
+            }
         }
 
-        var maxSquaredDistance = currentBestList.stream()
-                .mapToDouble(Neighbour::squaredDistance)
-                .max()
-                .orElse(Double.MAX_VALUE);
+        var diff = coordinateProvider.get(target, node.axis) - coordinateProvider.get(node.element, node.axis);
+        var near = diff < 0 ? node.left : node.right;
+        var far = diff < 0 ? node.right : node.left;
 
-        return (diff * diff) < maxSquaredDistance;
+        search(near, target, k, visited, priorityQueue);
+
+        var planeDistanceSquared = diff * diff;
+        if (priorityQueue.size() < k || planeDistanceSquared < priorityQueue.peek().squaredDistance) {
+            search(far, target, k, visited, priorityQueue);
+        }
     }
 }

@@ -42,10 +42,41 @@ class Day8Test {
     @Test
     public void solveFirstPart() {
         var sut = new Day8(1000);
-        assertEquals(1024, sut.solveFirstPart());
+        assertEquals(102816, sut.solveFirstPart());
+    }
+
+    @Test
+    void solveSecondPart_withSampleInput() {
+        var sut = spy(new Day8(Integer.MAX_VALUE));
+        doReturn(Arrays.stream("""
+                162,817,812
+                57,618,57
+                906,360,560
+                592,479,940
+                352,342,300
+                466,668,158
+                542,29,236
+                431,825,988
+                739,650,466
+                52,470,668
+                216,146,977
+                819,987,18
+                117,168,530
+                805,96,715
+                346,949,466
+                970,615,88
+                941,993,340
+                862,61,35
+                984,92,344
+                425,690,689
+                """.split("\n")).collect(Collectors.toCollection(ArrayList::new))).when(sut).loadInput();
+        assertEquals(25272, sut.solveSecondPart());
     }
 
     @Test
     void solveSecondPart() {
+        var sut = new Day8(Integer.MAX_VALUE);
+        var result = sut.solveSecondPart();
+        assertEquals(100011612.0, result, () -> String.format("%f", result));
     }
 }
