@@ -19,12 +19,12 @@ public class Day8 extends PuzzleSolver<Integer, Double> {
         this.connectionsToEstablish = connectionsToEstablish;
     }
 
-    private static void establishShortestConnections(
-            List<Point3D> points,
-            KDTree<Point3D> tree,
-            DisjointSetUnion<Point3D> dsu,
-            long limit
-    ) {
+    @Override
+    public Integer solveFirstPart() {
+        var points = new ArrayList<>(Point3D.fromStrings(loadInput()));
+        var tree = new KDTree<>(points, Point3D::getCoordinate, Point3D::getSquaredDistance);
+        var dsu = new DisjointSetUnion<>(points);
+
         var visited = new HashSet<Point3D>();
         points.stream()
                 .flatMap(point -> tree.findNearestUnvisited(point, 500, visited).stream()
@@ -33,17 +33,8 @@ public class Day8 extends PuzzleSolver<Integer, Double> {
                 .filter(edge -> edge.from().hashCode() < edge.to().hashCode())
                 .distinct()
                 .sorted(Comparator.comparingDouble(Edge2::weight))
-                .limit(limit)
+                .limit(connectionsToEstablish)
                 .forEach(edge -> dsu.union(edge.from(), edge.to()));
-    }
-
-    @Override
-    public Integer solveFirstPart() {
-        var points = new ArrayList<>(Point3D.fromStrings(loadInput()));
-        var tree = new KDTree<>(points, Point3D::getCoordinate, Point3D::getSquaredDistance);
-        var dsu = new DisjointSetUnion<>(points);
-
-        establishShortestConnections(points, tree, dsu, connectionsToEstablish);
 
         return dsu.getSizes()
                 .stream()
