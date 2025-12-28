@@ -1,6 +1,7 @@
 package io.github.maritims.advent_of_code.common.geometry;
 
 import java.util.*;
+import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 public class Grid2D<T> {
@@ -33,6 +34,20 @@ public class Grid2D<T> {
             var row = new ArrayList<T>();
             for(var colNum = 0; colNum < cols; colNum++) {
                 row.add(supplier.get());
+            }
+            grid.add(row);
+        }
+    }
+
+    public Grid2D(int cols, int rows, BiFunction<Integer, Integer, T> supplier) {
+        this.rows = rows;
+        this.cols = cols;
+
+        grid = new ArrayList<>(rows);
+        for(var rowNum = 0; rowNum < rows; rowNum++) {
+            var row = new ArrayList<T>();
+            for(var colNum = 0; colNum < cols; colNum++) {
+                row.add(supplier.apply(rowNum, colNum));
             }
             grid.add(row);
         }
