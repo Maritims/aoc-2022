@@ -29,10 +29,10 @@ public record Dial(int position, int zeroHits, int zeroPositions) {
         int distanceToFirstZeroHit;
 
         if (direction == 'R') {
-            // Moving clockwise. The first zero is encountered once we reach SIZE + 1, therefore, we just subtract position from SIZE to determine the distance.
+            // Moving clockwise. The first zero is encountered once we reach SIZE + 1, therefore, we just subtract position from SIZE to determine the squaredDistance.
             distanceToFirstZeroHit = SIZE - position;
         } else if (direction == 'L') {
-            // Moving counter-clockwise. The first zero is encountered once we reach 0. Therefore, the distance is just the position.
+            // Moving counter-clockwise. The first zero is encountered once we reach 0. Therefore, the squaredDistance is just the position.
             distanceToFirstZeroHit = position == 0 ? SIZE : position;
         } else {
             throw new IllegalArgumentException("Invalid direction: " + direction);

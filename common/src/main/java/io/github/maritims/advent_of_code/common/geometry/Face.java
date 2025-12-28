@@ -13,7 +13,7 @@ public record Face(int width, int height) {
     }
 
     /**
-     * The distance around the face.
+     * The squaredDistance around the face.
      */
     public int getPerimeter() {
         return 2 * (width + height);

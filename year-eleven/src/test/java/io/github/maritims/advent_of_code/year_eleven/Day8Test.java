@@ -1,6 +1,5 @@
 package io.github.maritims.advent_of_code.year_eleven;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -12,15 +11,9 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 
 class Day8Test {
-    Day8 sut;
-
-    @BeforeEach
-    void setUp() {
-        sut = spy(new Day8());
-    }
-
     @Test
     void solveFirstPart_withSampleInput() {
+        var sut = spy(new Day8(10));
         doReturn(Arrays.stream("""
                 162,817,812
                 57,618,57
@@ -44,6 +37,12 @@ class Day8Test {
                 425,690,689
                 """.split("\n")).collect(Collectors.toCollection(ArrayList::new))).when(sut).loadInput();
         assertEquals(40, sut.solveFirstPart());
+    }
+
+    @Test
+    public void solveFirstPart() {
+        var sut = new Day8(1000);
+        assertEquals(1024, sut.solveFirstPart());
     }
 
     @Test
