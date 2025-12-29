@@ -61,8 +61,8 @@ public class Grid2D<T> {
         return cols;
     }
 
-    public T get(int row, int col) {
-        return grid.get(row).get(col);
+    public T get(long row, long col) {
+        return grid.get((int) row).get((int) col);
     }
 
     public T get(Point2D point2D) {
@@ -77,8 +77,8 @@ public class Grid2D<T> {
     private List<Point2D> getSurroundingPoints(int row, int col) {
         List<Point2D> points = new ArrayList<>();
         for (Point2D direction : CARDINAL_DIRECTIONS) {
-            int newRow = row + direction.row();
-            int newCol = col + direction.col();
+            var newRow = row + direction.row();
+            var newCol = col + direction.col();
             if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < cols) {
                 points.add(new Point2D(newCol, newRow));
             }

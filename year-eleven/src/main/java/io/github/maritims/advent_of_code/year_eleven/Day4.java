@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Day4 extends PuzzleSolver<Integer, Integer> {
     Grid2D<Character> createGrid(List<String> input) {
-        var grid = new Grid2D<>(input.get(0).length(), input.size(), () -> '.');
+        var grid = new Grid2D<>(input.getFirst().length(), input.size(), () -> '.');
 
         for (var row = 0; row < input.size(); row++) {
             for (var col = 0; col < input.get(row).length(); col++) {
@@ -43,7 +43,7 @@ public class Day4 extends PuzzleSolver<Integer, Integer> {
         });
 
         if (clearAccessibleCells) {
-            cellsToClear.forEach(cellToClear -> grid.set(cellToClear.row(), cellToClear.col(), '.'));
+            cellsToClear.forEach(cellToClear -> grid.set((int) cellToClear.row(), (int) cellToClear.col(), '.'));
         }
 
         return accessiblePaperRolls.get();

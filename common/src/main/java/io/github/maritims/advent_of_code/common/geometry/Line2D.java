@@ -33,4 +33,16 @@ public record Line2D(Point2D from, Point2D to) {
     public static Builder newBuilder() {
         return new Builder();
     }
+
+    public double width() {
+        return Math.abs(from.col() - to.col());
+    }
+
+    public double height() {
+        return Math.abs(from.row() - to.row());
+    }
+
+    public boolean isDiagonal() {
+        return from.col() != to.col() && from.row() != to.row();
+    }
 }

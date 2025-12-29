@@ -1,6 +1,34 @@
 package io.github.maritims.advent_of_code.common.geometry;
 
-public record Point2D(int col, int row) {
+import java.util.List;
+
+public record Point2D(long col, long row) {
+    public static Point2D fromString(String input, String delimiter) {
+        if(input == null || input.isBlank()) {
+            throw new IllegalArgumentException("input cannot be null or blank");
+        }
+        if (delimiter == null || delimiter.isBlank()) {
+            throw new IllegalArgumentException("delimiter cannot be null or blank");
+        }
+
+        var parts = input.split(delimiter);
+        return new Point2D(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
+    }
+
+    public static List<Point2D> fromStrings(List<String> input, String delimiter) {
+        return input.stream()
+                .map(s -> fromString(s, delimiter))
+                .toList();
+    }
+
+    public static List<Point2D> fromStrings(List<String> input) {
+        return fromStrings(input, ",");
+    }
+
+    public static Point2D fromString(String input) {
+        return fromString(input, ",");
+    }
+
     public Point2D relativeTo(Direction direction, int distance) {
         if(direction == null) {
             throw new IllegalArgumentException("Direction cannot be null");
