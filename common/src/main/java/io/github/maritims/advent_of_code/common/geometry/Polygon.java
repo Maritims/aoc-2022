@@ -1,62 +1,155 @@
 package io.github.maritims.advent_of_code.common.geometry;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public record Polygon(List<Point2D> vertices) {
-    public boolean overlaps(Polygon other) {
-        var axes = new ArrayList<Vector2D>();
-        axes.addAll(getAxes());
-        axes.addAll(other.getAxes());
+public final class Polygon {
+    private final List<Point2D> vertices;
 
-        for(var axis : axes) {
-            var p1 = project(axis);
-            var p2 = other.project(axis);
-            if(!p1.overlaps(p2)) {
-                // We found a gap.
-                return false;
+    // region Internal variables for lazy loading.
+    private Rectangle    boundingBox;
+    private Boolean      isConvex;
+    private List<Line2D> edges;
+    // endregion
+
+    public Polygon(List<Point2D> vertices) {
+        this.vertices = vertices;
+    }
+
+    public List<Point2D> getVertices() {
+        return vertices;
+    }
+
+    public Rectangle getBoundingBox() {
+        if (boundingBox == null) {
+            var minCol = vertices.stream().mapToDouble(Point2D::col).min().orElseThrow();
+            var maxCol = vertices.stream().mapToDouble(Point2D::col).max().orElseThrow();
+            var minRow = vertices.stream().mapToDouble(Point2D::row).min().orElseThrow();
+            var maxRow = vertices.stream().mapToDouble(Point2D::row).max().orElseThrow();
+
+            boundingBox = new Rectangle(new Point2D(minCol, minRow), new Point2D(maxCol, maxRow));
+        }
+        return boundingBox;
+    }
+
+    public boolean isInBoundingBox(Rectangle rectangle) {
+        var boundingBox = getBoundingBox();
+        return rectangle.getTopLeft().col() >= boundingBox.getTopLeft().col() &&
+                rectangle.getTopRight().col() <= boundingBox.getTopRight().col() &&
+                rectangle.getTopLeft().row() >= boundingBox.getTopLeft().row() &&
+                rectangle.getBottomLeft().row() <= boundingBox.getBottomLeft().row();
+    }
+
+    public boolean isConvex() {
+        if (isConvex == null) {
+            isConvex = computeConvexity();
+        }
+        return isConvex;
+    }
+
+    public boolean isConcave() {
+        return !isConvex();
+    }
+
+    public boolean computeConvexity() {
+        if (vertices.size() < 3) {
+            return true;
+        }
+
+        Boolean isPositive = null;
+        var     n          = vertices.size();
+
+        for (var i = 0; i < n; i++) {
+            var p1 = vertices.get(i);
+            var p2 = vertices.get((i + 1) % n);
+            var p3 = vertices.get((i + 2) % n);
+
+            var v1           = p1.vectorTo(p2);
+            var v2           = p2.vectorTo(p3);
+            var crossProduct = v1.cross(v2);
+
+            if (crossProduct != 0) {
+                var currentIsPositive = crossProduct > 0;
+                if (isPositive == null) {
+                    isPositive = currentIsPositive;
+                } else if (isPositive != currentIsPositive) {
+                    return false;
+                }
             }
         }
 
         return true;
     }
 
-    public boolean contains(Point2D point) {
-        var inside = false;
-        for (var i = 0; i < vertices.size(); i++) {
-            var p1 = vertices.get(i);
-            var p2 = vertices.get((i + 1) % vertices.size());
+    public boolean containsPoint(Point2D point) {
+        var crossings = 0L;
+        var n         = vertices.size();
 
-            if ((p1.row() > point.row()) != (p2.row() > point.row()) &&
-                    point.col() < (p2.col() - p1.col()) * (point.row() - p1.row()) / (p2.row() - p1.row()) + p1.col()) {
-                inside = !inside;
+        for (var i = 0; i < n; i++) {
+            var v1 = vertices.get(i);
+            var v2 = vertices.get((i + 1) % n);
+
+            // Check if the point is on this edge.
+            var crossProduct = (point.row() - v1.row()) * (v2.col() - v1.col()) -
+                    (point.col() - v1.col()) * (v2.row() - v1.row());
+
+            if (crossProduct == 0) {
+                if (Math.min(v1.col(), v2.col()) <= point.col() &&
+                        point.col() <= Math.max(v1.col(), v2.col()) &&
+                        Math.min(v1.row(), v2.row()) <= point.row() &&
+                        point.row() <= Math.max(v1.row(), v2.row())) {
+                    return true;
+                }
+            }
+
+            // Ray casting check.
+            if (((v1.row() > point.row()) != (v2.row() > point.row())) &&
+                    (point.col() < (v2.col() - v1.col()) * (point.row() - v1.row()) /
+                            (v2.row() - v1.row()) + v1.col())) {
+                crossings++;
             }
         }
-        return inside;
+
+        return (crossings % 2) == 1;
     }
 
-    public boolean contains(Rectangle rectangle) {
-        return rectangle.vertices().stream().allMatch(this::contains);
-    }
-
-    public List<Vector2D> getAxes() {
-        var axes = new ArrayList<Vector2D>();
-        for(var i = 0; i < vertices.size(); i++) {
-            var p1 = vertices.get(i);
-            var p2 = vertices.get((i + 1) % vertices.size());
-            axes.add(new Vector2D(p1, p2).perpendicular().normalize());
+    public List<Line2D> getEdges() {
+        if (edges == null) {
+            edges = new ArrayList<>();
+            var n = vertices.size();
+            for (var i = 0; i < n; i++) {
+                var edge = new Line2D(vertices.get(i), vertices.get((i + 1) % n));
+                edges.add(edge);
+            }
         }
-        return axes;
+        return edges;
     }
 
-    public Projection project(Vector2D axis) {
-        var min = Double.POSITIVE_INFINITY;
-        var max = Double.NEGATIVE_INFINITY;
-        for(var p : vertices) {
-            var dot = (p.col() * axis.x()) + (p.row() * axis.y());
-            min = Math.min(min, dot);
-            max = Math.max(max, dot);
+    public boolean containsRectangle(Rectangle rectangle) {
+        if (!isInBoundingBox(rectangle)) {
+            return false;
         }
-        return new Projection(min, max);
+
+        if (!rectangle.getVertices().stream().allMatch(this::containsPoint)) {
+            return false;
+        }
+
+        if (isConcave()) {
+            var polygonEdges   = getEdges();
+            var rectangleEdges = rectangle.getEdges();
+
+            for (var polygonEdge : polygonEdges) {
+                for (var rectangleEdge : rectangleEdges) {
+                    if (polygonEdge.intersectsProperly(rectangleEdge)) {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return true;
     }
 }

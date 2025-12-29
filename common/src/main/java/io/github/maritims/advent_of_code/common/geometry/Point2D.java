@@ -2,7 +2,7 @@ package io.github.maritims.advent_of_code.common.geometry;
 
 import java.util.List;
 
-public record Point2D(long col, long row) {
+public record Point2D(double col, double row) {
     public static Point2D fromString(String input, String delimiter) {
         if(input == null || input.isBlank()) {
             throw new IllegalArgumentException("input cannot be null or blank");
@@ -45,5 +45,13 @@ public record Point2D(long col, long row) {
             case LEFT, RIGHT -> this.row;
         };
         return new Point2D(x, y);
+    }
+
+    public Line2D lineTo(Point2D to) {
+        return Line2D.of(this, to);
+    }
+
+    public Vector2D vectorTo(Point2D to) {
+        return new Vector2D(to.col - col, to.row - row);
     }
 }

@@ -21,10 +21,10 @@ public class Day9 extends PuzzleSolver<Long, Long> {
                 var p2 = points.get(j);
 
                 // Do we have a diagonal?
-                var line = Line2D.newBuilder().from(p1).to(p2).build();
+                var line = Line2D.of(p1, p2);
                 if(line.isDiagonal()) {
-                    var width = line.width() + 1;
-                    var height = line.height() + 1;
+                    var width = line.getWidth() + 1;
+                    var height = line.getHeight() + 1;
                     var area = width * height;
                     maxArea = Math.max(maxArea, area);
                 }
@@ -44,18 +44,19 @@ public class Day9 extends PuzzleSolver<Long, Long> {
             for(var j = i + 1; j < points.size(); j++) {
                 var p1 = points.get(i);
                 var p2 = points.get(j);
+                var line = p1.lineTo(p2);
 
                 // Do we have a diagonal?
-                var line = Line2D.newBuilder().from(p1).to(p2).build();
                 if(line.isDiagonal()) {
                     var rectangle = new Rectangle(p1, p2);
 
-                    if(polygonWithColoredTiles.overlaps(rectangle.toPolygon())) {
-                        // Include the "fence posts" by adding 1 to width and height.
-                        var width = rectangle.width() + 1;
-                        var height = rectangle.height() + 1;
-                        var area = width * height;
-                        maxArea = Math.max(maxArea, area);
+                    // Don't bother with math if the area is smaller anyway.
+                    if (maxArea > rectangle.getGridArea()) {
+                        continue;
+                    }
+
+                    if(polygonWithColoredTiles.containsRectangle(rectangle)) {
+                        maxArea = rectangle.getGridArea();
                     }
                 }
             }

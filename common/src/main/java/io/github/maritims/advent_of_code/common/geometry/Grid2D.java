@@ -61,7 +61,7 @@ public class Grid2D<T> {
         return cols;
     }
 
-    public T get(long row, long col) {
+    public T get(double row, double col) {
         return grid.get((int) row).get((int) col);
     }
 

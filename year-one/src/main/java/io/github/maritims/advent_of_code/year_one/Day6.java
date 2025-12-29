@@ -40,8 +40,8 @@ public class Day6 extends PuzzleSolver<Integer, Integer> {
         loadInput()
                 .forEach(line -> {
                     var instruction = InstructionBuilder.buildFromString(line);
-                    for (var row = instruction.subject().from().row(); row <= instruction.subject().to().row(); row++) {
-                        for (var col = instruction.subject().from().col(); col <= instruction.subject().to().col(); col++) {
+                    for (var row = instruction.subject().getStart().row(); row <= instruction.subject().getEnd().row(); row++) {
+                        for (var col = instruction.subject().getStart().col(); col <= instruction.subject().getEnd().col(); col++) {
                             grid.get(col, row).setState(instruction.verb());
                         }
                     }
@@ -59,8 +59,8 @@ public class Day6 extends PuzzleSolver<Integer, Integer> {
         loadInput()
                 .forEach(line -> {
                     var instruction = InstructionBuilder.buildFromString(line);
-                    for (var row = instruction.subject().from().row(); row <= instruction.subject().to().row(); row++) {
-                        for (var col = instruction.subject().from().col(); col <= instruction.subject().to().col(); col++) {
+                    for (var row = instruction.subject().getStart().row(); row <= instruction.subject().getEnd().row(); row++) {
+                        for (var col = instruction.subject().getStart().col(); col <= instruction.subject().getEnd().col(); col++) {
                             grid.get(col, row).setState(instruction.verb());
                         }
                     }

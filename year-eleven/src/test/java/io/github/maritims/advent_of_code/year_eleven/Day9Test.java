@@ -52,6 +52,6 @@ class Day9Test extends DayTest<Day9> {
     @Test
     void solveSecondPart() {
         var result = sut.solveSecondPart();
-        assertEquals(1000000000000L, result);
+        assertEquals(1429596008L, result);
     }
 }

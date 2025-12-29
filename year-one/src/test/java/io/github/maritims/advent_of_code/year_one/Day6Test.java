@@ -16,9 +16,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class Day6Test {
     public static Stream<Arguments> buildInstructionFromString() {
         return Stream.of(
-                Arguments.of("turn on 0,0 through 999,999", new Instruction<>(Line2D.newBuilder().from(0, 0).to(999, 999).build(), StateAction.Enable)),
-                Arguments.of("toggle 0,0 through 999,0", new Instruction<>(Line2D.newBuilder().from(0, 0).to(999, 0).build(), StateAction.Toggle)),
-                Arguments.of("turn off 499,499 through 500,500", new Instruction<>(Line2D.newBuilder().from(499, 499).to(500, 500).build(), StateAction.Disable))
+                Arguments.of("turn on 0,0 through 999,999", new Instruction<>(Line2D.of(0, 0, 999, 999), StateAction.Enable)),
+                Arguments.of("toggle 0,0 through 999,0", new Instruction<>(Line2D.of(0, 0, 999, 0), StateAction.Toggle)),
+                Arguments.of("turn off 499,499 through 500,500", new Instruction<>(Line2D.of(499, 499, 500, 500), StateAction.Disable))
         );
     }
 
