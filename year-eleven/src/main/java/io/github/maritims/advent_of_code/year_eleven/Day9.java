@@ -19,14 +19,12 @@ public class Day9 extends PuzzleSolver<Long, Long> {
             for(var j = i + 1; j < points.size(); j++) {
                 var p1 = points.get(i);
                 var p2 = points.get(j);
+                var line = Line2D.of(p1, p2);
 
                 // Do we have a diagonal?
-                var line = Line2D.of(p1, p2);
                 if(line.isDiagonal()) {
-                    var width = line.getWidth() + 1;
-                    var height = line.getHeight() + 1;
-                    var area = width * height;
-                    maxArea = Math.max(maxArea, area);
+                    var rectangle = new Rectangle(p1, p2);
+                    maxArea = Math.max(maxArea, rectangle.getGridArea());
                 }
             }
         }
