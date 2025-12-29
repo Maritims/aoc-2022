@@ -1,8 +1,5 @@
 package io.github.maritims.advent_of_code.common.geometry;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.ArrayList;
 import java.util.List;
 
