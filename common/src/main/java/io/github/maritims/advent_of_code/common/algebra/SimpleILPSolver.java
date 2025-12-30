@@ -79,11 +79,11 @@ public class SimpleILPSolver {
         currentSolution[variableIndex] = 0;
     }
 
-    public double[] solveForMinimum() {
+    public double[] solveForMinimum(int maxGuess) {
         minimumTotalSum = Double.POSITIVE_INFINITY;
         bestSolution    = null;
 
-        backtrack(0, new double[numberOfVariables], 1000);
+        backtrack(0, new double[numberOfVariables], maxGuess);
 
         return bestSolution;
     }

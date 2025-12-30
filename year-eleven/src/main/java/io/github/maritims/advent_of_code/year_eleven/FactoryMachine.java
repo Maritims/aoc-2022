@@ -3,16 +3,12 @@ package io.github.maritims.advent_of_code.year_eleven;
 import io.github.maritims.advent_of_code.common.algebra.LinearSystemSolver;
 import io.github.maritims.advent_of_code.common.algebra.SimpleILPSolver;
 import io.github.maritims.advent_of_code.common.graph.BreadthFirstSearch;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 
 public class FactoryMachine {
-    private static final Logger log = LoggerFactory.getLogger(FactoryMachine.class);
-
     public enum ConfigurationMode {
         IndicatorLights,
         Joltages
@@ -164,20 +160,18 @@ public class FactoryMachine {
 
         try {
             LinearSystemSolver.toReducedRowEchelonForm(matrix, cols);
-            //var pressesPerButton = LinearSystemSolver.solve(matrix, cols);
-            var pressesPerButton = new SimpleILPSolver(matrix, cols).solveForMinimum();
+            var pressesPerButton = new SimpleILPSolver(matrix, cols).solveForMinimum(180);
             var totalPresses     = 0.0;
-            for (int i = 0; i < pressesPerButton.length; i++) {
+            for (var buttonPress : pressesPerButton) {
                 // We can't click a button partially, so we round it to the closest integer.
-                long rounded = Math.round(pressesPerButton[i]);
+                var rounded = Math.round(buttonPress);
 
                 // A button press in negative form or with decimals is not valid.
-                if (pressesPerButton[i] < -1e-9) {
+                if (buttonPress < -1e-9) {
                     // Skip negative numbers.
                     continue;
                 }
 
-                log.debug("Button {}: {}", i, pressesPerButton[i]);
                 totalPresses += rounded;
             }
 
