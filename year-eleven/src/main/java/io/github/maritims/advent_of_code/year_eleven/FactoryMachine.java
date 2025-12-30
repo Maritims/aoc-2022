@@ -1,12 +1,18 @@
 package io.github.maritims.advent_of_code.year_eleven;
 
+import io.github.maritims.advent_of_code.common.algebra.LinearSystemSolver;
+import io.github.maritims.advent_of_code.common.algebra.SimpleILPSolver;
 import io.github.maritims.advent_of_code.common.graph.BreadthFirstSearch;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 
 public class FactoryMachine {
+    private static final Logger log = LoggerFactory.getLogger(FactoryMachine.class);
+
     public enum ConfigurationMode {
         IndicatorLights,
         Joltages
@@ -35,7 +41,7 @@ public class FactoryMachine {
             throw new IllegalArgumentException("joltages cannot be null or empty");
         }
         if (joltageRequirementDiagram == null || joltageRequirementDiagram.length == 0 || joltageRequirementDiagram.length != joltages.length) {
-            throw new IllegalArgumentException("joltageRequirements cannot be null, empt yor have a length different from joltages.length");
+            throw new IllegalArgumentException("joltageRequirements cannot be null, empty or have a length different from joltages.length");
         }
 
         this.indicatorLights           = indicatorLights;
@@ -141,84 +147,44 @@ public class FactoryMachine {
     }
 
     public int tuneJoltageCounters() {
-        var numberOfCounters = joltageRequirementDiagram.length;
-        var numberOfButtons  = buttonWiringSchematics.length;
-        var matrix = new double[numberOfCounters][numberOfButtons + 1];
+        var rows   = joltageRequirementDiagram.length;
+        var cols   = buttonWiringSchematics.length;
+        var matrix = new double[rows][cols + 1]; // The last column is the "solution" column.
 
         // 1. Fill matrix
-        for (var button = 0; button < numberOfButtons; button++) {
+        for (var button = 0; button < cols; button++) {
             for (var counterIndex : buttonWiringSchematics[button]) {
                 matrix[counterIndex][button] = 1.0;
             }
         }
-        for (var row = 0; row < numberOfCounters; row++) {
-            matrix[row][numberOfButtons] = joltageRequirementDiagram[row] - joltages[row];
+
+        for (var row = 0; row < rows; row++) {
+            matrix[row][cols] = (double) joltageRequirementDiagram[row] - joltages[row];
         }
 
-        // 2. Gaussian Elimination to RREF
-        int pivotRow = 0;
-        int[] pivotColAtRow = new int[numberOfCounters];
-        Arrays.fill(pivotColAtRow, -1);
+        try {
+            LinearSystemSolver.toReducedRowEchelonForm(matrix, cols);
+            //var pressesPerButton = LinearSystemSolver.solve(matrix, cols);
+            var pressesPerButton = new SimpleILPSolver(matrix, cols).solveForMinimum();
+            var totalPresses     = 0.0;
+            for (int i = 0; i < pressesPerButton.length; i++) {
+                // We can't click a button partially, so we round it to the closest integer.
+                long rounded = Math.round(pressesPerButton[i]);
 
-        for (int pivotCol = 0; pivotCol < numberOfButtons && pivotRow < numberOfCounters; pivotCol++) {
-            int sel = pivotRow;
-            for (int i = pivotRow + 1; i < numberOfCounters; i++) {
-                if (Math.abs(matrix[i][pivotCol]) > Math.abs(matrix[sel][pivotCol])) sel = i;
-            }
-
-            if (Math.abs(matrix[sel][pivotCol]) < 1e-9) continue;
-
-            var temp = matrix[sel];
-            matrix[sel] = matrix[pivotRow];
-            matrix[pivotRow] = temp;
-
-            double divisor = matrix[pivotRow][pivotCol];
-            for (int j = pivotCol; j <= numberOfButtons; j++) matrix[pivotRow][j] /= divisor;
-
-            for (int i = 0; i < numberOfCounters; i++) {
-                if (i != pivotRow && Math.abs(matrix[i][pivotCol]) > 1e-9) {
-                    double factor = matrix[i][pivotCol];
-                    for (int j = pivotCol; j <= numberOfButtons; j++) {
-                        matrix[i][j] -= factor * matrix[pivotRow][j];
-                    }
+                // A button press in negative form or with decimals is not valid.
+                if (pressesPerButton[i] < -1e-9) {
+                    // Skip negative numbers.
+                    continue;
                 }
+
+                log.debug("Button {}: {}", i, pressesPerButton[i]);
+                totalPresses += rounded;
             }
-            pivotColAtRow[pivotRow] = pivotCol;
-            pivotRow++;
+
+            return (int) totalPresses;
+        } catch (Exception e) {
+            throw new IllegalStateException("The matrix is singular or unsolvable", e);
         }
-
-        // 3. Extract and Validate
-        double totalPresses = 0;
-        double[] buttonResults = new double[numberOfButtons];
-
-        // Check for inconsistent rows (0 = non-zero)
-        for (int i = 0; i < numberOfCounters; i++) {
-            boolean allZeros = true;
-            for (int j = 0; j < numberOfButtons; j++) {
-                if (Math.abs(matrix[i][j]) > 1e-9) {
-                    allZeros = false;
-                    break;
-                }
-            }
-            if (allZeros && Math.abs(matrix[i][numberOfButtons]) > 1e-9) return -1;
-
-            // If this row has a pivot, record the result for that button
-            if (pivotColAtRow[i] != -1) {
-                buttonResults[pivotColAtRow[i]] = matrix[i][numberOfButtons];
-            }
-        }
-
-        for (double val : buttonResults) {
-            // Rounding to handle double imprecision
-            long rounded = Math.round(val);
-            // A button press count must be an integer and cannot be negative
-            if (Math.abs(val - rounded) > 1e-7 || val < -1e-9) {
-                return -1;
-            }
-            totalPresses += rounded;
-        }
-
-        return (int) totalPresses;
     }
 
     /**

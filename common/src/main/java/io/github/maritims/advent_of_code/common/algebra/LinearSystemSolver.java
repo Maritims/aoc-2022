@@ -1,5 +1,7 @@
 package io.github.maritims.advent_of_code.common.algebra;
 
+import java.util.stream.IntStream;
+
 public class LinearSystemSolver {
     /**
      * Converts the matrix to Row Echelon Form.
@@ -30,7 +32,7 @@ public class LinearSystemSolver {
 
 
             // Emergency brake: We can't continue if max is (almost) zero.
-            if(Math.abs(matrix[pivot][pivot]) < 1e-12) {
+            if (Math.abs(matrix[pivot][pivot]) < 1e-12) {
                 // No valid pivots in the column. The matrix is invalid somehow.
                 continue;
             }
@@ -50,31 +52,84 @@ public class LinearSystemSolver {
         }
     }
 
-    public static double[] substituteBackwards(double[][] rowEchelonForm) {
-        var result = new double[3];
+    public static void toReducedRowEchelonForm(double[][] matrix, int unknowns) {
+        var rows     = matrix.length;
+        var pivotRow = 0;
 
-        // Always start at the bottom row since that is the easiest one.
-        for (var row = rowEchelonForm.length - 1; row >= 0; row--) {
-            // Get the number from the result column, the right-most column.
-            var rhs = rowEchelonForm[row][rowEchelonForm[row].length - 1];
-
-            // Subtract the variables we already know the value of. Note that this is never executed for the first iteration of the outer loop.
-            for (var col = row + 1; col < rowEchelonForm[row].length - 1; col++) {
-                rhs -= rowEchelonForm[row][col] * result[col];
+        // Find a pivot.
+        for (var pivotCol = 0; pivotCol < unknowns && pivotRow < rows; pivotCol++) {
+            // Partial pivoting.
+            var max = pivotRow;
+            for (var row = pivotRow + 1; row < rows; row++) {
+                if (Math.abs(matrix[row][pivotCol]) > Math.abs(matrix[max][pivotCol])) {
+                    max = row;
+                }
             }
 
-            // Divide the right-hand side by the unknown variable we're looking for, our pivot.
-            result[row] = rhs / rowEchelonForm[row][row];
+            // Skip if mostly (almost) zeros.
+            if (Math.abs(matrix[max][pivotCol]) < 1e-12) {
+                continue;
+            }
+
+            // Swap rows.
+            var temp = matrix[pivotRow];
+            matrix[pivotRow] = matrix[max];
+            matrix[max]      = temp;
+
+            // Normalize.
+            var divisor = matrix[pivotRow][pivotCol];
+            for (var col = pivotCol; col < matrix[pivotRow].length; col++) {
+                matrix[pivotRow][col] /= divisor;
+            }
+
+            for (var row = 0; row < rows; row++) {
+                if (row != pivotRow && Math.abs(matrix[row][pivotCol]) > 1e-12) {
+                    var factor = matrix[row][pivotCol];
+                    for (var col = pivotCol; col < matrix[row].length; col++) {
+                        matrix[row][col] -= factor * matrix[pivotRow][col];
+                    }
+                }
+            }
+
+            // Next pivot.
+            pivotRow++;
+        }
+    }
+
+    public static int[] findFreeVariableIndices(double[][] reducedRowEchelonForm, int numberOfVariables) {
+        var isPivotColumn = new boolean[numberOfVariables];
+
+        var currentRow = 0;
+        for (var col = 0; col < numberOfVariables && currentRow < reducedRowEchelonForm.length; col++) {
+            if (Math.abs(reducedRowEchelonForm[currentRow][col] - 1.0) < 1e-12) {
+                isPivotColumn[col] = true;
+                currentRow++;
+            }
         }
 
-        return result;
+        return IntStream.range(0, numberOfVariables)
+                .filter(col -> !isPivotColumn[col])
+                .toArray();
     }
 
     /**
      * Use Gaussian elimination to solve the matrix.
      */
-    public static double[] solve(double[][] matrix) {
-        toRowEchelonForm(matrix);
-        return substituteBackwards(matrix);
+    public static double[] solve(double[][] matrix, int unknowns) {
+        //toRowEchelonForm(matrix);
+        toReducedRowEchelonForm(matrix, unknowns);
+
+        double[] result     = new double[unknowns];
+        int      currentRow = 0;
+        for (int col = 0; col < unknowns && currentRow < matrix.length; col++) {
+            // Is the column a pivot?
+            if (Math.abs(matrix[currentRow][col] - 1.0) < 1e-12) {
+                result[col] = matrix[currentRow][matrix[currentRow].length - 1];
+                currentRow++;
+            }
+        }
+
+        return result;
+        //return substituteBackwards(matrix);
     }
 }

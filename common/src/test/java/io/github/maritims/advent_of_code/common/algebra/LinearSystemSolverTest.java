@@ -51,7 +51,7 @@ public class LinearSystemSolverTest {
     @ParameterizedTest
     @MethodSource
     public void solve(double[][] matrix, double[] expectedResult) {
-        var result = LinearSystemSolver.solve(matrix);
+        var result = LinearSystemSolver.solve(matrix, 3);
         assertArrayEquals(expectedResult, result, 1e-4, () -> Arrays.toString(result));
     }
 }

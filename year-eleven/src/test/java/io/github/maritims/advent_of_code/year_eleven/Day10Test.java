@@ -37,6 +37,6 @@ public class Day10Test extends DayTest<Day10> {
 
     @Test
     void solveSecondPart() {
-        assertEquals(0, sut.solveSecondPart());
+        assertEquals(18981, sut.solveSecondPart());
     }
 }

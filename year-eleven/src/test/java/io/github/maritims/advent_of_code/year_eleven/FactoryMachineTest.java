@@ -35,6 +35,12 @@ class FactoryMachineTest {
         );
     }
 
+    public static Stream<Arguments> tuneJoltageCounters() {
+        return Stream.of(
+                Arguments.of("[.##.] (3) (1,3) (2) (2,3) (0,2) (0,1) {3,5,4,7}")
+        );
+    }
+
     @ParameterizedTest
     @MethodSource
     void pressButton_shouldSetTheIndicatorLights_whenConfigurationModeIsIndicatorLights(boolean[] indicatorLights, int[][] buttonWiringSchematics, int[] buttonPresses, boolean[] indicatorLightDiagram, int[] joltages, int[] joltageRequirements) {
@@ -64,5 +70,12 @@ class FactoryMachineTest {
     @MethodSource
     void parseFactoryMachine(String str) {
         FactoryMachine.parseFactoryMachine(str);
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void tuneJoltageCounters(String str) {
+        var sut = FactoryMachine.parseFactoryMachine(str);
+        sut.tuneJoltageCounters();
     }
 }
