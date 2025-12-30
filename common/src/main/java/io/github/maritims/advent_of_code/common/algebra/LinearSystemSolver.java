@@ -1,7 +1,5 @@
 package io.github.maritims.advent_of_code.common.algebra;
 
-import java.util.Arrays;
-
 public class LinearSystemSolver {
     /**
      * Converts the matrix to Row Echelon Form.
@@ -16,20 +14,37 @@ public class LinearSystemSolver {
      * @param matrix The matrix to convert to Row Echelon Form.
      */
     public static void toRowEchelonForm(double[][] matrix) {
-        for (var pivotRow = 0; pivotRow < matrix.length; pivotRow++) {
-            // Establish the pivot value.
-            var pivotValue = matrix[pivotRow][pivotRow];
+        for (var pivot = 0; pivot < matrix.length; pivot++) {
+            // Partial pivoting: Find the greatest number in the column "pivot" from row "pivot" and downwards.
+            var max = pivot;
+            for (var row = pivot + 1; row < matrix.length; row++) {
+                if (Math.abs(matrix[row][pivot]) > Math.abs(matrix[max][pivot])) {
+                    max = row;
+                }
+            }
 
-            // Walk down across the rows, but remember that we start with the first row beneath the pivot row number, defined as "k".
-            for (var row = pivotRow + 1; row < matrix.length; row++) {
+            // Swap rows if we're not currently on the best row.
+            var temp = matrix[pivot];
+            matrix[pivot] = matrix[max];
+            matrix[max]   = temp;
+
+
+            // Emergency brake: We can't continue if max is (almost) zero.
+            if(Math.abs(matrix[pivot][pivot]) < 1e-12) {
+                // No valid pivots in the column. The matrix is invalid somehow.
+                continue;
+            }
+
+            // Walk down across the rows, but remember that we start with the first row beneath the pivot row number, defined as "pivot".
+            for (var row = pivot + 1; row < matrix.length; row++) {
                 // The factor is the existing value of the column we're currently working with, defined as "k", divided by the pivot value (matrix[k][k]).
 
-                var factor = matrix[row][pivotRow] / pivotValue;
+                var factor = matrix[row][pivot] / matrix[pivot][pivot];
 
                 // Walk left to right across the columns.
-                for (var col = pivotRow; col < matrix[row].length; col++) {
+                for (var col = pivot; col < matrix[row].length; col++) {
                     // When you augment a row in the matrix, remember to inspect the corresponding column of the pivot row (matrix[k]) to understand how much you must subtract (matrix[k][col]).
-                    matrix[row][col] -= factor * matrix[pivotRow][col];
+                    matrix[row][col] -= factor * matrix[pivot][col];
                 }
             }
         }
@@ -55,27 +70,11 @@ public class LinearSystemSolver {
         return result;
     }
 
+    /**
+     * Use Gaussian elimination to solve the matrix.
+     */
     public static double[] solve(double[][] matrix) {
-        // Create matrix.
-
-
-        // Step 1: Get to Row Echelon Form.
-        // Remember: new value = old value (factor * value from pivot row)
-
-        // Step 1.1
-        // 3.0 - (3.0 * 1.0) = 0.0
-        // 2.0 - (3.0 * 1.0) = -1.0
-        // 5.0 - (3.0 * 1.0) = 2.0
-        // -4.0 - (3.0 * 6.0) = -22.0
-
         toRowEchelonForm(matrix);
-        var result = substituteBackwards(matrix);
-
-        for (var i = 0; i < 3; i++) {
-            System.out.println(Arrays.toString(matrix[i]));
-            System.out.println(result[i]);
-        }
-
-        return result;
+        return substituteBackwards(matrix);
     }
 }
