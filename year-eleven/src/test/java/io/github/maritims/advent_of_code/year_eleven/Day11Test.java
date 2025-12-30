@@ -31,4 +31,29 @@ public class Day11Test extends DayTest<Day11> {
     public void solveFirstPart() {
         assertEquals(662, sut.solveFirstPart());
     }
+
+    @Test
+    public void solveSecondPart_withSampleInput() {
+        mockLoadInput(sut, """
+                svr: aaa bbb
+                aaa: fft
+                fft: ccc
+                bbb: tty
+                tty: ccc
+                ccc: ddd eee
+                ddd: hub
+                hub: fff
+                eee: dac
+                dac: fff
+                fff: ggg hhh
+                ggg: out
+                hhh: out
+                """);
+        assertEquals(2, sut.solveSecondPart());
+    }
+
+    @Test
+    public void solveSecondPart() {
+        assertEquals(0, sut.solveSecondPart());
+    }
 }

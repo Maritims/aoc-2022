@@ -30,10 +30,8 @@ public class Day11 extends PuzzleSolver<Long, Long> {
         return count;
     }
 
-    @Override
-    public Long solveFirstPart() {
-        var graph = loadInput()
-                .stream()
+    private static Map<String, List<String>> buildDAG(List<String> lines) {
+        return lines.stream()
                 .map(line -> line.split(" "))
                 .map(parts -> {
                     var input   = parts[0].substring(0, parts[0].length() - 1);
@@ -41,12 +39,24 @@ public class Day11 extends PuzzleSolver<Long, Long> {
                     return Map.entry(input, outputs);
                 })
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-        var memo = new HashMap<String, Long>();
+    }
+
+    private static long countPathsBetween(Map<String, List<String>> graph, String start, String end) {
+        return countAllPaths(graph, new HashMap<>(), start, end);
+    }
+
+    @Override
+    public Long solveFirstPart() {
+        var graph = buildDAG(loadInput());
+        var memo  = new HashMap<String, Long>();
         return countAllPaths(graph, memo, "you", "out");
     }
 
     @Override
     public Long solveSecondPart() {
-        return 0L;
+        var graph = buildDAG(loadInput());
+        var path1 = countPathsBetween(graph, "svr", "dac") * countPathsBetween(graph, "dac", "fft") * countPathsBetween(graph, "fft", "out");
+        var path2 = countPathsBetween(graph, "svr", "fft") * countPathsBetween(graph, "fft", "dac") * countPathsBetween(graph, "dac", "out");
+        return path1 + path2;
     }
 }
