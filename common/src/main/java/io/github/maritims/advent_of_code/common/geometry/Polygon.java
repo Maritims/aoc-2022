@@ -15,6 +15,26 @@ public final class Polygon {
     public Polygon(List<Point2D> vertices) {
         this.vertices = vertices;
     }
+    
+    public static Polygon parsePolygon(List<String> lines) {
+        var vertices = new ArrayList<Point2D>();
+        
+        for(var row = 0; row < lines.size(); row++) {
+            for(var col = 0; col < lines.get(row).length(); col++) {
+                var c = lines.get(row).charAt(col);
+                if(c == '#') {
+                    var vertex = new Point2D(col, row);
+                    vertices.add(vertex);
+                } else if(c == '.') {
+                    continue;
+                } else {
+                    throw new IllegalArgumentException("Unexpected character in input: " + c);
+                }
+            }
+        }
+
+        return new Polygon(vertices);
+    }
 
     public List<Point2D> getVertices() {
         return vertices;
@@ -148,5 +168,12 @@ public final class Polygon {
         }
 
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "Polygon{" +
+                "vertices=" + vertices +
+                '}';
     }
 }
