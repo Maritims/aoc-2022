@@ -1,6 +1,7 @@
 package io.github.maritims.advent_of_code.common.geometry;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public final class Polygon {
@@ -13,18 +14,28 @@ public final class Polygon {
     // endregion
 
     public Polygon(List<Point2D> vertices) {
+        if (vertices == null || vertices.isEmpty()) {
+            throw new IllegalArgumentException("vertices cannot be null or empty");
+        }
         this.vertices = vertices;
+    }
+
+    public Polygon(Point2D... vertices) {
+        if (vertices == null || vertices.length == 0) {
+            throw new IllegalArgumentException("vertices cannot be null or empty");
+        }
+        this.vertices = Arrays.asList(vertices);
     }
     
     public static Polygon parsePolygon(List<String> lines) {
-        var vertices = new ArrayList<Point2D>();
+        var points = new ArrayList<Point2D>();
         
         for(var row = 0; row < lines.size(); row++) {
             for(var col = 0; col < lines.get(row).length(); col++) {
                 var c = lines.get(row).charAt(col);
                 if(c == '#') {
-                    var vertex = new Point2D(col, row);
-                    vertices.add(vertex);
+                    var point = new Point2D(col, row);
+                    points.add(point);
                 } else if(c == '.') {
                     continue;
                 } else {
@@ -33,7 +44,7 @@ public final class Polygon {
             }
         }
 
-        return new Polygon(vertices);
+        return new Polygon(points);
     }
 
     public List<Point2D> getVertices() {
@@ -101,7 +112,7 @@ public final class Polygon {
         return true;
     }
 
-    public boolean containsPoint(Point2D point) {
+    public boolean isInPolygon(Point2D point) {
         var crossings = 0L;
         var n         = vertices.size();
 
@@ -150,7 +161,7 @@ public final class Polygon {
             return false;
         }
 
-        if (!rectangle.getVertices().stream().allMatch(this::containsPoint)) {
+        if (!rectangle.getVertices().stream().allMatch(this::isInPolygon)) {
             return false;
         }
 

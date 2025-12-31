@@ -45,7 +45,10 @@ public class Day12 extends PuzzleSolver<Long, Long> {
             }
         }
 
-        System.out.println(presents);
+        for(var entry : presents.entrySet()) {
+            var polygon = entry.getValue();
+            System.out.println(polygon);
+        }
 
         return 0L;
     }

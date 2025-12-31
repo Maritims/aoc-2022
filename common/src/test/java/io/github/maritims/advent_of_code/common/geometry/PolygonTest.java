@@ -22,7 +22,7 @@ class PolygonTest {
         );
     }
 
-    public static Stream<Arguments> containsPoint() {
+    public static Stream<Arguments> isInPolygon() {
         return Stream.concat(
                         new Rectangle(new Point2D(7, 3), new Point2D(11, 1)).getVertices().stream(),
                         new Rectangle(new Point2D(9, 5), new Point2D(2, 3)).getVertices().stream()
@@ -85,10 +85,10 @@ class PolygonTest {
 
     @ParameterizedTest
     @MethodSource
-    void containsPoint(Point2D p, boolean expectedResult) {
+    void isInPolygon(Point2D p, boolean expectedResult) {
         assertEquals(
                 expectedResult,
-                sut.containsPoint(p),
+                sut.isInPolygon(p),
                 () -> String.format(
                         "(%.0f,%.0f) is not contained in the polygon {%s}",
                         p.col(),
