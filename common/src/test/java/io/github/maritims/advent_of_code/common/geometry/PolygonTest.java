@@ -1,9 +1,12 @@
 package io.github.maritims.advent_of_code.common.geometry;
 
+import io.github.maritims.advent_of_code.common.geometry.visualization.PolygonVisualizer;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.w3c.dom.css.Rect;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -105,5 +108,34 @@ class PolygonTest {
     @MethodSource
     void isConvex(Polygon sut, boolean expectedResult) {
         assertEquals(expectedResult, sut.isConvex());
+    }
+
+    @Test
+    void translate() {
+        var polygon = new Polygon(
+                new Point2D(0, 0),
+                new Point2D(1, 0),
+                new Point2D(2, 0),
+                new Point2D(0, 1),
+                new Point2D(0, 2),
+                new Point2D(1, 2),
+                new Point2D(2, 2)
+        );
+        var grid = new Rectangle(new Point2D(0, 0), new Point2D(6, 6));
+        var dx = 2;
+        var dy = 2;
+
+        var result = polygon.translate(dx, dy);
+        var bitmap = PolygonVisualizer.drawBitmap(result, grid);
+
+        assertEquals(bitmap, """
+                .......
+                .......
+                ..###..
+                ..#....
+                ..###..
+                .......
+                .......
+                """);
     }
 }
