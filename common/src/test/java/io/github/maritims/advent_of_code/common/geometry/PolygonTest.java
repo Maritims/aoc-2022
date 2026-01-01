@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.w3c.dom.css.Rect;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -111,7 +110,7 @@ class PolygonTest {
     }
 
     @Test
-    void translate() {
+    void move() {
         var polygon = new Polygon(
                 new Point2D(0, 0),
                 new Point2D(1, 0),
@@ -121,14 +120,15 @@ class PolygonTest {
                 new Point2D(1, 2),
                 new Point2D(2, 2)
         );
-        var grid = new Rectangle(new Point2D(0, 0), new Point2D(6, 6));
         var dx = 2;
         var dy = 2;
 
-        var result = polygon.translate(dx, dy);
-        var bitmap = PolygonVisualizer.drawBitmap(result, grid);
+        var result = polygon.move(dx, dy);
+        var grid   = PolygonVisualizer.createGrid(6, 6, '.');
+        PolygonVisualizer.drawOnGrid(result, grid);
+        var bitmap = PolygonVisualizer.drawGrid(grid);
 
-        assertEquals(bitmap, """
+        assertEquals("""
                 .......
                 .......
                 ..###..
@@ -136,6 +136,36 @@ class PolygonTest {
                 ..###..
                 .......
                 .......
-                """);
+                """, bitmap);
+    }
+
+    @Test
+    void rotate() {
+        var polygon = new Polygon(
+                new Point2D(0, 0),
+                new Point2D(1, 0),
+                new Point2D(2, 0),
+                new Point2D(0, 1),
+                new Point2D(0, 2),
+                new Point2D(1, 2),
+                new Point2D(2, 2)
+        );
+
+        var grid = PolygonVisualizer.createGrid(10, 10, '.');
+        PolygonVisualizer.drawOnGrid(polygon, grid);
+        var bitmap = PolygonVisualizer.drawGrid(grid);
+        System.out.println(bitmap);
+
+        grid    = PolygonVisualizer.createGrid(10, 10, '.');
+        polygon = polygon.rotate90().normalize();
+        bitmap  = PolygonVisualizer.drawGrid(grid);
+        System.out.println(bitmap);
+
+        assertEquals("""
+                .......
+                .......
+                .......
+                .......
+                """, bitmap);
     }
 }

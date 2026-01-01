@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PolygonVisualizerTest {
 
-    public static Stream<Arguments> drawBitmap() {
+    public static Stream<Arguments> drawOnGrid() {
         return Stream.of(
                 Arguments.of(
                         new Polygon(
@@ -115,8 +115,10 @@ class PolygonVisualizerTest {
 
     @ParameterizedTest
     @MethodSource
-    void drawBitmap(Polygon polygon, String expectedResult) {
-        var result = PolygonVisualizer.drawBitmap(polygon);
+    void drawOnGrid(Polygon polygon, String expectedResult) {
+        var grid = PolygonVisualizer.createGrid(10, 10, '.');
+        PolygonVisualizer.drawOnGrid(polygon);
+        var result = PolygonVisualizer.drawGrid(grid);
         assertEquals(expectedResult, result);
         System.out.println(result);
     }

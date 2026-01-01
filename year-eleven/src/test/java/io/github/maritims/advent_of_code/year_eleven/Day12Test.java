@@ -11,7 +11,7 @@ class Day12Test extends DayTest<Day12> {
     Day12 sut;
 
     @Test
-    void solveFirstPart() {
+    void solveFirstPart_withSampleInput() {
         mockLoadInput(sut, """
                 
                 
@@ -50,6 +50,11 @@ class Day12Test extends DayTest<Day12> {
                 12x5: 1 0 1 0 3 2
                 """);
         assertEquals(2, sut.solveFirstPart());
+    }
+
+    @Test
+    void solveFirstPart() {
+        assertEquals(0, sut.solveFirstPart());
     }
 
     @Test

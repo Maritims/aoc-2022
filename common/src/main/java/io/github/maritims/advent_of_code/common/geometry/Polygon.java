@@ -1,8 +1,6 @@
 package io.github.maritims.advent_of_code.common.geometry;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public final class Polygon {
     private final List<Point2D> vertices;
@@ -160,6 +158,25 @@ public final class Polygon {
         return vertices;
     }
 
+    public Set<Point2D> getDiscretePoints() {
+        return new HashSet<>(vertices);
+    }
+
+    public List<Polygon> getUniqueOrientations() {
+        var seen         = new HashSet<List<Point2D>>();
+        var orientations = new ArrayList<Polygon>();
+        var current      = this.normalize();
+
+        for (var i = 0; i < 4; i++) {
+            current = current.rotate90().normalize();
+            // Vertices list is a good key for uniqueness
+            if (seen.add(current.getVertices())) {
+                orientations.add(current);
+            }
+        }
+        return orientations;
+    }
+
     public boolean containsRectangle(Rectangle rectangle) {
         if (!isInBoundingBox(rectangle)) {
             return false;
@@ -186,17 +203,39 @@ public final class Polygon {
     }
 
     /**
-     * Shift a polygon's position. Does not mutate the instance itself.
+     * Shift the polygon's position. Does not mutate the instance itself.
      *
      * @param dx The difference in position on the X axis (the columns).
      * @param dy The difference in position on the Y axis (the rows).
      * @return A new polygon with the new position.
      */
-    public Polygon translate(double dx, double dy) {
+    public Polygon move(double dx, double dy) {
         var translatedVertices = vertices.stream()
                 .map(point -> new Point2D(point.col() + dx, point.row() + dy))
                 .toList();
         return new Polygon(translatedVertices);
+    }
+
+    /**
+     * Rotate the polygon 90 degrees clockwise. Does not mutate the instance itself.
+     * Transformation: (col, row) -> (-row, col)
+     *
+     * @return A new polygon with a new orientation.
+     */
+    public Polygon rotate90() {
+        var rotatedVertices = vertices.stream()
+                .map(point -> new Point2D(-point.row(), point.col()))
+                .toList();
+        return new Polygon(rotatedVertices);
+    }
+
+    public Polygon normalize() {
+        var boundingBox = getBoundingBox();
+        var minCol      = boundingBox.getTopLeft().col();
+        var minRow      = boundingBox.getTopLeft().row();
+
+        // Translate the polygon so its top-left corner is at (0,0)
+        return this.move(-minCol, -minRow);
     }
 
     @Override

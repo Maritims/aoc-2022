@@ -2,14 +2,14 @@ package io.github.maritims.advent_of_code.common.geometry.visualization;
 
 import io.github.maritims.advent_of_code.common.geometry.Point2D;
 import io.github.maritims.advent_of_code.common.geometry.Polygon;
-import io.github.maritims.advent_of_code.common.geometry.Rectangle;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class PolygonVisualizer {
-    public static String drawBitmap(Collection<Polygon> polygons, Rectangle grid, char fullPixel, char emptyPixel) {
+    public static void drawOnGrid(Collection<Polygon> polygons, char[][] grid, char fullPixel) {
         if (polygons == null || polygons.isEmpty()) {
             throw new IllegalArgumentException("polygon cannot be null or empty");
         }
@@ -17,38 +17,29 @@ public class PolygonVisualizer {
         var occupiedCells = polygons.stream()
                 .flatMap(point -> point.getVertices().stream())
                 .collect(Collectors.toSet());
-        var minCol        = grid.getTopLeft().col();
-        var maxCol        = grid.getTopRight().col();
-        var minRow        = grid.getTopLeft().row();
-        var maxRow        = grid.getBottomRight().row();
+        var minCol = 0;
+        var maxCol = grid[0].length;
+        var minRow = 0;
+        var maxRow = grid.length;
 
-        var sb = new StringBuilder();
         for (var row = minRow; row <= maxRow; row++) {
             for (var col = minCol; col <= maxCol; col++) {
-                sb.append(occupiedCells.contains(new Point2D(col, row)) ? fullPixel : emptyPixel);
+                if (occupiedCells.contains(new Point2D(col, row))) {
+                    grid[row][col] = fullPixel;
+                }
             }
-            sb.append('\n');
         }
-        return sb.toString();
     }
 
-    public static String drawBitmap(Collection<Polygon> polygons, Rectangle grid) {
-        return drawBitmap(polygons, grid, '#', '.');
+    public static void drawOnGrid(Polygon polygon, char[][] grid) {
+        drawOnGrid(List.of(polygon), grid, '#');
     }
 
-    public static String drawBitmap(Polygon polygon, Rectangle grid, char fullPixel, char emptyPixel) {
-        return drawBitmap(List.of(polygon), grid, fullPixel, emptyPixel);
-    }
-
-    public static String drawBitmap(Polygon polygon, Rectangle grid) {
-        return drawBitmap(List.of(polygon), grid);
-    }
-
-    public static String drawBitmap(Polygon polygon, char fullPixel, char emptyPixel) {
-        var minCol        = Double.MAX_VALUE;
-        var maxCol        = Double.MIN_VALUE;
-        var minRow        = Double.MAX_VALUE;
-        var maxRow        = Double.MIN_VALUE;
+    public static void drawOnGrid(Polygon polygon, char fullPixel) {
+        var minCol = Double.MAX_VALUE;
+        var maxCol = Double.MIN_VALUE;
+        var minRow = Double.MAX_VALUE;
+        var maxRow = Double.MIN_VALUE;
 
         for (var point : polygon.getVertices()) {
             minCol = Math.min(minCol, point.col());
@@ -57,11 +48,30 @@ public class PolygonVisualizer {
             maxRow = Math.max(maxRow, point.row());
         }
 
-        var grid = new Rectangle(new Point2D(minCol, minRow), new Point2D(maxCol, maxRow));
-        return drawBitmap(List.of(polygon), grid, fullPixel, emptyPixel);
+        var grid = new char[(int) maxRow][(int) maxCol];
+        drawOnGrid(List.of(polygon), grid, fullPixel);
     }
 
-    public static String drawBitmap(Polygon polygon) {
-        return drawBitmap(polygon, '#', '.');
+    public static void drawOnGrid(Polygon polygon) {
+        drawOnGrid(polygon, '#');
+    }
+
+    public static char[][] createGrid(int rows, int cols, char emptyCell) {
+        var grid = new char[rows][cols];
+        for(var row : grid) {
+            Arrays.fill(row, emptyCell);
+        }
+        return grid;
+    }
+
+    public static String drawGrid(char[][] grid) {
+        var sb = new StringBuilder();
+        for (var row : grid) {
+            for (var col : row) {
+                sb.append(col);
+            }
+            sb.append('\n');
+        }
+        return sb.toString();
     }
 }
