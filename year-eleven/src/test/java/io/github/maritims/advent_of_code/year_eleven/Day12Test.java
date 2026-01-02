@@ -13,8 +13,6 @@ class Day12Test extends DayTest<Day12> {
     @Test
     void solveFirstPart_withSampleInput() {
         mockLoadInput(sut, """
-                
-                
                 0:
                 ###
                 ##.

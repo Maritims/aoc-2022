@@ -44,4 +44,8 @@ public class ShoelaceFormula {
 
         return difference * 0.5;
     }
+
+    public double calculate2(List<Point2D> points) {
+        return calculate(points.stream().map(p -> new Point((int) p.row(), (int) p.col())).toList());
+    }
 }

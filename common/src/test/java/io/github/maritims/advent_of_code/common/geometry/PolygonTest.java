@@ -64,6 +64,49 @@ class PolygonTest {
         );
     }
 
+    public static Stream<Arguments> getDiscreteArea() {
+        return Stream.of(
+                Arguments.of(new Polygon(
+                                new Point2D(0, 0),
+                                new Point2D(1, 0),
+                                new Point2D(1, 0),
+                                new Point2D(0, 1),
+                                new Point2D(1, 1),
+                                new Point2D(0, 2),
+                                new Point2D(1, 2)
+                        ), 7)
+        );
+    }
+
+    public static Stream<Arguments> getDiscreteWidth() {
+        return Stream.of(
+                Arguments.of(new Polygon(
+                        new Point2D(0, 0),
+                        new Point2D(1, 0),
+                        new Point2D(2, 0),
+                        new Point2D(0, 1),
+                        new Point2D(1, 1),
+                        new Point2D(0, 2),
+                        new Point2D(1, 2)
+                ), 3)
+        );
+    }
+
+    public static Stream<Arguments> getDiscreteHeight() {
+        return Stream.of(
+                Arguments.of(new Polygon(
+                        new Point2D(0, 0),
+                        new Point2D(1, 0),
+                        new Point2D(2, 0),
+                        new Point2D(0, 1),
+                        new Point2D(1, 1),
+                        new Point2D(0, 2),
+                        new Point2D(1, 2),
+                        new Point2D(1, 3)
+                ), 4)
+        );
+    }
+
     @BeforeEach
     void setUp() {
         sut = new Polygon(List.of(
@@ -110,7 +153,7 @@ class PolygonTest {
     }
 
     @Test
-    void move() {
+    void translate() {
         var polygon = new Polygon(
                 new Point2D(0, 0),
                 new Point2D(1, 0),
@@ -123,7 +166,7 @@ class PolygonTest {
         var dx = 2;
         var dy = 2;
 
-        var result = polygon.move(dx, dy);
+        var result = polygon.translate(dx, dy);
         var grid   = PolygonVisualizer.createGrid(6, 6, '.');
         PolygonVisualizer.drawOnGrid(result, grid);
         var bitmap = PolygonVisualizer.drawGrid(grid);
@@ -167,5 +210,23 @@ class PolygonTest {
                 .......
                 .......
                 """, bitmap);
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void getDiscreteArea(Polygon polygon, double expectedResult) {
+        assertEquals(expectedResult, polygon.getDiscreteArea());
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void getDiscreteWidth(Polygon polygon, double expectedResult) {
+        assertEquals(expectedResult, polygon.getDiscreteWidth());
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void getDiscreteHeight(Polygon polygon, double expectedResult) {
+        assertEquals(expectedResult, polygon.getDiscreteHeight());
     }
 }

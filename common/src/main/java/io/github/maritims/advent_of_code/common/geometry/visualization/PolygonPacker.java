@@ -8,7 +8,10 @@ import java.util.*;
 
 public class PolygonPacker {
     private final Rectangle           grid;
+    private final List<Polygon>       polygons;
     private final List<List<Polygon>> polygonOrientations;
+    private final double              totalGridArea;
+    private final double              totalPolygonArea;
 
     public PolygonPacker(Rectangle grid, List<Polygon> polygons) {
         if (grid == null) {
@@ -18,9 +21,13 @@ public class PolygonPacker {
             throw new IllegalArgumentException("polygons cannot be null or empty");
         }
         this.grid                = grid;
+        this.polygons            = polygons;
         this.polygonOrientations = polygons.stream()
+                .sorted(Comparator.comparingDouble((Polygon polygon) -> polygon.getVertices().size()).reversed())
                 .map(this::generateUniqueOrientations)
                 .toList();
+        this.totalGridArea       = grid.getArea();
+        this.totalPolygonArea    = polygons.stream().mapToDouble(Polygon::getDiscreteArea).sum();
     }
 
     List<Polygon> generateUniqueOrientations(Polygon polygon) {
@@ -32,7 +39,7 @@ public class PolygonPacker {
         var unique  = new ArrayList<Polygon>();
         var current = polygon.normalize();
 
-        for(var i = 0; i < 4; i++) {
+        for (var i = 0; i < 4; i++) {
             current = current.rotate90().normalize();
             var sortedVertices = current.getVertices()
                     .stream()
@@ -72,7 +79,7 @@ public class PolygonPacker {
         for(var orientation : polygonOrientations.get(polygonIndex)) {
             for(var row = 0; row < grid.getHeight(); row++) {
                 for(var col = 0; col < grid.getWidth(); col++) {
-                    var placed = orientation.move(col, row);
+                    var placed = orientation.translate(col, row);
                     if (isValidPlacement(placed, occupied)) {
                         var polygonPoints = new HashSet<>(placed.getVertices());
                         occupied.addAll(polygonPoints);

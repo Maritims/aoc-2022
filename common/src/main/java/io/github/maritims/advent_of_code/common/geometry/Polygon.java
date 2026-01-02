@@ -26,6 +26,9 @@ public final class Polygon {
     }
 
     public static Polygon parsePolygon(List<String> lines) {
+        if (lines == null || lines.isEmpty()) {
+            throw new IllegalArgumentException("lines cannot be null or empty");
+        }
         var points = new ArrayList<Point2D>();
 
         for (var row = 0; row < lines.size(); row++) {
@@ -43,7 +46,7 @@ public final class Polygon {
         return new Polygon(points);
     }
 
-    Rectangle getBoundingBox() {
+    public Rectangle getBoundingBox() {
         if (boundingBox == null) {
             var minCol = vertices.stream().mapToDouble(Point2D::col).min().orElseThrow();
             var maxCol = vertices.stream().mapToDouble(Point2D::col).max().orElseThrow();
@@ -158,23 +161,16 @@ public final class Polygon {
         return vertices;
     }
 
-    public Set<Point2D> getDiscretePoints() {
-        return new HashSet<>(vertices);
+    public double getDiscreteWidth() {
+        return getBoundingBox().getWidth() + 1;
     }
 
-    public List<Polygon> getUniqueOrientations() {
-        var seen         = new HashSet<List<Point2D>>();
-        var orientations = new ArrayList<Polygon>();
-        var current      = this.normalize();
+    public double getDiscreteHeight() {
+        return getBoundingBox().getHeight() + 1;
+    }
 
-        for (var i = 0; i < 4; i++) {
-            current = current.rotate90().normalize();
-            // Vertices list is a good key for uniqueness
-            if (seen.add(current.getVertices())) {
-                orientations.add(current);
-            }
-        }
-        return orientations;
+    public double getDiscreteArea() {
+        return vertices.size();
     }
 
     public boolean containsRectangle(Rectangle rectangle) {
@@ -209,7 +205,7 @@ public final class Polygon {
      * @param dy The difference in position on the Y axis (the rows).
      * @return A new polygon with the new position.
      */
-    public Polygon move(double dx, double dy) {
+    public Polygon translate(double dx, double dy) {
         var translatedVertices = vertices.stream()
                 .map(point -> new Point2D(point.col() + dx, point.row() + dy))
                 .toList();
@@ -235,7 +231,7 @@ public final class Polygon {
         var minRow      = boundingBox.getTopLeft().row();
 
         // Translate the polygon so its top-left corner is at (0,0)
-        return this.move(-minCol, -minRow);
+        return this.translate(-minCol, -minRow);
     }
 
     @Override

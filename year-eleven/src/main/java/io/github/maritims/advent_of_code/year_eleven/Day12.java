@@ -5,86 +5,92 @@ import io.github.maritims.advent_of_code.common.geometry.Point2D;
 import io.github.maritims.advent_of_code.common.geometry.Polygon;
 import io.github.maritims.advent_of_code.common.geometry.Rectangle;
 import io.github.maritims.advent_of_code.common.geometry.visualization.PolygonPacker;
+import io.github.maritims.advent_of_code.common.tuples.Tuple2;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.regex.Pattern;
+import java.util.stream.IntStream;
 
 public class Day12 extends PuzzleSolver<Long, Long> {
-    private static final Pattern PRESENT_ID_PATTERN    = Pattern.compile("^(\\d+):");
-    private static final Pattern PRESENT_PATTERN       = Pattern.compile("^([#.]++)$");
-    private static final Pattern CONFIGURATION_PATTERN = Pattern.compile("^(\\d+)x(\\d+): ((\\d+\\s*)+)$");
+    private static final Logger log = LoggerFactory.getLogger(Day12.class);
 
-    record Configuration(int cols, int rows, int[] quantityPerIndex) {
+    record Grid(int width, int height, List<Integer> counts) {
     }
 
     @Override
     public Long solveFirstPart() {
-        var          lines               = loadInput();
-        Integer      currentPresentId    = null;
-        List<String> currentPresentInput = null;
-        var          presents            = new HashMap<Integer, Polygon>();
-        var          configs             = new ArrayList<Configuration>();
+        var lines    = loadInput();
+        var grids    = new ArrayList<Tuple2<Rectangle, List<Integer>>>();
+        var polygons = new ArrayList<Polygon>();
+        var shape    = new ArrayList<String>();
 
-        for (var line : lines) {
-            if (line.isBlank()) {
-                if (currentPresentId != null && currentPresentInput != null) {
-                    var present = Polygon.parsePolygon(currentPresentInput);
-                    presents.put(currentPresentId, present);
-                    currentPresentId    = null;
-                    currentPresentInput = null;
-                }
-                continue;
-            }
-
-            var presentIdMatcher = PRESENT_ID_PATTERN.matcher(line);
-            if (presentIdMatcher.matches()) {
-                currentPresentId = Integer.parseInt(presentIdMatcher.group(1));
-                continue;
-            }
-
-            var presentMatcher = PRESENT_PATTERN.matcher(line);
-            if (presentMatcher.matches()) {
-                if (currentPresentInput == null) {
-                    currentPresentInput = new ArrayList<>();
-                }
-                currentPresentInput.add(presentMatcher.group(1));
-            }
-
-            var configurationMatcher = CONFIGURATION_PATTERN.matcher(line);
-            if (configurationMatcher.matches()) {
-                var cols = Integer.parseInt(configurationMatcher.group(1));
-                var rows = Integer.parseInt(configurationMatcher.group(2));
-                var quantityPerIndex = Arrays.stream(configurationMatcher.group(3).split(" "))
-                        .mapToInt(Integer::parseInt)
-                        .toArray();
-                var config = new Configuration(cols, rows, quantityPerIndex);
-                configs.add(config);
+        for (String line : lines) {
+            if (line.endsWith(":")) {
+                shape = new ArrayList<>();
+            } else if (line.startsWith("#") || line.startsWith(".")) {
+                shape.add(line);
+            } else if (line.isBlank()) {
+                polygons.add(Polygon.parsePolygon(shape));
+                shape = null;
+            } else {
+                var parts      = line.replace(":", "").split(" ");
+                var first      = parts[0];
+                var counts     = Arrays.stream(parts).skip(1).map(Integer::parseInt).toList();
+                var dimensions = first.split("x");
+                var width      = Integer.parseInt(dimensions[0]);
+                var height     = Integer.parseInt(dimensions[1]);
+                var grid       = new Rectangle(new Point2D(0, 0), new Point2D(width, height));
+                grids.add(new Tuple2<>(grid, counts));
             }
         }
 
-        var result = 0L;
+        var impossibleGrids = 0;
+        var successfulGrids = 0;
+        var iterator        = grids.iterator();
 
-        for (var config : configs) {
-            var grid   = new Rectangle(new Point2D(0, 0), new Point2D(config.cols, config.rows));
-            var pieces = new HashMap<Integer, List<Polygon>>();
+        while (iterator.hasNext()) {
+            var grid                = iterator.next();
+            var pointsToFitOnGrid   = 0;
+            var polygonsToFitOnGrid = new ArrayList<Polygon>();
+            var spaceOnGrid         = grid.item1().getArea();
 
-            for (var id = 0; id < config.quantityPerIndex.length; id++) {
-                var quantity = config.quantityPerIndex[id];
-                if (quantity > 0) {
-                    var piece = presents.get(id);
-                    for (var j = 0; j < quantity; j++) {
-                        pieces.computeIfAbsent(id, k -> new ArrayList<>()).add(piece);
+            for (var i = 0; i < grid.item2().size(); i++) {
+                var count = grid.item2().get(i);
+                if (count > 0) {
+                    var polygon = polygons.get(i);
+                    polygonsToFitOnGrid.add(polygon);
+
+                    for (var j = 0; j < count; j++) {
+                        polygonsToFitOnGrid.add(polygon);
+                        pointsToFitOnGrid += polygon.getVertices().size();
                     }
                 }
             }
 
-            var packer = new PolygonPacker(grid, pieces.values().stream().flatMap(Collection::stream).toList());
-            if (packer.pack() != null) {
-                result++;
+            // Can the pieces be fit next to each other?
+            var maxDiscreteWidth  = polygonsToFitOnGrid.stream().mapToDouble(Polygon::getDiscreteWidth).max().orElseThrow();
+            var maxDiscreteHeight = polygonsToFitOnGrid.stream().mapToDouble(Polygon::getDiscreteHeight).max().orElseThrow();
+            var slots             = (grid.item1().getWidth() / maxDiscreteWidth) * (grid.item1().getHeight() / maxDiscreteHeight);
+
+            if (slots > polygonsToFitOnGrid.size()) {
+                successfulGrids++;
+                iterator.remove();
+            }
+            // Can the pieces fit in a perfect packing situation?
+            else if (pointsToFitOnGrid > spaceOnGrid) {
+                impossibleGrids++;
+                iterator.remove();
+            }
+            // Flip, translate and rotate our way to success...?
+            else {
+
             }
         }
 
-        return result;
+        log.debug("possible grids: {}, impossible grids: {}, undetermined grids: {}", successfulGrids, impossibleGrids, grids.size());
+
+        return 0L;
     }
 
     @Override
