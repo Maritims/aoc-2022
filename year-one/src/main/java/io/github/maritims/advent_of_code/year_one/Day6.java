@@ -7,6 +7,7 @@ import io.github.maritims.advent_of_code.common.geometry.Grid2D;
 import io.github.maritims.advent_of_code.common.geometry.Line2D;
 import io.github.maritims.advent_of_code.common.geometry.Point2D;
 
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
 public class Day6 extends PuzzleSolver<Integer, Integer> {
@@ -47,9 +48,13 @@ public class Day6 extends PuzzleSolver<Integer, Integer> {
                     }
                 });
 
-        return (int) grid.stream()
-                .filter(Light::isOn)
-                .count();
+        var activeLights = new AtomicInteger(0);
+        grid.walkGrid((row, col, value, surroundingPoints) -> {
+            if(value.isOn()) {
+                activeLights.incrementAndGet();
+            }
+        });
+        return activeLights.get();
     }
 
     @Override
@@ -66,8 +71,8 @@ public class Day6 extends PuzzleSolver<Integer, Integer> {
                     }
                 });
 
-        return grid.stream()
-                .mapToInt(DimmableLight::getBrightness)
-                .sum();
+        var totalBrightness = new AtomicInteger(0);
+        grid.walkGrid((row, col, value, surroundingPoints) -> totalBrightness.addAndGet(value.getBrightness()));
+        return totalBrightness.get();
     }
 }
