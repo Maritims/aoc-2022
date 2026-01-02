@@ -10,13 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.stream.IntStream;
 
 public class Day12 extends PuzzleSolver<Long, Long> {
     private static final Logger log = LoggerFactory.getLogger(Day12.class);
-
-    record Grid(int width, int height, List<Integer> counts) {
-    }
 
     @Override
     public Long solveFirstPart() {
@@ -45,12 +41,11 @@ public class Day12 extends PuzzleSolver<Long, Long> {
             }
         }
 
-        var impossibleGrids = 0;
-        var successfulGrids = 0;
-        var iterator        = grids.iterator();
+        var impossibleGrids  = 0;
+        var possibleGrids  = 0;
+        var undeterminedGrids = grids.size();
 
-        while (iterator.hasNext()) {
-            var grid                = iterator.next();
+        for (var grid : grids) {
             var pointsToFitOnGrid   = 0;
             var polygonsToFitOnGrid = new ArrayList<Polygon>();
             var spaceOnGrid         = grid.item1().getArea();
@@ -59,7 +54,6 @@ public class Day12 extends PuzzleSolver<Long, Long> {
                 var count = grid.item2().get(i);
                 if (count > 0) {
                     var polygon = polygons.get(i);
-                    polygonsToFitOnGrid.add(polygon);
 
                     for (var j = 0; j < count; j++) {
                         polygonsToFitOnGrid.add(polygon);
@@ -74,23 +68,31 @@ public class Day12 extends PuzzleSolver<Long, Long> {
             var slots             = (grid.item1().getWidth() / maxDiscreteWidth) * (grid.item1().getHeight() / maxDiscreteHeight);
 
             if (slots > polygonsToFitOnGrid.size()) {
-                successfulGrids++;
-                iterator.remove();
+                possibleGrids++;
+                undeterminedGrids--;
             }
             // Can the pieces fit in a perfect packing situation?
             else if (pointsToFitOnGrid > spaceOnGrid) {
                 impossibleGrids++;
-                iterator.remove();
+                undeterminedGrids--;
             }
-            // Flip, translate and rotate our way to success...?
+            // Rotate and translate our way to success!
             else {
-
+                var polygonPacker = new PolygonPacker(grid.item1(), polygonsToFitOnGrid);
+                var packedPolygons = polygonPacker.pack();
+                if (packedPolygons == null) {
+                    impossibleGrids++;
+                    undeterminedGrids--;
+                } else {
+                    possibleGrids++;
+                    undeterminedGrids--;
+                }
             }
         }
 
-        log.debug("possible grids: {}, impossible grids: {}, undetermined grids: {}", successfulGrids, impossibleGrids, grids.size());
+        log.debug("possible grids: {}, impossible grids: {}, undetermined grids: {}", possibleGrids, impossibleGrids, undeterminedGrids);
 
-        return 0L;
+        return (long) possibleGrids;
     }
 
     @Override
