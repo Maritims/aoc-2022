@@ -2,64 +2,62 @@ package io.github.maritims.advent_of_code.year_one;
 
 import io.github.maritims.advent_of_code.common.PuzzleSolver;
 import io.github.maritims.advent_of_code.common.graph.*;
-import io.github.maritims.advent_of_code.common.tuples.Tuple3;
+import io.github.maritims.advent_of_code.common.util.IntegerUtil;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
-
-import static io.github.maritims.advent_of_code.common.graph.TravellingSalesman.Strategy.HighestCost;
-import static io.github.maritims.advent_of_code.common.graph.TravellingSalesman.Strategy.LowestCost;
 
 public class Day9 extends PuzzleSolver<Integer, Integer> {
+    private static final class Extractor implements AdjacencyMatrix.OriginExtractor<String>, AdjacencyMatrix.DestinationExtractor<String>, AdjacencyMatrix.WeightExtractor<Integer>, AdjacencyMatrix.NodeExtractor<String, Integer> {
+        String[]    parts         = null;
+        int         numberOfParts = 0;
 
-    static class InstructionResolver implements Graph.Resolver<String> {
-        private static final Pattern      INSTRUCTION_PATTERN = Pattern.compile("^([A-Za-z]+) to ([A-Za-z]+) = (\\d+)$");
-        private final        List<String> cities              = new ArrayList<>();
-
-        private int getCityId(String city) {
-            var cityId = cities.indexOf(city);
-            if (cityId == -1) {
-                cities.add(city);
-                cityId = cities.size() - 1;
+        String[] getParts(String input) {
+            if (parts == null) {
+                parts         = input.split(" ");
+                numberOfParts = parts.length;
             }
-            return cityId;
+            return parts;
         }
 
         @Override
-        public Tuple3<Vertex, Vertex, Integer> resolve(String input) {
-            var matcher = INSTRUCTION_PATTERN.matcher(input);
-            if (!matcher.matches()) {
-                throw new IllegalArgumentException("Invalid input: " + input);
-            }
+        public String extractDestination(String input) {
+            return getParts(input)[2];
+        }
 
-            var from     = matcher.group(1);
-            var to       = matcher.group(2);
-            var distance = Integer.parseInt(matcher.group(3));
-            var fromId   = getCityId(from);
-            var toId     = getCityId(to);
+        @Override
+        public String extractOrigin(String input) {
+            return getParts(input)[0];
+        }
 
-            return new Tuple3<>(new Vertex(fromId), new Vertex(toId), distance);
+        @Override
+        public Integer extractWeight(String input) {
+            return Integer.parseInt(getParts(input)[numberOfParts - 1]);
+        }
+
+        @Override
+        public List<AdjacencyMatrix.Node<String, Integer>> extractNodes(String input) {
+            var origin      = extractOrigin(input);
+            var destination = extractDestination(input);
+            var weight = extractWeight(input);
+
+            return List.of(
+                    new AdjacencyMatrix.Node<>(origin, destination, weight),
+                    new AdjacencyMatrix.Node<>(destination, origin, weight)
+            );
         }
     }
 
     @Override
     public Integer solveFirstPart() {
-        var distanceMatrix = Graph.<String>newBuilder()
-                .resolver(new InstructionResolver())
-                .addVertices(loadInput())
-                .build()
-                .getDistanceMatrix();
-        return new TravellingSalesman(distanceMatrix, LowestCost).compute();
+        var adjacencyMatrix = AdjacencyMatrix.parseAdjacencyMatrix(loadInput(), Integer.class, Extractor::new, (a, b) -> a);
+        var matrix          = IntegerUtil.toPrimitiveArray(adjacencyMatrix.getMatrix(), 0);
+        return HamiltonianPathSolver.solverForMinCost(matrix).doNotReturnHome().solveHamiltonianPath();
     }
 
     @Override
     public Integer solveSecondPart() {
-        var distanceMatrix = Graph.<String>newBuilder()
-                .resolver(new InstructionResolver())
-                .addVertices(loadInput())
-                .build()
-                .getDistanceMatrix();
-        return new TravellingSalesman(distanceMatrix, HighestCost).compute();
+        var adjacencyMatrix = AdjacencyMatrix.parseAdjacencyMatrix(loadInput(), Integer.class, Extractor::new, (a, b) -> a);
+        var matrix          = IntegerUtil.toPrimitiveArray(adjacencyMatrix.getMatrix(), 0);
+        return HamiltonianPathSolver.solverForMaxCost(matrix).doNotReturnHome().solveHamiltonianPath();
     }
 }

@@ -13,7 +13,7 @@ public class Day11 extends PuzzleSolver<Long, Long> {
      * @param memo        Memoization map.
      * @param current     Where we're at.
      * @param destination WHere we're going.
-     * @return The number of all paths leading from current to destination.
+     * @return The number of all paths leading from current to to.
      */
     private static long countAllPaths(Map<String, List<String>> graph, Map<String, Long> memo, String current, String destination) {
         if (current.equals(destination)) {

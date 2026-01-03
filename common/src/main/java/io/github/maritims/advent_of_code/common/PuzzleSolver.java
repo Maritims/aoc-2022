@@ -23,7 +23,7 @@ public abstract class PuzzleSolver<T1, T2> {
         if (input == null) {
             try (var file = getClass().getClassLoader().getResourceAsStream(day + ".txt")) {
                 if (file == null) {
-                    throw new FileNotFoundException("You've forgotten to add puzzle input for day " + day + ". Please add it to resources/day<number>.txt, replacing <number> with the actual day number.");
+                    throw new FileNotFoundException("You've forgotten to add puzzle input for day " + day + ". Please add it to resources/<number>.txt, replacing <number> with the actual day number.");
                 }
 
                 try (var bufferedReader = new BufferedReader(new InputStreamReader(file))) {
