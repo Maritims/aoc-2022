@@ -5,25 +5,28 @@ import io.github.maritims.advent_of_code.common.PuzzleSolver;
 import java.util.List;
 
 public class Day14 extends PuzzleSolver<Long, Long> {
-    private final int runtimeInSeconds;
+    private final int                 runtimeInSeconds;
+    private       List<ReindeerState> reindeerStates;
 
     public Day14(int runtimeInSeconds) {
         this.runtimeInSeconds = runtimeInSeconds;
     }
 
-    List<ReindeerState> play() {
-        var reindeer = loadInput()
-                .stream()
-                .map(Reindeer::parseReindeer)
-                .toList();
-        var reindeerStates = reindeer.stream()
-                .map(ReindeerState::new)
-                .toList();
+    List<ReindeerState> solveBothParts() {
+        if (reindeerStates == null) {
+            var reindeer = loadInput()
+                    .stream()
+                    .map(Reindeer::parseReindeer)
+                    .toList();
+            reindeerStates = reindeer.stream()
+                    .map(ReindeerState::new)
+                    .toList();
 
-        for(var second = 0; second < runtimeInSeconds; second++) {
-            reindeerStates.forEach(ReindeerState::tick);
-            var longestTravelledDistance = reindeerStates.stream().mapToLong(ReindeerState::getTravelledDistance).max().orElseThrow();
-            reindeerStates.stream().filter(reindeerState -> reindeerState.getTravelledDistance() == longestTravelledDistance).forEach(ReindeerState::addPoint);
+            for (var second = 0; second < runtimeInSeconds; second++) {
+                reindeerStates.forEach(ReindeerState::tick);
+                var longestTravelledDistance = reindeerStates.stream().mapToLong(ReindeerState::getTravelledDistance).max().orElseThrow();
+                reindeerStates.stream().filter(reindeerState -> reindeerState.getTravelledDistance() == longestTravelledDistance).forEach(ReindeerState::addPoint);
+            }
         }
 
         return reindeerStates;
@@ -31,7 +34,7 @@ public class Day14 extends PuzzleSolver<Long, Long> {
 
     @Override
     public Long solveFirstPart() {
-        return play()
+        return solveBothParts()
                 .stream()
                 .mapToLong(ReindeerState::getTravelledDistance)
                 .max()
@@ -40,7 +43,7 @@ public class Day14 extends PuzzleSolver<Long, Long> {
 
     @Override
     public Long solveSecondPart() {
-        return play()
+        return solveBothParts()
                 .stream()
                 .mapToLong(ReindeerState::getPoints)
                 .max()
